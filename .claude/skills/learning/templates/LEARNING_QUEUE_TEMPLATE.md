@@ -1,16 +1,26 @@
-# Learning Queue Template
+# Learning Queue
 
-**Status:** NOT IMPLEMENTED YET
-**Planned Phase:** Phase 3 (tentative)
-**Target file:** `docs/learning/state/LEARNING_QUEUE.md`
+> Template: `.claude/skills/learning/templates/LEARNING_QUEUE_TEMPLATE.md`
+> Target: `docs/learning/state/LEARNING_QUEUE.md`
+> Role: Open-item convenience view.
 
-## Purpose
+## A. Deferred Work Units
 
-Deferred work unit'leri ve Knowledge Debt kayıtlarını iki ayrı bölümde tutar.
+**GENERATED VIEW — elle düzenleme.** Bu bölüm her ledger commit'inden sonra `COVERAGE_LEDGER.md` içindeki `DEFERRED` ve `PARTIAL` satırlarından yeniden üretilir. Authoritative status ledger'dadır.
 
-## Future Schema
+| work_unit_id | label | status | reason | deferred_at | source |
+|---|---|---|---|---|---|
 
-- Deferred Work Units (ertelenmiş proje işi)
-- Knowledge Debt (ertelenmiş kavram)
+Alan eşlemesi (ledger → queue):
 
-Alanlar ilgili phase içinde tanımlanacak. Bu dosya o zamana kadar initialization için kullanılmaz.
+| Queue alanı | Ledger alanı |
+|---|---|
+| `reason` | `notes` (`PARTIAL` için: `open_items`) |
+| `deferred_at` | `last_evaluated_at` |
+| `source` | `source_type` + `source_ref` |
+
+## B. Knowledge Debt
+
+**RESERVED — implemented in later phase.**
+
+Knowledge Debt ertelenmiş **kavramdır**. Deferred Work Unit ertelenmiş **proje işidir**. İki kayıt ayrıdır.

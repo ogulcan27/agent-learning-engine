@@ -89,30 +89,37 @@ Argüman belirsizse tahmin etme. Kullanıcıya sor.
 
 ## 7. Run router
 
-| # | Adım | Reference |
-|---|---|---|
-| 1 | LOAD PROJECT CONFIG / STATE | Bölüm 9 |
-| 2 | DISCOVER CURRENT WORK UNITS | `references/02_COVERAGE_PROTOCOL.md` |
-| 3 | COVERAGE CHECK | `references/02_COVERAGE_PROTOCOL.md` |
-| 4 | SCOPE RESOLUTION | `references/02_COVERAGE_PROTOCOL.md` |
-| 5 | HUMAN SYNCHRONIZATION | `references/03_HUMAN_SYNC_PROTOCOL.md` |
-| 6 | KNOWLEDGE PRIORITY | `references/03_HUMAN_SYNC_PROTOCOL.md` |
-| 7 | LEARNING EVENT EXTRACTION | `references/03_HUMAN_SYNC_PROTOCOL.md` |
-| 8 | LIGHT or FULL ULA | `references/04_ULA_PROTOCOL.md` |
-| 9 | MINDMAP / SEMANTIC GRAPH UPDATE | `references/05_MINDMAP_PROTOCOL.md` |
-| 10 | KNOWLEDGE PERSISTENCE | `references/06_KNOWLEDGE_PERSISTENCE.md` |
-| 11 | RETRIEVAL | `references/04_ULA_PROTOCOL.md` |
-| 12 | COVERAGE UPDATE | `references/02_COVERAGE_PROTOCOL.md` |
-| 13 | INTEGRITY CHECK | `references/07_INTEGRITY_CHECKS.md` |
+| # | Adım | Reference | Durum |
+|---|---|---|---|
+| 1 | LOAD PROJECT CONFIG / STATE | `references/01_OPERATIONAL_CORE.md` §1 | IMPLEMENTED |
+| 2 | DISCOVER CURRENT WORK UNITS | `references/02_COVERAGE_PROTOCOL.md` §3–§6 | IMPLEMENTED |
+| 3 | COVERAGE CHECK | `references/02_COVERAGE_PROTOCOL.md` §6 | IMPLEMENTED |
+| 4 | SCOPE RESOLUTION | `references/02_COVERAGE_PROTOCOL.md` §8 | IMPLEMENTED |
+| 5 | HUMAN SYNCHRONIZATION | `references/03_HUMAN_SYNC_PROTOCOL.md` | NOT IMPLEMENTED YET |
+| 6 | KNOWLEDGE PRIORITY | `references/03_HUMAN_SYNC_PROTOCOL.md` | NOT IMPLEMENTED YET |
+| 7 | LEARNING EVENT EXTRACTION | `references/03_HUMAN_SYNC_PROTOCOL.md` | NOT IMPLEMENTED YET |
+| 8 | LIGHT or FULL ULA | `references/04_ULA_PROTOCOL.md` | NOT IMPLEMENTED YET |
+| 9 | MINDMAP / SEMANTIC GRAPH UPDATE | `references/05_MINDMAP_PROTOCOL.md` | NOT IMPLEMENTED YET |
+| 10 | KNOWLEDGE PERSISTENCE | `references/06_KNOWLEDGE_PERSISTENCE.md` | NOT IMPLEMENTED YET |
+| 11 | RETRIEVAL | `references/04_ULA_PROTOCOL.md` | NOT IMPLEMENTED YET |
+| 12 | COVERAGE UPDATE (Completion Commit) | `references/02_COVERAGE_PROTOCOL.md` §10 | IMPLEMENTED (yalnız pipeline başarılıysa) |
+| 13 | INTEGRITY CHECK | `references/07_INTEGRITY_CHECKS.md` | §C IMPLEMENTED; diğer bölümler NOT IMPLEMENTED YET |
 
-Genel akış kuralları: `references/01_OPERATIONAL_CORE.md`.
+Genel akış ve dur kuralları: `references/01_OPERATIONAL_CORE.md`.
 
-**Skeleton kuralı:** Bir adımın reference veya template dosyası `Status: NOT IMPLEMENTED YET` içeriyorsa:
+**Skeleton kuralı:** Bir adımın reference dosyası o adım için `NOT IMPLEMENTED YET` diyorsa:
 
 1. O adımın davranışını uydurma.
-2. Kullanıcıya hangi adımın henüz implement edilmediğini bildir.
-3. Bu adımda ve sonraki adımlarda project state yazma.
+2. Selected scope'u göster. Kullanıcıya hangi adımın henüz implement edilmediğini bildir.
+3. Bu adımda ve sonraki adımlarda project state yazma. Completion Commit yapma.
 4. Dur.
+
+Coverage adımları (1–4) implement edilmiştir. Bu adımlar Discovery Commit ve Scope Commit yazabilir (`02_COVERAGE_PROTOCOL.md` §10). Bugünkü akış:
+
+```text
+Coverage (1–4) → PASS
+Human Synchronization (5) → NOT IMPLEMENTED YET → STOP
+```
 
 ## 8. Load map
 
@@ -121,7 +128,7 @@ Token kuralı: Yalnız aktif adımın dosyasını oku. Bir dosyayı aynı çağr
 | Durum | Oku |
 |---|---|
 | Startup | Bu dosya + `docs/learning/state/LEARNING_CONFIG.md` + `docs/learning/state/LEARNING_STATE.md` |
-| Coverage | `references/02_COVERAGE_PROTOCOL.md` + `docs/learning/state/COVERAGE_LEDGER.md` |
+| Coverage | `references/01_OPERATIONAL_CORE.md` + `references/02_COVERAGE_PROTOCOL.md` + `references/07_INTEGRITY_CHECKS.md` §C + `docs/learning/state/COVERAGE_LEDGER.md` |
 | Human Sync | `references/03_HUMAN_SYNC_PROTOCOL.md` |
 | Light ULA | `references/04_ULA_PROTOCOL.md` (gerekirse `references/05_MINDMAP_PROTOCOL.md`) |
 | Full ULA | Sırayla, aynı anda değil: `ula/LEARNING_ARCHITECT.md` → user review → `ula/CONTENT_BUILDER.md` → `ula/LEARNING_AUDITOR.md` |
@@ -138,11 +145,11 @@ Master yalnız ambiguity, audit, maintenance veya explicit deep verification ger
 
 ## 9. Project-state initialization
 
-Startup'ta `docs/learning/state/` yoksa proje initialize edilmemiştir.
+Startup'ta `docs/learning/state/` veya içindeki dosyalardan biri yoksa proje initialize edilmemiştir. Ayrıntı: `references/02_COVERAGE_PROTOCOL.md` §11.
 
 1. Kullanıcıya initialization gerektiğini bildir.
 2. Kullanıcı onayı olmadan dosya oluşturma.
-3. Onay varsa şu yapıyı `templates/` üzerinden oluştur:
+3. Onay varsa yalnız eksik dosyaları `templates/` üzerinden oluştur. Mevcut dosyayı overwrite etme.
 
 ```text
 docs/learning/
@@ -165,13 +172,15 @@ personal_library_path = UNCONFIGURED
 work_unit_source      = auto
 ```
 
-Skeleton kuralı burada da geçerlidir. Template `NOT IMPLEMENTED YET` ise initialization yapma.
+Authority: `COVERAGE_LEDGER.md` coverage truth taşır. `LEARNING_STATE.md` ve `LEARNING_QUEUE.md` §A ledger'dan türetilir ve yeniden üretilebilir.
+
+Development repository kuralı: Bu skill'in kendi geliştirme repository'sinde project state oluşturma.
 
 ## 10. Must not
 
 - Normal project work sırasında çalışma.
 - Skill klasörüne project state yazma.
-- File modification time ile coverage kararı verme.
+- File modification time, directory listing order, filename sort veya persistent evidence olmayan çıkarım ile coverage kararı verme.
 - Chat context'i tek başına persistent coverage source kabul etme.
 - Tek bir `last covered boundary` değerini coverage gerçeği kabul etme.
 - Her teknik ayrıntıyı öğretme. Yalnız MUST UNDERSTAND bilgi ULA alır.

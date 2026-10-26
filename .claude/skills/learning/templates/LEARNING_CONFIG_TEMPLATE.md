@@ -1,17 +1,22 @@
-# Learning Config Template
+# Learning Config
 
-**Status:** NOT IMPLEMENTED YET
-**Planned Phase:** Phase 3 (tentative)
-**Target file:** `docs/learning/state/LEARNING_CONFIG.md`
+> Template: `.claude/skills/learning/templates/LEARNING_CONFIG_TEMPLATE.md`
+> Target: `docs/learning/state/LEARNING_CONFIG.md`
+> Role: Project preferences. Kullanıcı düzenler. `/learning` yalnız kullanıcı onayı ile değiştirir.
 
-## Purpose
+```yaml
+learning_config_version: 1
 
-Project-level learning tercihlerini tutar.
+# auto | jira | git | phase-doc
+# Bilinmeyen değer: CONFIG ERROR. Fallback yapılmaz.
+work_unit_source: auto
 
-## Future Schema
+# Personal Technical Library konumu. UNCONFIGURED ise concept geçici olarak
+# docs/learning/concepts/ içinde tutulur.
+personal_library_path: UNCONFIGURED
+```
 
-- `personal_library_path` — default: `UNCONFIGURED`
-- `work_unit_source` — default: `auto`; override: `jira`, `git`, `phase-doc`
-- Diğer alanlar coverage phase içinde eklenecek.
+## Notes
 
-Alanlar ilgili phase içinde tanımlanacak. Bu dosya o zamana kadar initialization için kullanılmaz.
+- Kurallar: `references/02_COVERAGE_PROTOCOL.md` Bölüm 3.
+- Bu dosya coverage truth taşımaz. Coverage truth: `COVERAGE_LEDGER.md`.
