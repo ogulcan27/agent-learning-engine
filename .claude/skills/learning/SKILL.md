@@ -95,15 +95,15 @@ Argüman belirsizse tahmin etme. Kullanıcıya sor.
 | 2 | DISCOVER CURRENT WORK UNITS | `references/02_COVERAGE_PROTOCOL.md` §3–§6 | IMPLEMENTED |
 | 3 | COVERAGE CHECK | `references/02_COVERAGE_PROTOCOL.md` §6 | IMPLEMENTED |
 | 4 | SCOPE RESOLUTION | `references/02_COVERAGE_PROTOCOL.md` §8 | IMPLEMENTED |
-| 5 | HUMAN SYNCHRONIZATION | `references/03_HUMAN_SYNC_PROTOCOL.md` | NOT IMPLEMENTED YET |
-| 6 | KNOWLEDGE PRIORITY | `references/03_HUMAN_SYNC_PROTOCOL.md` | NOT IMPLEMENTED YET |
-| 7 | LEARNING EVENT EXTRACTION | `references/03_HUMAN_SYNC_PROTOCOL.md` | NOT IMPLEMENTED YET |
-| 8 | LIGHT or FULL ULA | `references/04_ULA_PROTOCOL.md` | NOT IMPLEMENTED YET |
+| 5 | HUMAN SYNCHRONIZATION | `references/03_HUMAN_SYNC_PROTOCOL.md` §3–§7 | IMPLEMENTED |
+| 6 | LEARNING EVENT EXTRACTION | `references/03_HUMAN_SYNC_PROTOCOL.md` §8–§10 | IMPLEMENTED |
+| 7 | KNOWLEDGE PRIORITY + EVENT DISPOSITION + HANDOFF | `references/03_HUMAN_SYNC_PROTOCOL.md` §11–§17 | IMPLEMENTED |
+| 8 | ULA ROUTING (LIGHT or FULL ULA) | `references/04_ULA_PROTOCOL.md` | NOT IMPLEMENTED YET |
 | 9 | MINDMAP / SEMANTIC GRAPH UPDATE | `references/05_MINDMAP_PROTOCOL.md` | NOT IMPLEMENTED YET |
 | 10 | KNOWLEDGE PERSISTENCE | `references/06_KNOWLEDGE_PERSISTENCE.md` | NOT IMPLEMENTED YET |
 | 11 | RETRIEVAL | `references/04_ULA_PROTOCOL.md` | NOT IMPLEMENTED YET |
 | 12 | COVERAGE UPDATE (Completion Commit) | `references/02_COVERAGE_PROTOCOL.md` §10 | IMPLEMENTED (yalnız pipeline başarılıysa) |
-| 13 | INTEGRITY CHECK | `references/07_INTEGRITY_CHECKS.md` | §C IMPLEMENTED; diğer bölümler NOT IMPLEMENTED YET |
+| 13 | INTEGRITY CHECK | `references/07_INTEGRITY_CHECKS.md` | §C, §E IMPLEMENTED; §L NOT IMPLEMENTED YET |
 
 Genel akış ve dur kuralları: `references/01_OPERATIONAL_CORE.md`.
 
@@ -114,11 +114,14 @@ Genel akış ve dur kuralları: `references/01_OPERATIONAL_CORE.md`.
 3. Bu adımda ve sonraki adımlarda project state yazma. Completion Commit yapma.
 4. Dur.
 
-Coverage adımları (1–4) implement edilmiştir. Bu adımlar Discovery Commit ve Scope Commit yazabilir (`02_COVERAGE_PROTOCOL.md` §10). Bugünkü akış:
+Adım 1–7 implement edilmiştir. Coverage adımları Discovery Commit ve Scope Commit yazabilir (`02_COVERAGE_PROTOCOL.md` §10). Adım 7 handoff'ta pass dosyasını (`IN_PROGRESS`) ve queue §B Knowledge Debt kaydını yazar. Ledger'a yazmaz. Bugünkü akış:
 
 ```text
-Coverage (1–4) → PASS
-Human Synchronization (5) → NOT IMPLEMENTED YET → STOP
+Coverage                   → IMPLEMENTED
+Human Synchronization      → IMPLEMENTED
+Learning Event Extraction  → IMPLEMENTED
+Knowledge Priority         → IMPLEMENTED
+ULA (8)                    → NOT IMPLEMENTED YET → STOP
 ```
 
 ## 8. Load map
@@ -129,7 +132,7 @@ Token kuralı: Yalnız aktif adımın dosyasını oku. Bir dosyayı aynı çağr
 |---|---|
 | Startup | Bu dosya + `docs/learning/state/LEARNING_CONFIG.md` + `docs/learning/state/LEARNING_STATE.md` |
 | Coverage | `references/01_OPERATIONAL_CORE.md` + `references/02_COVERAGE_PROTOCOL.md` + `references/07_INTEGRITY_CHECKS.md` §C + `docs/learning/state/COVERAGE_LEDGER.md` |
-| Human Sync | `references/03_HUMAN_SYNC_PROTOCOL.md` |
+| Human Sync | `references/03_HUMAN_SYNC_PROTOCOL.md` + `templates/LEARNING_PASS_TEMPLATE.md` + `templates/HUMAN_SYNC_TEMPLATE.md` + `references/07_INTEGRITY_CHECKS.md` §E + `docs/learning/state/LEARNING_QUEUE.md` §B |
 | Light ULA | `references/04_ULA_PROTOCOL.md` (gerekirse `references/05_MINDMAP_PROTOCOL.md`) |
 | Full ULA | Sırayla, aynı anda değil: `ula/LEARNING_ARCHITECT.md` → user review → `ula/CONTENT_BUILDER.md` → `ula/LEARNING_AUDITOR.md` |
 | Persistence | `references/06_KNOWLEDGE_PERSISTENCE.md` + gerekli `templates/` dosyası |
@@ -183,5 +186,5 @@ Development repository kuralı: Bu skill'in kendi geliştirme repository'sinde p
 - File modification time, directory listing order, filename sort veya persistent evidence olmayan çıkarım ile coverage kararı verme.
 - Chat context'i tek başına persistent coverage source kabul etme.
 - Tek bir `last covered boundary` değerini coverage gerçeği kabul etme.
-- Her teknik ayrıntıyı öğretme. Yalnız MUST UNDERSTAND bilgi ULA alır.
+- Her teknik ayrıntıyı öğretme. Yalnız MUST UNDERSTAND + knowledge gap olan event ULA adayı olur.
 - Kullanıcı istemeden HTML üretme.

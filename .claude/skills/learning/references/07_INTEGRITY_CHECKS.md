@@ -1,6 +1,6 @@
 # 07 — Integrity Checks
 
-**Status:** §C Coverage Integrity IMPLEMENTED (Phase 3). Diğer bölümler NOT IMPLEMENTED YET.
+**Status:** §C Coverage Integrity IMPLEMENTED (Phase 3). §E Event Integrity IMPLEMENTED (Phase 4). §L NOT IMPLEMENTED YET.
 
 ## Purpose
 
@@ -39,6 +39,40 @@ FAIL olduğunda hiçbir ledger commit'i yapılmaz.
 
 ---
 
+## E. Learning Event and Knowledge Debt Integrity
+
+Ne zaman çalışır:
+
+- Handoff write'tan önce (`03_HUMAN_SYNC_PROTOCOL.md` §17). Pass ve queue §B taslağı üzerinde.
+- Startup'ta, queue §B üzerinde (E-07, E-08, E-12).
+- Ledger'da `PARTIAL` satırı varsa, `open_items` üzerinde (E-10).
+
+| ID | Kontrol | Sonuç | Aksiyon |
+|---|---|---|---|
+| E-01 | Duplicate `event_id` aynı pass içinde | FAIL | Dur. |
+| E-02 | Event `work_unit_ids` boş veya selected scope dışında bir ID içeriyor | FAIL | Dur. |
+| E-03 | Unknown `category` veya `secondary_tags` değeri | FAIL | Dur. |
+| E-04 | Unknown `knowledge_priority` | FAIL | Dur. |
+| E-05 | Unknown `disposition` | FAIL | Dur. |
+| E-06 | Disposition Summary içinde `ULA_CANDIDATE` girdisi tanımlı bir `event_id` değil | FAIL | Dur. |
+| E-07 | Debt `originating_event_id` boş veya tanımlı bir event değil | FAIL | Dur. |
+| E-08 | Duplicate `debt_id` | FAIL | Dur. |
+| E-09 | `IMPLEMENTATION_DETAIL` priority ile `ULA_CANDIDATE` veya `KNOWLEDGE_DEBT` disposition | FAIL | Dur. |
+| E-10 | `PARTIAL.open_items` bilinmeyen bir `event_id` içeriyor | FAIL | Dur. |
+| E-11 | `VERIFIED` iddia evidence ref içermiyor | FAIL | Ref ekle veya status'u düzelt. Sonra tekrar kontrol et. |
+| E-12 | Unknown `evidence_status`, debt `priority` veya `debt_status` | FAIL | Dur. |
+| E-13 | `KNOWLEDGE_DEBT` disposition event için §B kaydı yok | FAIL | Dur. |
+| E-14 | `ULA_CANDIDATE` ve `knowledge_gap` `GAP` değil | WARNING | Kullanıcıya göster. Override kaydı yoksa sor. |
+| E-15 | Aynı `concept` için birden fazla `OPEN` debt | WARNING | Kullanıcıya göster. Otomatik birleştirme yapma. |
+
+E-10 için çözüm: `event_id` içindeki `<learning-pass-id>` ile `docs/learning/passes/<learning-pass-id>.md` bulunur. Event o dosyada yoksa FAIL.
+
+FAIL olduğunda pass dosyası ve queue §B yazılmaz. Ledger zaten Phase 4'te yazılmaz.
+
+Bu bölüm ULA content audit yapmaz.
+
+---
+
 ## L. Learning State Integrity (pointer, passes, maps)
 
 NOT IMPLEMENTED YET.
@@ -47,4 +81,5 @@ NOT IMPLEMENTED YET.
 
 - Phase 1 audit: Bölüm 15.1, 17 (M-16), 18.
 - `references/02_COVERAGE_PROTOCOL.md` §1, §9, §10.
+- `references/03_HUMAN_SYNC_PROTOCOL.md` §7, §9, §13, §14, §15.
 - Content audit: `ula/LEARNING_AUDITOR.md`.

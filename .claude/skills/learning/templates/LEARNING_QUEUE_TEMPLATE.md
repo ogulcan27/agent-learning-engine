@@ -2,7 +2,7 @@
 
 > Template: `.claude/skills/learning/templates/LEARNING_QUEUE_TEMPLATE.md`
 > Target: `docs/learning/state/LEARNING_QUEUE.md`
-> Role: Open-item convenience view.
+> Role: §A open work unit view (derived). §B Knowledge Debt record (authoritative).
 
 ## A. Deferred Work Units
 
@@ -21,6 +21,17 @@ Alan eşlemesi (ledger → queue):
 
 ## B. Knowledge Debt
 
-**RESERVED — implemented in later phase.**
+**AUTHORITATIVE RECORD — generated view değildir.** Kayıtlar `references/03_HUMAN_SYNC_PROTOCOL.md` §14 ile eklenir. Satır silinmez. Status değişir.
 
 Knowledge Debt ertelenmiş **kavramdır**. Deferred Work Unit ertelenmiş **proje işidir**. İki kayıt ayrıdır.
+
+| debt_id | concept | originating_event_id | work_unit_ids | one_sentence_explanation | why_it_matters | priority | debt_status | created_at | concept_home |
+|---|---|---|---|---|---|---|---|---|---|
+
+| Alan | Değerler |
+|---|---|
+| `debt_id` | `KD-<learning-pass-id>-NN` |
+| `originating_event_id` | `LE-<learning-pass-id>-NN`. Zorunlu. |
+| `priority` | `NOW` · `LATER` · `OPTIONAL` |
+| `debt_status` | `OPEN` · `RESOLVED` · `DISMISSED` |
+| `concept_home` | Concept Home pointer veya `UNASSIGNED` |
