@@ -92,10 +92,21 @@ Pass `COMPLETE` olduktan sonra doldurulur. Post-completion enrichment. Coverage'
 |---|---|---|---|
 
 - `Map Sync`: `PENDING` · `COMPLETE` · `NOT_APPLICABLE` · `BLOCKED`
-- `Experience Persistence`: `PENDING` · `NOT_APPLICABLE` (Phase 7 handoff marker)
+- `Experience Persistence`: `PENDING` · `COMPLETE` · `NOT_APPLICABLE` · `BLOCKED` (lifecycle: 06 §19)
+
+## Knowledge Persistence
+
+Persistence sonrası doldurulur. ID ve pointer tutar. İçerik kopyalanmaz. `event_id → experience_id` eşlemesinin deterministic kaydıdır (06 §15.1).
+
+| Event ID | Concept ID | Experience ID | Decision Record | Note |
+|---|---|---|---|---|
+
+- `Concept ID`: `CH-...` · `UNASSIGNED` · `-`
+- `Experience ID`: `EX-...` · `-`
+- `Decision Record`: `DR-...` · `-`
 
 ## Pipeline Handoff
 
 ```text
-Next Stage: <ULA ROUTING | COMPLETION | MAP SYNC | KNOWLEDGE PERSISTENCE>
+Next Stage: <ULA ROUTING | COMPLETION | MAP SYNC | KNOWLEDGE PERSISTENCE | FINAL INTEGRITY | DONE>
 ```

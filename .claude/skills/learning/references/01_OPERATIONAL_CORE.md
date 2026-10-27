@@ -1,6 +1,6 @@
 # 01 — Operational Core
 
-**Status:** Startup → Map Sync IMPLEMENTED (Phase 3–6). Knowledge Persistence NOT IMPLEMENTED YET.
+**Status:** Startup → Final Integrity IMPLEMENTED (Phase 3–7).
 
 ## Purpose
 
@@ -13,7 +13,7 @@
 
 ---
 
-## 1. Implemented boundary (Phase 6)
+## 1. Run loop
 
 ```text
 /learning
@@ -45,9 +45,16 @@ COMPLETION
 MAP SYNC
 13. eligibility + identity + delta + integrity (07 §M) + graph write + view (05 §6–§12)
 ↓                      post-completion enrichment; completion'ı geri alamaz
-NEXT: KNOWLEDGE PERSISTENCE — NOT IMPLEMENTED YET
+KNOWLEDGE PERSISTENCE
+14. routing + resolution + delta + integrity (07 §P) + atomic write (06 §5–§22)
+↓                      post-completion enrichment; completion'ı geri alamaz
+FINAL INTEGRITY
+15. 07 §C + §E + §U + §M + §P
+↓
+DONE
 
 Map komutları (`/learning map ...`) bu akışı çalıştırmaz. Doğrudan 05 §15'e gider.
+Persistence komutları (`concept`, `library`, `experiences`, `debt`) bu akışı çalıştırmaz. Doğrudan 06 §24'e gider.
 ```
 
 ## 2. Stop rules
@@ -65,7 +72,9 @@ Map komutları (`/learning map ...`) bu akışı çalıştırmaz. Doğrudan 05 �
 | `pass_status: WAITING_USER` | Kullanıcı kararını iste. Pass'i kaydet. Dur. |
 | `pass_status: BLOCKED` | Eksik evidence / artifact'i göster. Dur. |
 | Map integrity (07 §M) FAIL veya identity AMBIGUOUS | Graph yazma. Event `map_sync_status: BLOCKED`. Coverage ve pass değişmez. Dur. |
-| Sonraki protocol `NOT IMPLEMENTED YET` | Pass sonucunu göster. Adımın henüz implement edilmediğini bildir. Dur. |
+| Persistence integrity (07 §P) FAIL, AMBIGUOUS veya CONFLICT | Write yok. Event persistence `BLOCKED`. Coverage, pass ve graph değişmez. Diğer event'lere devam et. |
+| Personal library `UNCONFIGURED` ve personal write gerekli | 06 §2.2 seçeneklerini sor. Cevap yoksa event `PENDING`. Dur. |
+| Final integrity FAIL | Hatayı göster. `DONE` deme. |
 
 ## 3. Write rules
 
@@ -76,6 +85,7 @@ Map komutları (`/learning map ...`) bu akışı çalıştırmaz. Doğrudan 05 �
 | ULA | `passes/<learning-pass-id>/ula/<event-id>/`, pass routing tablosu ve metadata | Ledger |
 | Completion | Ledger `COVERED` / `PARTIAL` / `NOT_LEARNING_RELEVANT`; pass status | — |
 | Map sync | `maps/SEMANTIC_GRAPH.md` (delta, atomic), `maps/HORIZONTAL_MAP.md` (view), pass `## Map Sync` tablosu | Ledger, pass status, `current_stage` |
+| Persistence | Personal: Concept Home, Registry, Experience Map, Index. Project: `concepts/`, `experiences/`, graph `home_ref`, queue §B debt status, pass `Experience Persistence` + `## Knowledge Persistence` | Ledger, pass status, `current_stage` |
 | Abandon | Pass `pass_status: ABANDONED` | Ledger, queue §B |
 
 - Ledger yalnız Discovery Commit, Scope Commit ve Completion Commit ile yazılır (02 §10).
@@ -83,7 +93,10 @@ Map komutları (`/learning map ...`) bu akışı çalıştırmaz. Doğrudan 05 �
 
 ## 4. Steps after map sync
 
-NOT IMPLEMENTED YET. Sıra `SKILL.md` Bölüm 7'dedir.
+1. Knowledge Persistence: `06`. Event başına atomic transaction.
+2. Final Integrity: `07` §C, §E, §U, §M, §P. FAIL yoksa run `DONE`.
+
+§L Learning State Integrity henüz implement edilmedi. Final integrity'yi durdurmaz.
 
 ## Authoritative Source
 

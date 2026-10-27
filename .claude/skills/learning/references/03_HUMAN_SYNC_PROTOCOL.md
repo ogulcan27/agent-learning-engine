@@ -548,7 +548,7 @@ Debt priority:
 
 - Phase 4 yalnız `OPEN` kayıt oluşturur.
 - `DISMISSED`: yalnız kullanıcının açık kararı ile.
-- `RESOLVED`: Knowledge Persistence phase'inde tamamlanır. Phase 4 yazmaz.
+- `RESOLVED`: yalnız `06_KNOWLEDGE_PERSISTENCE.md` §20 guard'ı ile. Phase 4 yazmaz.
 - `concept_home`: Concept Home henüz yoksa `UNASSIGNED`.
 - Aynı `concept` için `OPEN` debt zaten varsa yeni kayıt açma. Mevcut kaydı kullanıcıya göster.
 

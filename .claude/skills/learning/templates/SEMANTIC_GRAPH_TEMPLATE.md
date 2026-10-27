@@ -32,7 +32,7 @@ last_updated: YYYY-MM-DD
 | `node_type` | `ROOT` · `DOMAIN` · `CONCEPT` · `SYSTEM_COMPONENT` · `DECISION` · `PATTERN` · `FAILURE_MODE` · `OTHER` |
 | `node_status` | `ACTIVE` · `DEBT` · `SUPERSEDED` |
 | `available_depth` | `L1`…`L4` alt kümesi veya `-` |
-| `home_ref` | Concept Home pointer veya `UNASSIGNED` |
+| `home_ref` | Concept ID `CH-xxxxxxxx` veya `UNASSIGNED` (06 §21). Path değil. |
 | `edge_id` | `KE-NNNN` |
 | `relation_type` | `NEXT` · `REQUIRES` · `PRODUCES` · `CAUSES` · `USES` · `DEPENDS_ON` · `ALTERNATIVE_TO` · `COMPARED_WITH` · `PART_OF` · `EVIDENCE_FOR` · `FAILS_WHEN` · `IMPLEMENTED_BY` |
 | Liste ayırıcı | `; ` |

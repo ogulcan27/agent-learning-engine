@@ -72,14 +72,14 @@ docs/learning/maps/
 | `parent_id` | Primary navigation parent `node_id` veya `-` (§5) |
 | `short_meaning` | Tek kısa cümle (Türkçe) |
 | `system_role` | Sistemdeki rolü, tek kısa cümle |
-| `home_ref` | Concept Home pointer. Phase 6'da `UNASSIGNED`. |
+| `home_ref` | Concept ID `CH-xxxxxxxx` veya `UNASSIGNED`. Yalnız `06` §21 atar. |
 | `available_depth` | `L1`…`L4` alt kümesi veya `-` (§3.4) |
 | `source_event_ids` | Kaynak `event_id` listesi |
 | `source_artifacts` | ULA artifact veya pass path listesi |
 | `project_appearances` | `learning_pass_id` listesi |
 | `aliases` | Eski veya alternatif isimler |
 | `node_status` | §3.3 |
-| `debt_id` | Yalnız `DEBT` node: `KD-...`. Diğerleri `-`. |
+| `debt_id` | `DEBT` node: `KD-...` zorunlu. `DEBT → ACTIVE` promoted node: historical reference olarak korunur. Diğerleri `-`. |
 | `superseded_by` | Yalnız `SUPERSEDED` node: canonical `node_id`. Diğerleri `-`. |
 
 Liste alanları `; ` ile ayrılır.
@@ -373,7 +373,7 @@ Aynı tabloda `experience_persistence_status`:
 | `PENDING` | `EXPERIENCE_ONLY` veya `COMPLETE` ULA event |
 | `NOT_APPLICABLE` | Diğerleri |
 
-Bu yalnız Phase 7 handoff marker'ıdır. Lifecycle `06`'dadır.
+Map sync yalnız başlangıç değerini yazar. Tam lifecycle (`PENDING` · `COMPLETE` · `NOT_APPLICABLE` · `BLOCKED`) `06` §19'dadır.
 
 ### 10.2 Coverage independence
 
@@ -512,11 +512,11 @@ Progressive expansion: Map expands. Content does not dump. Bir çağrıda bütü
 ## 17. Persistence boundary
 
 ```text
-Semantic Graph                     → project-local knowledge structure (bu dosya)
-Concept Home / Experience persistence → 06_KNOWLEDGE_PERSISTENCE.md (Phase 7)
+Semantic Graph                        → project-local knowledge structure (bu dosya)
+Concept Home / Experience persistence → 06_KNOWLEDGE_PERSISTENCE.md
 ```
 
-`home_ref` Phase 7'de doldurulur. Phase 6 global graph veya cross-project registry oluşturmaz.
+`home_ref` yalnız `06` §21 ile atanır. Bu update `node_id` ve semantic identity'yi değiştirmez. Global cross-project graph yoktur.
 
 ---
 

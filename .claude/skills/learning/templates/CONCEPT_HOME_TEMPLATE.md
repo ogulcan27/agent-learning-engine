@@ -1,24 +1,87 @@
-# Concept Home Template
+# Concept Home — <Canonical Name>
 
-**Status:** NOT IMPLEMENTED YET
-**Planned Phase:** Phase 7 (tentative)
-**Target file:** `<personal_library_path>/concepts/ veya docs/learning/concepts/ (temporary local)`
+> Template: `.claude/skills/learning/templates/CONCEPT_HOME_TEMPLATE.md`
+> Target: `<personal_library_path>/concepts/<concept-id>.md` (PERSONAL) veya `docs/learning/concepts/<concept-id>.md` (LOCAL_TEMPORARY)
+> Rules: `references/06_KNOWLEDGE_PERSISTENCE.md` §8–§14
+> Role: General technical knowledge. Project story değildir. Tek concept, tek Home.
+> İçerik yalnız `COMPLETE` ULA artifact'ten gelir. Olmayan depth: `N/A`. Delta ile güncellenir; baştan yazılmaz.
 
-## Purpose
+## Identity
 
-Bir kavramın genel bilgisini tek bir Home içinde tutar.
+```text
+Concept ID:     CH-xxxxxxxx
+Canonical Name: <canonical technical term>
+Aliases:        -
+Short Meaning:  <tek cümle>
+Status:         ACTIVE
+Home Mode:      PERSONAL
+Version:        1
+Updated At:     YYYY-MM-DD
+```
 
-## Future Schema
+- `Status`: `ACTIVE` · `MERGED`
+- `Home Mode`: `PERSONAL` · `LOCAL_TEMPORARY`
 
-- Concept ID, canonical name
-- L0 — Map
-- L1 — Simple Explanation
-- L2 — Mechanism
-- L3 — Theory
-- L4 — Math / Formalism
-- Boundary Statements
-- Retrieval
-- R — Reference
-- Project Appearances
+## System Position
 
-Alanlar ilgili phase içinde tanımlanacak. Bu dosya o zamana kadar initialization için kullanılmaz.
+<Genel bilgi alanındaki yer. Tek satır. Ör: Async Processing → Queue>
+
+## L0 — Map / Context
+
+Provenance: <ULA-DERIVED | PROJECT-DERIVED | GENERAL THEORY | USER-CONFIRMED> (<source>)
+
+<Büyük resimde nerede? Kısa yerel harita.>
+
+## L1 — Simple Explanation
+
+Provenance: <label> (<source>)
+
+## L2 — Mechanism
+
+Provenance: <label> (<source>)
+
+## L3 — Theory
+
+N/A
+
+## L4 — Math / Formalism
+
+N/A
+
+## Confusion Boundaries
+
+N/A
+
+## Retrieval
+
+Provenance: <label> (<source>)
+
+## Reference
+
+N/A
+
+## Project Appearances
+
+Dedupe: (`project_id`, `event_id`). Yalnız appearance eklemek `Version` değiştirmez.
+
+| project_id | project_name | event_id | learning_pass_id | experience_id | date |
+|---|---|---|---|---|---|
+
+## Source Artifacts
+
+| project_id | artifact | levels | version |
+|---|---|---|---|
+
+## Change History
+
+| version | date | change | provenance | source |
+|---|---|---|---|---|
+
+## Local Pointer
+
+<!-- Yalnız Home Mode: LOCAL_TEMPORARY. PERSONAL Home'da bu bölüm yoktur. Promotion'da project pointer'a taşınır. -->
+
+```text
+Project Node IDs:    KN-...
+Local Delta:         -
+```

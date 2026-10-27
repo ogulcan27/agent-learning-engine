@@ -25,8 +25,8 @@ Alan eşlemesi (ledger → queue):
 
 Knowledge Debt ertelenmiş **kavramdır**. Deferred Work Unit ertelenmiş **proje işidir**. İki kayıt ayrıdır.
 
-| debt_id | concept | originating_event_id | work_unit_ids | one_sentence_explanation | why_it_matters | priority | debt_status | created_at | concept_home |
-|---|---|---|---|---|---|---|---|---|---|
+| debt_id | concept | originating_event_id | work_unit_ids | one_sentence_explanation | why_it_matters | priority | debt_status | created_at | concept_home | resolution_ref |
+|---|---|---|---|---|---|---|---|---|---|---|
 
 | Alan | Değerler |
 |---|---|
@@ -34,4 +34,7 @@ Knowledge Debt ertelenmiş **kavramdır**. Deferred Work Unit ertelenmiş **proj
 | `originating_event_id` | `LE-<learning-pass-id>-NN`. Zorunlu. |
 | `priority` | `NOW` · `LATER` · `OPTIONAL` |
 | `debt_status` | `OPEN` · `RESOLVED` · `DISMISSED` |
-| `concept_home` | Concept Home pointer veya `UNASSIGNED` |
+| `concept_home` | `CH-xxxxxxxx` veya `UNASSIGNED` |
+| `resolution_ref` | `OPEN`: `-` · `RESOLVED`: resolution `event_id` · `DISMISSED`: `user:YYYY-MM-DD` |
+
+Lifecycle ve `RESOLVED` guard: `references/06_KNOWLEDGE_PERSISTENCE.md` §20.

@@ -1,6 +1,6 @@
 # 07 — Integrity Checks
 
-**Status:** §C Coverage Integrity IMPLEMENTED (Phase 3). §E Event Integrity IMPLEMENTED (Phase 4). §U ULA / Pass Integrity IMPLEMENTED (Phase 5). §M MindMap / Semantic Graph Integrity IMPLEMENTED (Phase 6). §L NOT IMPLEMENTED YET.
+**Status:** §C Coverage Integrity IMPLEMENTED (Phase 3). §E Event Integrity IMPLEMENTED (Phase 4). §U ULA / Pass Integrity IMPLEMENTED (Phase 5). §M MindMap / Semantic Graph Integrity IMPLEMENTED (Phase 6). §P Knowledge Persistence Integrity IMPLEMENTED (Phase 7). §L NOT IMPLEMENTED YET.
 
 ## Purpose
 
@@ -144,6 +144,50 @@ FAIL olduğunda graph overwrite edilmez, `graph_version` değişmez, view yenide
 
 ---
 
+## P. Knowledge Persistence Integrity
+
+Ne zaman çalışır:
+
+- Persistence sırasında, bütün candidate set üzerinde, write'tan önce (`06_KNOWLEDGE_PERSISTENCE.md` §22).
+- Final integrity'de, project state ve yüklenmiş personal dosyalar üzerinde.
+
+Kapsam: Personal library yalnız registry + işlemdeki Home + ilgili map ile kontrol edilir. Bütün library yüklenmez. Map satırlarında yalnız current `project_id` satırları doğrulanır.
+
+| ID | Kontrol | Sonuç | Aksiyon |
+|---|---|---|---|
+| P-01 | Duplicate `concept_id` (registry satırı veya Home dosyası) | FAIL | Write yok. Event `BLOCKED`. |
+| P-02 | Duplicate `experience_id` | FAIL | Write yok. |
+| P-03 | Registry satırı var, Home dosyası yok | FAIL | Write yok. |
+| P-04 | Home dosyası var, registry satırı yok | FAIL | Write yok. |
+| P-05 | İki `ACTIVE` registry satırı aynı `Canonical Name` | FAIL | Write yok. Kullanıcı: farklı canonical name veya merge. |
+| P-06 | Alias başka bir `ACTIVE` concept'in canonical name veya alias'ı ile çakışıyor | FAIL | Write yok. Kullanıcı kararı. |
+| P-07 | Project pointer bilinmeyen `concept_id` gösteriyor | FAIL | Write yok. |
+| P-08 | Graph `home_ref` bilinmeyen `concept_id` gösteriyor | FAIL | Write yok. |
+| P-09 | Aynı `event_id` için birden fazla Experience Note | FAIL | Write yok. |
+| P-10 | Concept Home içinde duplicate Project Appearance (`project_id`, `event_id`) | FAIL | Write yok. |
+| P-11 | Experience Note `L0`–`L4` başlığı veya Home section metni taşıyor | FAIL | Write yok. Teoriyi çıkar. |
+| P-12 | `RESOLVED` debt: `resolution_ref` ULA `COMPLETE` event değil veya event persistence `COMPLETE` değil veya `concept_home` çözülemiyor | FAIL | Write yok. |
+| P-13 | `RESOLVED` debt ve `debt_id` taşıyan graph node hâlâ `DEBT` | FAIL | Write yok. |
+| P-14 | Promoted `ACTIVE` node (`debt_id` var, debt `RESOLVED`) ve `home_ref: UNASSIGNED` | FAIL | Write yok. |
+| P-15 | `DISMISSED` debt ve `resolution_ref` `user:` kararı değil | FAIL | Write yok. |
+| P-16 | Persistence `COMPLETE` ama pass tablosundaki Home / pointer / Experience Note / Decision Record dosyası yok | FAIL | Status `PENDING`. Tekrar persistence. |
+| P-17 | `personal_library_path: UNCONFIGURED` ve personal write candidate'i var | FAIL | Write yok. `06` §2.2. |
+| P-18 | `LOCAL_TEMPORARY` concept `personal:` olarak işaretli veya personal Home'u yok iken pointer `PERSONAL` | FAIL | Write yok. |
+| P-19 | Promotion `concept_id` değiştirdi | FAIL | Write yok. |
+| P-20 | SD Experience Map satırı olmayan Experience Note gösteriyor | FAIL | Write yok. |
+| P-21 | DSA Experience Map satırı olmayan Experience Note gösteriyor | FAIL | Write yok. |
+| P-22 | DSA Experience Map satırı primary category `DSA` olmayan event'e ait | FAIL | Write yok. |
+| P-23 | Registry ile Home Identity uyuşmuyor (`Canonical Name`, `Aliases`, `Status`, `Home`) | FAIL | Write yok. |
+| P-24 | Library Index veya pointer `Canonical Name` label'ı registry / Home ile uyuşmuyor | WARNING | Index'i ve label'ı yeniden üret. |
+| P-25 | Version kuralı ihlali (`06` §9): versioned alan değişti ve `Version` +1 değil, veya versioned alan değişmedi ve `Version` değişti | FAIL | Write yok. |
+| P-26 | Dolu Concept Home content section'ında `Provenance:` etiketi yok veya label bilinmiyor | FAIL | Write yok. |
+| P-27 | Experience Note claim `VERIFIED` ve ref yok, veya claim status kaynak event'ten güçlü | FAIL | Write yok. |
+| P-28 | Project pointer (`Home Mode: PERSONAL`) L0–L4 theory section'ı taşıyor (promotion sonrası duplicate theory) | FAIL | Write yok. |
+
+FAIL olduğunda hiçbir persistence dosyası yazılmaz. Event persistence `BLOCKED`. Coverage, ledger ve pass status değişmez.
+
+---
+
 ## L. Learning State Integrity (pointer, passes, maps)
 
 NOT IMPLEMENTED YET.
@@ -155,4 +199,5 @@ NOT IMPLEMENTED YET.
 - `references/03_HUMAN_SYNC_PROTOCOL.md` §7, §9, §13, §14, §15.
 - `references/04_ULA_PROTOCOL.md` §2, §5, §7, §9, §10, §11.
 - `references/05_MINDMAP_PROTOCOL.md` §3–§11.
+- `references/06_KNOWLEDGE_PERSISTENCE.md` §4–§22.
 - Content audit: `ula/LEARNING_AUDITOR.md`.

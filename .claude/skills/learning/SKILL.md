@@ -3,7 +3,7 @@ name: learning
 description: Run the project's manual System Design + Problem-Pattern DSA + ULA learning workflow and maintain project learning coverage.
 disable-model-invocation: true
 user-invocable: true
-argument-hint: "[latest | pending | catch-up | show skipped | resume | new | abandon <pass-id> | map [<node-id> [L1-L4] | debt | sync] | <work-unit-id>]"
+argument-hint: "[latest | pending | catch-up | show skipped | resume | new | abandon <pass-id> | map [<node-id> [L1-L4] | debt | sync] | concept <concept-id> | library | experiences | debt | <work-unit-id>]"
 ---
 
 # /learning — Entry Router
@@ -72,7 +72,7 @@ Outside knowledge: `ALLOWED WITH LABELS`. Project facts için project sources au
 | PROJECT-SPECIFIC STATE | `docs/learning/` (project root'a göre) | `/learning` yazar |
 | PERSONAL CROSS-PROJECT STATE | `LEARNING_CONFIG.md → personal_library_path` | Yalnız yapılandırılmışsa |
 
-`personal_library_path` yapılandırılmadıysa hata verme. Concept'i geçici olarak `docs/learning/concepts/` içinde tut.
+`personal_library_path` hard-code edilmez. Yapılandırılmadıysa hata verme. Kullanıcıya sor: yapılandır / `LOCAL_TEMPORARY` / ertele (`references/06_KNOWLEDGE_PERSISTENCE.md` §2.2).
 
 ## 6. Arguments
 
@@ -92,6 +92,10 @@ Outside knowledge: `ALLOWED WITH LABELS`. Project facts için project sources au
 | `map <node-id> L1`…`L4` | Depth view; yalnız mevcut seviye (`05` §14) |
 | `map debt` | `DEBT` node listesi |
 | `map sync` | `COMPLETE` pass'lerde bekleyen map sync (`05` §8) |
+| `concept <concept-id>` | Pointer + Concept Home (`06` §24) |
+| `library` | Personal library status / index; promotion önerisi (`06` §24) |
+| `experiences` | Experience Note listesi (`06` §24) |
+| `debt` | `OPEN` Knowledge Debt (`06` §24) |
 
 Argüman belirsizse tahmin etme. Kullanıcıya sor.
 
@@ -110,12 +114,13 @@ Argüman belirsizse tahmin etme. Kullanıcıya sor.
 | 9 | LIGHT ULA / FULL ULA (retrieval prompt dahil) | `references/04_ULA_PROTOCOL.md` §6–§8 | IMPLEMENTED |
 | 10 | COVERAGE COMPLETION COMMIT (unit bazında) | `references/04_ULA_PROTOCOL.md` §11 + `references/02_COVERAGE_PROTOCOL.md` §9–§10 | IMPLEMENTED |
 | 11 | MAP SYNC: SEMANTIC GRAPH + HORIZONTAL MAP | `references/05_MINDMAP_PROTOCOL.md` §6–§12 | IMPLEMENTED (yalnız pass COMPLETE ise; completion'ı geri almaz) |
-| 12 | KNOWLEDGE PERSISTENCE | `references/06_KNOWLEDGE_PERSISTENCE.md` | NOT IMPLEMENTED YET |
-| 13 | INTEGRITY CHECK | `references/07_INTEGRITY_CHECKS.md` | §C, §E, §U, §M IMPLEMENTED; §L NOT IMPLEMENTED YET |
+| 12 | KNOWLEDGE PERSISTENCE | `references/06_KNOWLEDGE_PERSISTENCE.md` §5–§22 | IMPLEMENTED (post-completion; completion'ı geri almaz) |
+| 13 | FINAL INTEGRITY → DONE | `references/07_INTEGRITY_CHECKS.md` §C, §E, §U, §M, §P | IMPLEMENTED (§L henüz yok; guard değildir) |
 
 Startup'ta active pass varsa önce resume / new / abandon sorulur (`references/04_ULA_PROTOCOL.md` §10). Resume, pass'in `current_stage` adımından devam eder.
 
 `map ...` argümanları run loop'u çalıştırmaz. Doğrudan `references/05_MINDMAP_PROTOCOL.md` §15'e gider.
+`concept`, `library`, `experiences`, `debt` argümanları run loop'u çalıştırmaz. Doğrudan `references/06_KNOWLEDGE_PERSISTENCE.md` §24'e gider.
 
 Genel akış ve dur kuralları: `references/01_OPERATIONAL_CORE.md`.
 
@@ -126,17 +131,16 @@ Genel akış ve dur kuralları: `references/01_OPERATIONAL_CORE.md`.
 3. Bu adımda ve sonraki adımlarda project state yazma. Completion Commit yapma.
 4. Dur.
 
-Adım 1–11 implement edilmiştir. Ledger yalnız Discovery, Scope ve Completion Commit ile yazılır (`02_COVERAGE_PROTOCOL.md` §10). Retrieval yalnız ULA artifact içindeki prompt'tur; interactive retrieval session yoktur. Bugünkü akış:
+Adım 1–13 implement edilmiştir. Skeleton kuralı bugün run loop'ta hiçbir adımda tetiklenmez. Ledger yalnız Discovery, Scope ve Completion Commit ile yazılır (`02_COVERAGE_PROTOCOL.md` §10). Retrieval yalnız ULA artifact içindeki prompt'tur; interactive retrieval session yoktur. Bugünkü akış:
 
 ```text
 Coverage              → IMPLEMENTED
 Human Sync            → IMPLEMENTED
-ULA Routing           → IMPLEMENTED
-Light ULA             → IMPLEMENTED
-Full ULA              → IMPLEMENTED
+ULA                   → IMPLEMENTED
 Completion            → IMPLEMENTED
-MindMap / Semantic Graph → IMPLEMENTED
-Knowledge Persistence (12) → NOT IMPLEMENTED YET → STOP
+MindMap               → IMPLEMENTED
+Knowledge Persistence → IMPLEMENTED
+FINAL INTEGRITY       → DONE
 ```
 
 ## 8. Load map
@@ -152,7 +156,8 @@ Token kuralı: Yalnız aktif adımın dosyasını oku. Bir dosyayı aynı çağr
 | Light ULA | `references/04_ULA_PROTOCOL.md` + `templates/LIGHT_ULA_TEMPLATE.md` + gerekli project evidence |
 | Full ULA | Sırayla, aynı anda değil: `ula/LEARNING_ARCHITECT.md` → user review → `ula/CONTENT_BUILDER.md` → `ula/LEARNING_AUDITOR.md`. Stage başına dosyalar: `references/04_ULA_PROTOCOL.md` §12 |
 | Map sync / `map ...` | `references/05_MINDMAP_PROTOCOL.md` + `docs/learning/maps/SEMANTIC_GRAPH.md` (+ `HORIZONTAL_MAP.md`) + `references/07_INTEGRITY_CHECKS.md` §M. Depth view: yalnız ilgili artifact bölümü. |
-| Persistence | `references/06_KNOWLEDGE_PERSISTENCE.md` + gerekli `templates/` dosyası |
+| Persistence | `references/06_KNOWLEDGE_PERSISTENCE.md` + `references/07_INTEGRITY_CHECKS.md` §P + registry + yalnız candidate Concept Home + yalnız ilgili Experience Map + gerekli `templates/` dosyası (`06` §25) |
+| `concept` / `library` / `experiences` / `debt` | `06` §24–§25 içindeki dosyalar. Bütün personal library yüklenmez. |
 | Integrity | `references/07_INTEGRITY_CHECKS.md` |
 
 **Default olarak ASLA otomatik yükleme:**
@@ -160,6 +165,7 @@ Token kuralı: Yalnız aktif adımın dosyasını oku. Bir dosyayı aynı çağr
 - `references/00_MASTER_SYSTEM_SPEC.md`
 - `ula/examples/`
 - Full ULA source set (spec + üç rol + `ula/templates/` birlikte)
+- Personal Technical Library (normal project work sırasında hiç; persistence sırasında yalnız `06` §25 kadar)
 
 Master yalnız ambiguity, audit, maintenance veya explicit deep verification gerektiğinde okunur.
 
@@ -188,6 +194,8 @@ docs/learning/
 Config default değerleri:
 
 ```text
+project_id            = UNCONFIGURED   (06 §2.1)
+project_name          = UNCONFIGURED
 personal_library_path = UNCONFIGURED
 work_unit_source      = auto
 ```
