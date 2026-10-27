@@ -61,7 +61,7 @@ SELECTED COVERAGE SCOPE        (02 §8 çıktısı)
 ↓
 2. PROJECT EVIDENCE READ       (§4)
 ↓
-3. HUMAN SYNCHRONIZATION       scope-level, tek çıktı (§5, §6)
+3. HUMAN SYNCHRONIZATION       scope-level, tek çıktı (§5, §6); geçerli unit record reuse (08 §12)
 ↓
 4. LEARNING EVENT EXTRACTION   filter + event model (§8–§10)
 ↓
@@ -168,6 +168,9 @@ Kurallar:
 3. Her event hangi work unit'lerden geldiğini `work_unit_ids` ile gösterir. Bir event birden fazla unit'e bağlı olabilir.
 4. Routine file-by-file narration yapma.
 5. Sabit event quota kullanma. Event sayısını yapay olarak artırma.
+6. Kalıcı unit record (`08` §4) kullanıcıya gösterilen çıktı değildir. Kullanıcı yine scope başına tek çıktı görür.
+
+§4–§7 Human Synchronization içeriği için tek kaynaktır. Full mode ve `/stay-in-the-loop sync` aynı kuralları kullanır (`08` §2).
 
 ```text
 100 technical changes
@@ -601,6 +604,8 @@ Sıra:
 docs/learning/passes/<learning-pass-id>/LEARNING_PASS.md yaz (templates/LEARNING_PASS_TEMPLATE.md)
 ↓
 KNOWLEDGE_DEBT event'leri için queue §B'ye OPEN kayıt ekle
+↓
+Üretilen / refresh edilen unit record'ları yaz (08 §12)
 ↓
 Pipeline Handoff: Next Stage = 04 §3 early completion check
 ```

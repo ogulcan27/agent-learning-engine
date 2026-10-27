@@ -191,6 +191,40 @@ check("G 01 run loop step 1 resolves root first", bool(re.search(r"1\. STARTUP .
 check("G 01 stop rule: root unknown -> BLOCKED", bool(re.search(r"^\| Active project root belirlenemedi \| .*BLOCKED", core, re.M)), True)
 check("G SKILL.md state layer uses <ACTIVE_PROJECT_ROOT>/docs/learning/", "`<ACTIVE_PROJECT_ROOT>/docs/learning/`" in text("SKILL.md"), True)
 
+# Test H - standalone sync in B never uses A's Human Sync state (08 §3, 07 §S)
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "sync"))
+import sync_model as sm  # noqa: E402
+
+SP = sm.Protocol(SKILL)
+(A / sm.SYNC / "records").mkdir(parents=True)
+a_rec = sm.render_record(SP, {"record_id": sm.record_id(sm.wu(1)), "project_id": SENTINEL, "work_unit_id": sm.wu(1),
+                              "record_version": 1, "checkpoint": "fp:0123456789abcdef", "updated_at": "2026-10-27"},
+                         {"Purpose": f"{SENTINEL} regime model stage 18"})
+(A / sm.SYNC / "records" / f"{sm.record_id(sm.wu(1))}.md").write_text(a_rec, encoding="utf-8")
+(A / sm.STATE_F).write_text(sm.render_state(SP, SENTINEL, [{"work_unit_id": sm.wu(1), "seq": 1, "label": "Step 1", "sync_status": "SYNCED",
+                                                           "record_id": sm.record_id(sm.wu(1)), "record_version": "1",
+                                                           "checkpoint": "fp:0123456789abcdef", "evidence_paths": "src/a.py",
+                                                           "depends_on": "-", "synced_at": "2026-10-27"}]), encoding="utf-8")
+a_before = tree_hash(A)
+(B / "PLAN.md").write_text("# Plan\n\n## Step 1 — Step 1\n\nPaths: src/b.py\n", encoding="utf-8")
+(B / "src/b.py").write_text("print('b')\n", encoding="utf-8")
+root = resolve_root(incident)
+res = sm.Sync(SP, root).run("", approve_id=True)
+b_sync = B / sm.SYNC
+check("H sync runs in Project B", (root, res["synced"]), (B.resolve(), [sm.wu(1)]))
+check("H B receives its own docs/learning/sync", (b_sync / "HUMAN_SYNC_STATE.md").exists(), True)
+check("H no A identifier in B sync state", [f.name for f in b_sync.rglob("*.md") if SENTINEL in f.read_text(encoding="utf-8")], [])
+check("H B record belongs to B project_id", sm.kv((b_sync / "records" / f"{sm.record_id(sm.wu(1))}.md").read_text(encoding="utf-8"))["project_id"]
+      == dict(sm.KV.findall((B / sm.CONFIG_F).read_text(encoding="utf-8")))["project_id"], True)
+check("H Project A (state + Human Sync) unchanged", tree_hash(A), a_before)
+(b_sync / "records" / f"{sm.record_id(sm.wu(1))}.md").write_text(a_rec, encoding="utf-8")
+try:
+    sm.Sync(SP, root).run("")
+    code = "NOT BLOCKED"
+except sm.Blocked as e:
+    code = str(e)
+check("H A record copied into B -> S-04 BLOCKED, never used as B state", code, "S-04")
+
 # Extra - cleanup
 shutil.rmtree(BASE, ignore_errors=True)
 

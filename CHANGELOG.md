@@ -9,6 +9,7 @@ First stable release. Current integration: Claude Code (runtime skill `stay-in-t
 - Manual, project-driven learning workflow started with `/stay-in-the-loop`.
 - Coverage Engine: work unit discovery, gap detection, and per-unit coverage ledger.
 - Human Synchronization: short summaries of what AI-assisted work changed and why.
+- Standalone incremental Human Sync (`/stay-in-the-loop sync`) with persistent per-work-unit records, scoped staleness and reuse in the full workflow.
 - Light / Full ULA: targeted learning content only for concepts that matter.
 - Semantic Graph and knowledge map views.
 - Concept Home and experience persistence, including the Personal Technical Library.

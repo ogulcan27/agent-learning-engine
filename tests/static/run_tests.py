@@ -15,7 +15,7 @@ RESULTS = []
 FILES = sorted(SKILL.rglob("*.md"))
 OPERATIONAL = [f for f in FILES if "ula" not in f.relative_to(SKILL).parts and f.name != "00_MASTER_SYSTEM_SPEC.md"]
 HEAD = re.compile(r"^#{1,4} ([0-9]+[A-Z]?(?:\.[0-9]+)*|[A-Z](?:\.[0-9]+)?)[.\s]", re.M)
-PREFIX = r"`?((?:references/)?0[0-7](?:_[A-Z_]+\.md)?|ula/[A-Z_]+\.md)`?"
+PREFIX = r"`?((?:references/)?0[0-8](?:_[A-Z_]+\.md)?|ula/[A-Z_]+\.md)`?"
 REF = re.compile(PREFIX + r" (§[0-9A-Z][0-9A-Z.]*(?:(?:–| / |, )§[0-9A-Z][0-9A-Z.]*)*)")
 
 
@@ -80,8 +80,8 @@ check("X router step 13 -> 07 §L", "07_INTEGRITY_CHECKS.md` §L" in router[-1][
 check("X manual only", ("disable-model-invocation: true" in skill_md, "user-invocable: true" in skill_md), (True, True))
 hint = re.search(r'^argument-hint: "(.+)"$', skill_md, re.M).group(1)
 check("X argument hint covers commands", [c for c in ("map", "concept", "library", "experiences", "debt", "integrity", "resume",
-                                                      "abandon") if c not in hint], [])
-check("X arguments routed", [c for c in ("map", "concept", "library", "experiences", "debt", "integrity")
+                                                      "abandon", "sync") if c not in hint], [])
+check("X arguments routed", [c for c in ("map", "concept", "library", "experiences", "debt", "integrity", "sync")
                              if not re.search(rf"^\| `{c}( |`)", skill_md, re.M)], [])
 check("X SKILL.md short (<= 220 lines)", len(skill_md.splitlines()) <= 220, True)
 check("X final flow line", "START → COVERAGE → HUMAN SYNC → ULA → COMPLETION → MAP SYNC → KNOWLEDGE PERSISTENCE → FINAL INTEGRITY → DONE"

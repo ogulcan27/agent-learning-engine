@@ -91,6 +91,7 @@ DONE
 Map komutları (`/stay-in-the-loop map ...`) bu akışı çalıştırmaz. Doğrudan 05 §15'e gider.
 Persistence komutları (`concept`, `library`, `experiences`, `debt`) bu akışı çalıştırmaz. Doğrudan 06 §24'e gider.
 `/stay-in-the-loop integrity` bu akışı çalıştırmaz. Doğrudan 07 §L.6'ya gider.
+`/stay-in-the-loop sync ...` bu akışı çalıştırmaz. Doğrudan 08 §11'e gider. Human Sync sonrası STOP.
 ```
 
 ## 2. Stop rules

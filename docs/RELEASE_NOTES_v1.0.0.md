@@ -11,6 +11,7 @@
 - **Manual learning workflow.** Run `/stay-in-the-loop` when you want to catch up on what your AI-assisted work changed. Nothing runs in the background.
 - **Coverage.** Finds unlearned work units from persistent project evidence such as git commits, plan documents, and issue keys.
 - **Human Synchronization.** Short summaries of what changed and why.
+- **Standalone Human Sync.** `/stay-in-the-loop sync` keeps you aligned with the project without studying. It is incremental: synchronized work is reused, and only new or materially changed work is processed. It never starts ULA or changes learning coverage.
 - **Light / Full ULA.** Teaching material only for concepts you need, at the depth you need.
 - **Semantic Graph.** A per-project concept graph with knowledge map views.
 - **Personal Technical Library.** Each concept lives in one canonical home that is reused across projects.

@@ -25,6 +25,7 @@ Yalnız Python standard library kullanılır.
 | `phase7/` | Knowledge Persistence model + testler | `06`, `07` §P, persistence template'leri |
 | `integration/` | E2E driver, `07` §L final integrity modeli, `06` §22.1 lock modeli | `06`, `07` §L |
 | `static/` | Router, cross reference, portability, encoding, dil kontrolü, development-project contamination | bütün skill dosyaları |
+| `sync/` | Standalone incremental Human Sync: routing, first catch-up, incremental run, stale / scoped invalidation, dependency freshness (direct, transitive, non-material, unrelated), dependency retrieval, full mode reuse, coverage / debt / graph / library independence, corruption, token audit | `08`, `07` §S, `03` §6 |
 | `isolation/` | Cross-project isolation: fresh Project B hiçbir zaman Project A state'ini seçmez (sentinel `V8_Clean_Validation` yalnız test data) | `01` §0, `02` §3.4 / §11, `06` §2.3, SKILL.md §9 |
 | `mutation.py` | Geçici skill kopyasında bir kuralı bozar; suite yakalamalıdır | - |
 

@@ -10,7 +10,7 @@ from pathlib import Path
 
 import run_all
 
-R01 = "references/01_OPERATIONAL_CORE.md"
+R01, R08 = "references/01_OPERATIONAL_CORE.md", "references/08_HUMAN_SYNC_STATE.md"
 R03, R04, R05 ="references/03_HUMAN_SYNC_PROTOCOL.md", "references/04_ULA_PROTOCOL.md", "references/05_MINDMAP_PROTOCOL.md"
 R06, R07 = "references/06_KNOWLEDGE_PERSISTENCE.md", "references/07_INTEGRITY_CHECKS.md"
 
@@ -60,6 +60,29 @@ MUTATIONS = [
     ("ISO-M3", "development-project identifier leaks into runtime first-run rule",
      [("references/02_COVERAGE_PROTOCOL.md", r"project adı \(= active project root klasör adı\)", "project adı (= V8_Clean_Validation)")],
      ["static"]),
+    ("SYNC-M1", "08 §7 default sync no longer refreshes STALE records",
+     [(R08, r"^\| `sync` \| `UNSYNCED_AFTER ∪ STALE` \|", "| `sync` | `UNSYNCED_AFTER` |")], ["sync"]),
+    ("SYNC-M2", "08 §8 STALE refresh rereads full raw evidence",
+     [(R08, r"^(\| `STALE` \| `CONTEXT`, `DEP_RECORDS`, `OWN_RECORD`, `DELTA`) \| `RAW_EVIDENCE`, ", r"\1, `RAW_EVIDENCE` | ")], ["sync"]),
+    ("SYNC-M3", "08 §8 dependency records dropped from the UNSYNCED plan",
+     [(R08, r"^\| `UNSYNCED` \| `CONTEXT`, `DEP_RECORDS`, `RAW_EVIDENCE` \|", "| `UNSYNCED` | `CONTEXT`, `RAW_EVIDENCE` |")], ["sync"]),
+    ("SYNC-M4", "08 §6 TYPO in an evidence path invalidates the record",
+     [(R08, r"^\| `TYPO` \| `SYNCED`;", "| `TYPO` | `STALE`;")], ["sync"]),
+    ("SYNC-M5", "08 §11 sync-only may write the coverage ledger",
+     [(R08, r"^\| `COVERAGE_LEDGER.md` \| NO \|$", "| `COVERAGE_LEDGER.md` | YES |")], ["sync"]),
+    ("SYNC-M6", "07 S-01 removed (SYNCED unit without record accepted)", [(R07, r"^\| S-01 \|.*\n", "")], ["sync"]),
+    ("SYNC-M7", "07 S-04 removed (another project's record accepted)", [(R07, r"^\| S-04 \|.*\n", "")], ["sync", "isolation"]),
+    ("SYNC-M8", "07 S-16 removed (existing records regenerated from scratch)", [(R07, r"^\| S-16 \|.*\n", "")], ["sync"]),
+    ("DEP-M1", "08 §6.1 impact NONE invalidates the dependent (over-invalidation)",
+     [(R08, r"^\| `NONE` \| `SYNCED` \|$", "| `NONE` | `STALE` |")], ["sync"]),
+    ("DEP-M2", "08 §6.1 CONTRACT impact keeps the dependent SYNCED (stale understanding kept)",
+     [(R08, r"^\| `CONTRACT` \| `STALE` \|$", "| `CONTRACT` | `SYNCED` |")], ["sync"]),
+    ("DEP-M3", "08 §6.1 every later unit treated as dependent",
+     [(R08, r"^\| edges \| EXPLICIT_DEPENDS_ON \|$", "| edges | LATER_SEQ |")], ["sync"]),
+    ("DEP-M4", "08 §6.1 blanket transitive cascade",
+     [(R08, r"^\| transitive \| ON_MATERIAL_IMPACT \|$", "| transitive | ALWAYS |")], ["sync"]),
+    ("DEP-M5", "08 §6.1 dependent raw evidence read to decide impact",
+     [(R08, r"^\| evidence \| RECORDS_FIRST \|$", "| evidence | RAW_FIRST |")], ["sync"]),
 ]
 
 

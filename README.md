@@ -95,7 +95,8 @@ ULA (Universal Learning Architecture) has two depths. Light ULA produces a short
 
 | Command | What it does |
 |---|---|
-| `/stay-in-the-loop` | Run the full workflow; asks for scope when several work units are open. |
+| `/stay-in-the-loop` | Run the full learning workflow; asks for scope when several work units are open. |
+| `/stay-in-the-loop sync` | Understand project work incrementally, without starting ULA or completing learning coverage. Add `latest`, `pending` or `catch-up` to narrow it. |
 | `/stay-in-the-loop latest` | Catch up on the most recent work unit only. |
 | `/stay-in-the-loop pending` | Return to deferred or partially covered work. |
 | `/stay-in-the-loop catch-up` | Work through all open gaps. |
@@ -107,6 +108,8 @@ ULA (Universal Learning Architecture) has two depths. Light ULA produces a short
 | `/stay-in-the-loop experiences` | List project experience notes. |
 | `/stay-in-the-loop debt` | List open knowledge debt: gaps left for later. |
 | `/stay-in-the-loop integrity` | Check stored knowledge and suggest safe repairs. |
+
+Human Sync is persistent and incremental. Previously synchronized work is reused; by default only new or materially changed work is synchronized. Sync state lives in `docs/learning/sync/`.
 
 More arguments (`show skipped`, `new`, `abandon <pass-id>`, `map debt`, `map sync`, `<work-unit-id>`) are listed in [`SKILL.md`](.claude/skills/stay-in-the-loop/SKILL.md).
 

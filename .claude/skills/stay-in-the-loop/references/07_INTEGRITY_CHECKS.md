@@ -1,6 +1,6 @@
 # 07 — Integrity Checks
 
-**Status:** §C, §E, §U, §M, §P, §L IMPLEMENTED (Phase 3–8). Final Integrity: §L.
+**Status:** §C, §E, §U, §M, §P, §S, §L IMPLEMENTED (Phase 3–8). Final Integrity: §L.
 
 ## Purpose
 
@@ -185,6 +185,39 @@ Kapsam: Personal library yalnız registry + işlemdeki Home + ilgili map ile kon
 | P-28 | Project pointer (`Home Mode: PERSONAL`) L0–L4 theory section'ı taşıyor (promotion sonrası duplicate theory) | FAIL | Write yok. |
 
 FAIL olduğunda hiçbir persistence dosyası yazılmaz. Event persistence `BLOCKED`. Coverage, ledger ve pass status değişmez.
+
+---
+
+## S. Human Sync State Integrity
+
+Ne zaman çalışır:
+
+- `/stay-in-the-loop sync` startup'ında, sync state okunduktan sonra (`08_HUMAN_SYNC_STATE.md` §11 adım 4).
+- Sync record write'tan önce candidate set üzerinde ve write'tan sonra (`08` §11.1).
+- Full mode record write'ta aynı sırayla (`08` §12).
+
+Kapsam: Yalnız active project root altındaki `docs/learning/sync/` ve `LEARNING_CONFIG.project_id`. Başka project okunmaz.
+
+| ID | Kontrol | Sonuç | Aksiyon |
+|---|---|---|---|
+| S-01 | `SYNCED` veya `STALE` unit ve `record_id` dosyası yok | FAIL | Write yok. Kullanıcıya göster. |
+| S-02 | `SYNCED` unit: state veya record `checkpoint` boş veya format geçersiz | FAIL | Write yok. |
+| S-03 | Record `work_unit_id` state satırı ile uyuşmuyor | FAIL | Write yok. |
+| S-04 | Record `project_id` config `project_id` ile uyuşmuyor | FAIL | Write yok. Record kullanılmaz. |
+| S-05 | State header `project_id` config `project_id` ile uyuşmuyor | FAIL | Write yok. Sync state kullanılmaz. |
+| S-06 | Record `record_version` state değeri ile uyuşmuyor | FAIL | Write yok. |
+| S-07 | Bilinmeyen `sync_status` | FAIL | Write yok. |
+| S-08 | Duplicate `work_unit_id` veya `record_id` | FAIL | Write yok. |
+| S-09 | `evidence_paths` boş, absolute veya project root dışında | FAIL | Write yok. |
+| S-10 | `depends_on` state'te olmayan unit gösteriyor | FAIL | Write yok. |
+| S-11 | Context `project_id` config `project_id` ile uyuşmuyor | FAIL | Context kullanılmaz. Yeniden üretim yalnız kullanıcı onayı ile ve yalnız active project record'larından. |
+| S-12 | State satırı olmayan record dosyası | WARNING | Bilgi ver. Silme kullanıcı kararıdır. |
+| S-13 | Context `source_records` state'teki `SYNCED` `record_id@record_version` seti ile uyuşmuyor | WARNING | Context'i active project record'larından yeniden üret. |
+| S-14 | Context 120 satırdan uzun | WARNING | Context'i yeniden üret. |
+| S-15 | Sync-only run ledger, queue, pass, map, concept, experience veya personal library dosyası değiştirdi | FAIL | Pre-image'ları geri yükle. `08` §11. |
+| S-16 | Candidate record mevcut bir record'un üzerine yazıyor ve `record_version` pre-image değeri + 1 değil | FAIL | Write yok. State path ile tekrar okunur (`08` §11). |
+
+FAIL olduğunda sync dosyası yazılmaz. Unit önceki status'unda kalır. Eksik veya bozuk state başka project'ten yeniden kurulmaz. Coverage ve ledger değişmez.
 
 ---
 

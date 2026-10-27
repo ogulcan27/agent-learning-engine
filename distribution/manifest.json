@@ -6,7 +6,7 @@
     "files":  [
                   {
                       "path":  "SKILL.md",
-                      "sha256":  "ddeb089866b5829058475e8c4f4b2b33a5cea5a3cebbc4fe00fd0e56e4518d69"
+                      "sha256":  "1ea5df5157bf81eba75098af2be7fc77a2f37b48fd96a3561d5778981dcb1486"
                   },
                   {
                       "path":  "references/00_MASTER_SYSTEM_SPEC.md",
@@ -14,7 +14,7 @@
                   },
                   {
                       "path":  "references/01_OPERATIONAL_CORE.md",
-                      "sha256":  "6319daf278de6f3a45fbe7007f20b08f207e310a1e719117f33eba8ce5d63825"
+                      "sha256":  "98d5290d465a4d6b6a06b1f91088d2c7d411bb99fc57cbcb4bce35f1dbeb4786"
                   },
                   {
                       "path":  "references/02_COVERAGE_PROTOCOL.md",
@@ -22,7 +22,7 @@
                   },
                   {
                       "path":  "references/03_HUMAN_SYNC_PROTOCOL.md",
-                      "sha256":  "e8925185545acbd07dbe4eea4e9714214cab281e8fe83bff42791df101eaddf0"
+                      "sha256":  "e2902ee020777821a7c48c0d9f4e17776791cc564ac47e9512bd3605b6f1b62b"
                   },
                   {
                       "path":  "references/04_ULA_PROTOCOL.md",
@@ -38,7 +38,11 @@
                   },
                   {
                       "path":  "references/07_INTEGRITY_CHECKS.md",
-                      "sha256":  "b0469deecc2408f5ee3de1a27c3b4dbd4b45332e8530bf00345f0bfeb5a8b5ae"
+                      "sha256":  "3432f3f7f36715553d036a3199ec4205b121aa67459e7864e49b932fc8cacc57"
+                  },
+                  {
+                      "path":  "references/08_HUMAN_SYNC_STATE.md",
+                      "sha256":  "0eb16b8e7e50fcf677cf74a77a4dacbe0d79494c5bef990f860371c8ebb84f47"
                   },
                   {
                       "path":  "templates/CONCEPT_HOME_TEMPLATE.md",
@@ -67,6 +71,14 @@
                   {
                       "path":  "templates/EXPERIENCE_NOTE_TEMPLATE.md",
                       "sha256":  "829dba08a6ae72af69188df0a9773f7ac04e5114bccdb27279eb2122ab13b686"
+                  },
+                  {
+                      "path":  "templates/HUMAN_SYNC_RECORD_TEMPLATE.md",
+                      "sha256":  "0aeb208d9c403ee3f70363beca4630d3cf79618fc063cbaebcaff767ccf5f3a7"
+                  },
+                  {
+                      "path":  "templates/HUMAN_SYNC_STATE_TEMPLATE.md",
+                      "sha256":  "552fec566d1fe1efeb7c2accabfa1fa5c90f1d70e510fece57681c273691143f"
                   },
                   {
                       "path":  "templates/HUMAN_SYNC_TEMPLATE.md",
@@ -99,6 +111,10 @@
                   {
                       "path":  "templates/PERSONAL_LIBRARY_INDEX_TEMPLATE.md",
                       "sha256":  "0c1e917e60c1c57fffc00d6647fafea5c6e83afe453ceb8f74e0970546923840"
+                  },
+                  {
+                      "path":  "templates/PROJECT_SYNC_CONTEXT_TEMPLATE.md",
+                      "sha256":  "cfba22489aa5ed94a1829c3e74e12a46330a239a1a60887657d522e1ef003391"
                   },
                   {
                       "path":  "templates/SEMANTIC_GRAPH_TEMPLATE.md",

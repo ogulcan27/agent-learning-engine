@@ -3,7 +3,7 @@ name: stay-in-the-loop
 description: Run the project's manual System Design + Problem-Pattern DSA + ULA learning workflow and maintain project learning coverage.
 disable-model-invocation: true
 user-invocable: true
-argument-hint: "[latest | pending | catch-up | show skipped | resume | new | abandon <pass-id> | map [<node-id> [L1-L4] | debt | sync] | concept <concept-id> | library | experiences | debt | integrity | <work-unit-id>]"
+argument-hint: "[latest | pending | catch-up | show skipped | resume | new | abandon <pass-id> | map [<node-id> [L1-L4] | debt | sync] | concept <concept-id> | library | experiences | debt | integrity | sync [latest | pending | catch-up | <work-unit-id>] | <work-unit-id>]"
 ---
 
 # /stay-in-the-loop — Entry Router
@@ -99,6 +99,7 @@ Outside knowledge: `ALLOWED WITH LABELS`. Project facts için project sources au
 | `experiences` | Experience Note listesi (`06` §24) |
 | `debt` | `OPEN` Knowledge Debt (`06` §24) |
 | `integrity` | Final Integrity + derived repair önerisi. Pass, coverage, ULA yok (`07` §L.6) |
+| `sync [latest / pending / catch-up / <work-unit-id>]` | Standalone incremental Human Sync. ULA, coverage ve debt yok (`08` §7, §11). İlk token `sync` her zaman bu mode'dur; custom scope değildir. `map sync` map komutudur. |
 
 Argüman belirsizse tahmin etme. Kullanıcıya sor.
 
@@ -125,6 +126,7 @@ Startup'ta active pass varsa önce resume / new / abandon sorulur (`references/0
 `map ...` argümanları run loop'u çalıştırmaz. Doğrudan `references/05_MINDMAP_PROTOCOL.md` §15'e gider.
 `concept`, `library`, `experiences`, `debt` argümanları run loop'u çalıştırmaz. Doğrudan `references/06_KNOWLEDGE_PERSISTENCE.md` §24'e gider.
 `integrity` argümanı run loop'u çalıştırmaz. Doğrudan `references/07_INTEGRITY_CHECKS.md` §L.6'ya gider.
+`sync ...` argümanları run loop'u çalıştırmaz. Doğrudan `references/08_HUMAN_SYNC_STATE.md` §11'e gider. Human Sync persist edilir, sonra STOP.
 
 Genel akış ve dur kuralları: `references/01_OPERATIONAL_CORE.md`.
 
@@ -144,7 +146,8 @@ Token kuralı: Yalnız aktif adımın dosyasını oku. Bir dosyayı aynı çağr
 |---|---|
 | Startup | Bu dosya + `docs/learning/state/LEARNING_CONFIG.md` + `docs/learning/state/LEARNING_STATE.md` |
 | Coverage | `references/01_OPERATIONAL_CORE.md` + `references/02_COVERAGE_PROTOCOL.md` + `references/07_INTEGRITY_CHECKS.md` §C + `docs/learning/state/COVERAGE_LEDGER.md` |
-| Human Sync | `references/03_HUMAN_SYNC_PROTOCOL.md` + `templates/LEARNING_PASS_TEMPLATE.md` + `templates/HUMAN_SYNC_TEMPLATE.md` + `references/07_INTEGRITY_CHECKS.md` §E + `docs/learning/state/LEARNING_QUEUE.md` §B |
+| Human Sync | `references/03_HUMAN_SYNC_PROTOCOL.md` + `templates/LEARNING_PASS_TEMPLATE.md` + `templates/HUMAN_SYNC_TEMPLATE.md` + `references/07_INTEGRITY_CHECKS.md` §E + `docs/learning/state/LEARNING_QUEUE.md` §B + unit record reuse (`references/08_HUMAN_SYNC_STATE.md` §12) |
+| `sync ...` | `references/08_HUMAN_SYNC_STATE.md` + `references/03_HUMAN_SYNC_PROTOCOL.md` §4–§7 + `references/07_INTEGRITY_CHECKS.md` §S + `docs/learning/sync/HUMAN_SYNC_STATE.md` + `PROJECT_SYNC_CONTEXT.md`. Record ve evidence yalnız `08` §8 planı kadar. |
 | ULA Routing / Completion | `references/04_ULA_PROTOCOL.md` + pass `LEARNING_PASS.md` + `references/07_INTEGRITY_CHECKS.md` §U |
 | Light ULA | `references/04_ULA_PROTOCOL.md` + `templates/LIGHT_ULA_TEMPLATE.md` + gerekli project evidence |
 | Full ULA | Sırayla, aynı anda değil: `ula/LEARNING_ARCHITECT.md` → user review → `ula/CONTENT_BUILDER.md` → `ula/LEARNING_AUDITOR.md`. Stage başına dosyalar: `references/04_ULA_PROTOCOL.md` §12 |
@@ -181,7 +184,8 @@ docs/learning/
 ├── experiences/
 ├── concepts/
 ├── maps/
-└── audits/
+├── audits/
+└── sync/                      ← yalnız gerektiğinde (`references/08_HUMAN_SYNC_STATE.md` §3)
 ```
 
 Config default değerleri:
