@@ -505,7 +505,7 @@ Progressive expansion: Map expands. Content does not dump. Bir çağrıda bütü
 | `map`, `map <node-id>` | Bu dosya + `SEMANTIC_GRAPH.md` (+ `HORIZONTAL_MAP.md`) |
 | `map <node-id> Lx` | Yukarıdaki + yalnız ilgili artifact bölümü |
 
-`00_MASTER_SYSTEM_SPEC.md`, `ula/` rol dosyaları ve `ula/examples/` yüklenmez.
+`00_MASTER_SYSTEM_SPEC.md`, `ula/` rol dosyaları ve example / historical material yüklenmez.
 
 ---
 

@@ -1,4 +1,5 @@
-"""Run the permanent regression suite: Phase 3-7 subsystem suites, Phase 8 E2E suite, Phase 9 distribution suite, mutation checks.
+"""Run the permanent regression suite: Phase 3-7 subsystem suites, Phase 8 E2E suite, static and cross-project isolation suites,
+Phase 9 distribution suite, mutation checks.
 
 Usage:
     uv run --no-project python tests/run_all.py [<skill_dir>] [--no-mutations]
@@ -13,7 +14,7 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent
-SUITES = ["phase3", "phase4", "phase5", "phase6", "phase7", "integration", "static"]
+SUITES = ["phase3", "phase4", "phase5", "phase6", "phase7", "integration", "static", "isolation"]
 DISTRIBUTION = ["distribution"]
 
 

@@ -318,7 +318,7 @@ yalnız gereken pass, graph, view, concepts/, experiences/
 personal registry + ilgili Home + ilgili map + index  (yalnız configured ve gerekli ise)
 ```
 
-Yüklenmez: `00_MASTER_SYSTEM_SPEC.md`, `ula/` rol dosyaları, `ula/examples/`, ULA artifact içeriği (yalnız varlık kontrolü), diğer project'lerin Experience Note'ları.
+Yüklenmez: `00_MASTER_SYSTEM_SPEC.md`, `ula/` rol dosyaları, example / historical material, ULA artifact içeriği (yalnız varlık kontrolü), diğer project'lerin Experience Note'ları.
 
 ---
 

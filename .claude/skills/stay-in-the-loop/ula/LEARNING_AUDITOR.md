@@ -453,10 +453,10 @@ Flag unnecessary synonym switching.
 
 Example:
 
-duration PMF
-→ dwell table
-→ sojourn vector
-→ duration array
+feature store
+→ feature table
+→ feature cache
+→ feature repository
 
 unless technically justified.
 
@@ -669,9 +669,9 @@ Examples:
 does not imply
 "Model gives practical advantage."
 
-"Retrospective regime classification"
+"High offline accuracy"
 does not imply
-"Real-time tradable strategy."
+"Reliable production performance."
 
 "Reproducible"
 does not imply

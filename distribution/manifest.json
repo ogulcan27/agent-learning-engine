@@ -6,7 +6,7 @@
     "files":  [
                   {
                       "path":  "SKILL.md",
-                      "sha256":  "9a4a023ba51370df9bb30536bb6a2bd67959ef3cee43c71081a53c6d3aa7f031"
+                      "sha256":  "ddeb089866b5829058475e8c4f4b2b33a5cea5a3cebbc4fe00fd0e56e4518d69"
                   },
                   {
                       "path":  "references/00_MASTER_SYSTEM_SPEC.md",
@@ -14,11 +14,11 @@
                   },
                   {
                       "path":  "references/01_OPERATIONAL_CORE.md",
-                      "sha256":  "788bf2c6e0d0f34a95ca0f668bdfcf5e0fc127d45d243ae7370f0524a980292a"
+                      "sha256":  "6319daf278de6f3a45fbe7007f20b08f207e310a1e719117f33eba8ce5d63825"
                   },
                   {
                       "path":  "references/02_COVERAGE_PROTOCOL.md",
-                      "sha256":  "cb0ca1fb19fd086d0f0fe3f99907a5898f9c9ebf93d2bb1c20f333d655a8923b"
+                      "sha256":  "89f571eb047e420fc2a40e9256bcbb4ee1c82440c018b5e831bfebd0ce15c13a"
                   },
                   {
                       "path":  "references/03_HUMAN_SYNC_PROTOCOL.md",
@@ -26,19 +26,19 @@
                   },
                   {
                       "path":  "references/04_ULA_PROTOCOL.md",
-                      "sha256":  "b4298a2ba1c0c73ea130fd493b5a7470c0923cfaa9e78df1b241ebf17a96af85"
+                      "sha256":  "a4386a5409ecd551099dcd5505ec7ef7e4be5189c4c2616d2f97df51c4ba30e8"
                   },
                   {
                       "path":  "references/05_MINDMAP_PROTOCOL.md",
-                      "sha256":  "3298de70e80c5f0af71452f0d5df8481b530da3c71d7e6054901672c4113ad1c"
+                      "sha256":  "1c0d9f294e1f7f4ae309afb5707a1ca32b98960a0ae3617a23b6c90b321828cc"
                   },
                   {
                       "path":  "references/06_KNOWLEDGE_PERSISTENCE.md",
-                      "sha256":  "7166da3a92013d4e45aace0a7d5d9141d17e7e9be757b101e81c53016126c2cd"
+                      "sha256":  "1a80c8565f1e794a06fccf1784670a473184665f6449c6dfcc50980e86de090c"
                   },
                   {
                       "path":  "references/07_INTEGRITY_CHECKS.md",
-                      "sha256":  "a6b6be756ae3deae45c0da286635594fa395c7bfeb052778b73914c0f5e2e053"
+                      "sha256":  "b0469deecc2408f5ee3de1a27c3b4dbd4b45332e8530bf00345f0bfeb5a8b5ae"
                   },
                   {
                       "path":  "templates/CONCEPT_HOME_TEMPLATE.md",
@@ -110,7 +110,7 @@
                   },
                   {
                       "path":  "ula/CONTENT_BUILDER.md",
-                      "sha256":  "79e3e318dac9d8089bac47b9d0d3176895ae3353fbc48998faf841805f2bfeb4"
+                      "sha256":  "af06bfb4535e67661a4eed04577cde95fdd9c96ade47e3dd410c6aa56a9afe74"
                   },
                   {
                       "path":  "ula/LEARNING_ARCHITECT.md",
@@ -118,27 +118,11 @@
                   },
                   {
                       "path":  "ula/LEARNING_AUDITOR.md",
-                      "sha256":  "b92748227e28a2af1b90b625a961238ad759b1cd468b1538a2808cfc8e750c4d"
+                      "sha256":  "5d504931b4a6488abce26a9e76a250bf6932d55de0ce9313156028938775f494"
                   },
                   {
                       "path":  "ula/ULA_SPECIFICATION.md",
-                      "sha256":  "5215279b7dca4e874151f8202e60d08ae3b49ece77c29c30cfbfb0311e6a0f3c"
-                  },
-                  {
-                      "path":  "ula/examples/HSMM_PILOT/01_ARCHITECTURE_EXAMPLE.md",
-                      "sha256":  "d1d19a3e05363ac9562ba02209a9718321b9280f1049cd45ce0932cb119a83de"
-                  },
-                  {
-                      "path":  "ula/examples/HSMM_PILOT/02_CONTENT_EXAMPLE.md",
-                      "sha256":  "f60dba2b6855419752175509a10c9d567dbe79882fa77b0bada60abd5a5860a9"
-                  },
-                  {
-                      "path":  "ula/examples/HSMM_PILOT/03_AUDIT_EXAMPLE.md",
-                      "sha256":  "3bc803bca84565fc357b370075674d551e725c6c032ccb308fb0d7ec94f03de6"
-                  },
-                  {
-                      "path":  "ula/examples/HSMM_PILOT/README.md",
-                      "sha256":  "7bd0ef801b4a59d9adaf5209d1f310243c7baf2b4295ff7ce39f62df02a3738d"
+                      "sha256":  "5d19783e38db08e3a4eda3d68b0c1a5a023658d6b3cb9b604a4fc291cdee786a"
                   },
                   {
                       "path":  "ula/templates/ARCHITECTURE_OUTPUT_TEMPLATE.md",

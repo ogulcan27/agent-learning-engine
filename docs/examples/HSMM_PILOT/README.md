@@ -1,5 +1,8 @@
 # HSMM ULA Pilot
 
+> Historical construction example from skill development. Not part of the runtime skill package.
+> Moved from `.claude/skills/stay-in-the-loop/ula/examples/HSMM_PILOT/` before v1.0.0.
+
 ## Scope Note
 
 This pilot is **not** a complete representation of the full HSMM research paper or the full ULA-based study project.

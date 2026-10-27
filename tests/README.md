@@ -24,7 +24,8 @@ Yalnız Python standard library kullanılır.
 | `phase6/` | Semantic Graph model + testler (hierarchy amendment dahil) | `05`, `07` §M, graph template |
 | `phase7/` | Knowledge Persistence model + testler | `06`, `07` §P, persistence template'leri |
 | `integration/` | E2E driver, `07` §L final integrity modeli, `06` §22.1 lock modeli | `06`, `07` §L |
-| `static/` | Router, cross reference, portability, encoding, dil kontrolü | bütün skill dosyaları |
+| `static/` | Router, cross reference, portability, encoding, dil kontrolü, development-project contamination | bütün skill dosyaları |
+| `isolation/` | Cross-project isolation: fresh Project B hiçbir zaman Project A state'ini seçmez (sentinel `V8_Clean_Validation` yalnız test data) | `01` §0, `02` §3.4 / §11, `06` §2.3, SKILL.md §9 |
 | `mutation.py` | Geçici skill kopyasında bir kuralı bozar; suite yakalamalıdır | - |
 
 ## Kurallar

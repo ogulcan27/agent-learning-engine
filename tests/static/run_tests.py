@@ -110,6 +110,14 @@ check("X no project state in skill", sorted(p.name for p in SKILL.rglob("*") if 
 check("X only Markdown in skill", sorted({p.suffix for p in SKILL.rglob("*") if p.is_file()}), [".md"])
 check("X Graphify not required", [f.name for f in OPERATIONAL if re.search(r"graphify", text(f), re.I)], [])
 check("X no HTML output required", [f.name for f in OPERATIONAL if re.search(r"\.html\b", text(f), re.I)], [])
+# Generic HSMM/HMM terminology is allowed; development-project artifacts and provenance are not.
+DEV_PROJECT = re.compile(r"V8_Clean_Validation|Markov Switching - From Scratch|HSMM_PILOT|HSMM Defense|HSMM (?:deneyim|çalışması)")
+check("X no development-project identifiers in runtime", [f"{f.relative_to(SKILL).as_posix()}: {m}" for f in FILES
+                                                          for m in DEV_PROJECT.findall(text(f))], [])
+check("X no examples directory in runtime", sorted(p.relative_to(SKILL).as_posix() for p in SKILL.rglob("examples")), [])
+never_load = skill_md.split("**Default olarak ASLA otomatik yükleme:**", 1)[1].split("\n\n", 2)[1]
+check("X startup never auto-loads Master spec, historical / example material, personal library",
+      [k for k in ("00_master_system_spec.md", "historical", "example", "personal technical library") if k not in never_load.lower()], [])
 check("X personal_library_path never hard-coded", [l for f in OPERATIONAL for l in text(f).splitlines()
                                                    if re.match(r"\s*personal_library_path\s*[:=][ \t]*(?!UNCONFIGURED|<)\S", l)], [])
 

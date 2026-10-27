@@ -13,13 +13,48 @@
 
 ---
 
+## 0. Active project root
+
+Invariant: Bir `/stay-in-the-loop` çağrısı project state'i yalnız active project root içinde okur ve yazar.
+
+```text
+Project state = <ACTIVE_PROJECT_ROOT>/docs/learning/
+```
+
+Çözüm:
+
+1. Çağrı başındaki Claude Code primary working directory değerini al.
+2. Bu dizin bir git repository içindeyse `git rev-parse --show-toplevel` sonucunu kullan. Değilse dizinin kendisini kullan.
+3. Sonucu kullanıcıya göster: `Active project: <klasör adı> (<root>)`.
+4. Root çağrı boyunca sabittir. Shell `cd` veya environment güncellemesi root'u değiştirmez.
+
+| Sinyal | Root kaynağı |
+|---|---|
+| Primary working directory (çağrı başı) | YES |
+| Additional working directories | NO |
+| Çağrı sırasında değişen shell cwd | NO |
+| Skill base directory | NO |
+| `personal_library_path` | NO |
+| Personal library içeriği | NO |
+| Example, audit veya historical artifact | NO |
+| Önceki project adı, chat memory, example path | NO |
+| Diskteki diğer repository'ler | NO |
+
+- `NO` sinyali başka bir project'i seçmez, önermez ve okutmaz.
+- Root içinde `docs/learning/state/` yoksa first run initialization bu root için başlar (02 §11). Başka project aranmaz.
+- Root içinde work unit evidence yoksa başka dizine geçilmez.
+- Primary working directory bilinmiyor veya erişilemiyorsa: `BLOCKED`. Dur. Fallback yapma.
+- Personal library root'u değiştirmez (06 §2.3).
+
+---
+
 ## 1. Run loop
 
 ```text
 /stay-in-the-loop
 ↓
 START
- 1. STARTUP            config + state oku; yoksa initialization (02 §11)
+ 1. STARTUP            active project root (01 §0); config + state oku; yoksa initialization (02 §11)
  2. CONFIG CHECK       work_unit_source geçerli mi? (02 §3.3)
  3. INTEGRITY          ledger (07 §C) + queue §B (07 §E) + active pass (07 §U)
  4. ACTIVE PASS CHECK  resume / new / abandon (04 §10)
@@ -62,6 +97,7 @@ Persistence komutları (`concept`, `library`, `experiences`, `debt`) bu akışı
 
 | Durum | Davranış |
 |---|---|
+| Active project root belirlenemedi | `BLOCKED`. Dur. Başka project seçme. |
 | State yok ve kullanıcı initialization'ı onaylamadı | Dur. Dosya oluşturma. |
 | CONFIG ERROR | Dur. Hatayı göster. Fallback yapma. |
 | Coverage integrity FAIL | Dur. Hatayı göster. Ledger'a yazma. |

@@ -89,6 +89,16 @@ Personal Technical Library yapılandırılmadı.
 
 Skill kendi başına path seçmez. Seçim yalnız bu run için geçerlidir; kalıcı tercih yalnız config ile yapılır.
 
+### 2.3 Project isolation
+
+Personal library project dışında olabilir. Active project root'u değiştirmez (01 §0).
+
+| Durum | Sonuç |
+|---|---|
+| Path explicit configured ve bir project state dizini değil | Library olarak kullanılır. Root değişmez. |
+| Path bir `docs/learning/` dizinini veya altını gösteriyor | CONFIG ERROR |
+| Library içeriği project adı, `project_id` veya pass içeriyor | Root seçimi için kullanılmaz. |
+
 ---
 
 ## 3. Storage layout
@@ -813,7 +823,7 @@ Tek entry point: `/stay-in-the-loop`. Ayrı skill yok. Bu komutlar coverage, Hum
 | `/stay-in-the-loop experiences` | Project `experiences/` Identity blokları | Personal library |
 | `/stay-in-the-loop debt` | Queue §B | Graph, personal library |
 
-`00_MASTER_SYSTEM_SPEC.md`, `ula/` rol dosyaları ve `ula/examples/` yüklenmez. ULA artifact yalnız Home candidate kurulurken ve yalnız ilgili section'lar okunur.
+`00_MASTER_SYSTEM_SPEC.md`, `ula/` rol dosyaları ve example / historical material yüklenmez. ULA artifact yalnız Home candidate kurulurken ve yalnız ilgili section'lar okunur.
 
 ---
 

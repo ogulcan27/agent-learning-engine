@@ -534,7 +534,7 @@ Pass `COMPLETE` sonrası Next Stage: MAP SYNC (`05_MINDMAP_PROTOCOL.md` §8). Ma
 
 - Üç rol dosyası aynı anda yüklenmez.
 - `ula/ULA_SPECIFICATION.md` yalnız rol dosyası bir kuralı belirsiz bıraktığında okunur.
-- `00_MASTER_SYSTEM_SPEC.md` ve `ula/examples/` default load dışındadır.
+- `00_MASTER_SYSTEM_SPEC.md` ve example / historical material default load dışındadır.
 
 ---
 

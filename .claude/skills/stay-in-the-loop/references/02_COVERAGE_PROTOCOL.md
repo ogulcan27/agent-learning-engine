@@ -113,6 +113,7 @@ ambiguous → ask user
 
 Kurallar:
 
+0. Discovery evidence yalnız `<ACTIVE_PROJECT_ROOT>` içinden okunur (01 §0). Additional working directory, diğer repository veya personal library work unit kaynağı değildir.
 1. Bir source yalnız teknik olarak mevcut diye seçilmez. Projenin işi gerçekten o birimlerle ilerlemelidir.
 2. Issue source sinyali: issue key'ler commit mesajlarında, branch adlarında veya planning dokümanlarında tutarlı biçimde görünür. Tracker API erişimi zorunlu değildir. Erişim yalnız label'ı zenginleştirir.
 3. Phase-doc sinyali: Bir doküman numaralı phase / step listesi tutar ve iş bu listeye göre ilerler.
@@ -357,13 +358,13 @@ Her commit sonrası:
 
 ## 11. First run initialization
 
-Startup'ta `docs/learning/state/` veya içindeki dört dosyadan biri yoksa:
+Startup'ta `<ACTIVE_PROJECT_ROOT>/docs/learning/state/` veya içindeki dört dosyadan biri yoksa (01 §0):
 
-1. Kullanıcıya initialization gerektiğini bildir. Eksik dosyaları listele.
+1. Kullanıcıya initialization gerektiğini bildir. Active project root'u ve eksik dosyaları listele.
 2. Kullanıcı onayı olmadan dosya oluşturma.
 3. Onay varsa yalnız **eksik** dosyaları template'ten oluştur. Mevcut dosyayı overwrite etme.
 4. Şu klasörleri oluştur: `state/`, `passes/`, `experiences/`, `concepts/`, `maps/`, `audits/`.
-5. Template placeholder'larını doldur: project adı, tarih.
+5. Template placeholder'larını doldur: project adı (= active project root klasör adı), tarih.
 6. Discovery'ye geç. Gerekirse baseline sor (Bölüm 8.5).
 
 ---

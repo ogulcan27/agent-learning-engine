@@ -155,10 +155,10 @@ Avoid:
 Example:
 
 BAD:
-"The utilisation of regularisation facilitates the imposition of a degree of structural restraint on the otherwise highly flexible duration specification."
+"The utilisation of regularisation facilitates the imposition of a degree of structural restraint on the otherwise highly flexible weight specification."
 
 GOOD:
-"Regularisation limits the flexibility of the duration PMF. It pulls the PMF toward a reference distribution."
+"Regularisation limits the flexibility of the model weights. It pulls the weights toward zero."
 
 ---
 
@@ -174,20 +174,20 @@ Example:
 
 If the canonical term is:
 
-duration PMF
+feature store
 
 do not randomly alternate with:
 
-- dwell table,
-- sojourn vector,
-- duration array,
-- holding-time distribution,
+- feature table,
+- feature cache,
+- feature repository,
+- feature database,
 
 unless the distinction is technically necessary.
 
 If synonyms exist, introduce them once:
 
-"Duration PMF is also called a sojourn-time distribution in some sources."
+"Feature store is also called a feature repository in some sources."
 
 Then return to the canonical term.
 
@@ -380,7 +380,7 @@ If a concept is easy to misunderstand, explicitly state what it is NOT.
 
 Examples:
 
-"Zero transition diagonal does not mean zero persistence."
+"A cache hit does not mean the data is fresh."
 
 "Replication is not the same as backup."
 
@@ -509,7 +509,7 @@ Prefer examples that expose the mechanism.
 
 Example:
 
-"HMM self-transition probability is 0.8. The state asks the same stay/leave question every period. Repeated stays create a geometric duration."
+"Each request fails with probability 0.2. The retry policy asks the same retry/stop question after every failure. The attempt limit bounds the total wait."
 
 Do not overload the guide with examples if the mechanism is already clear.
 
@@ -728,7 +728,7 @@ Even if the final medium is static text, preserve this order.
 
 Do not create a section like:
 
-"Everything About HMM"
+"Everything About Caching"
 
 containing:
 
@@ -947,13 +947,13 @@ When two concepts are compared, compare them on the same dimensions.
 
 Example:
 
-HMM vs HSMM
+Retry vs Circuit Breaker
 
-| Question | HMM | HSMM |
+| Question | Retry | Circuit Breaker |
 |---|---|---|
-| Persistence | Self-transition | Explicit duration |
-| Duration | Implied geometric | Explicit PMF |
-| Exit | Through transition | After duration ends |
+| Failure response | Call again | Stop calling for a period |
+| State | Per request | Shared across requests |
+| Recovery | Next attempt | After cool-down ends |
 
 Do not create long comparison tables unless they improve understanding.
 
@@ -974,10 +974,10 @@ CORRECT MODEL:
 Example:
 
 COMMON MISTAKE:
-"Zero diagonal means the state cannot persist."
+"An open circuit breaker means the service is down."
 
 CORRECT MODEL:
-"In this HSMM, persistence is represented by duration. The zero diagonal only prevents an immediate transition back to the same state after a completed visit."
+"An open circuit breaker only means recent failures crossed the threshold. The breaker stops calls for a cool-down period, then lets a trial call through."
 
 Use sparingly.
 

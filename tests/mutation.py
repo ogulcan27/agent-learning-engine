@@ -10,7 +10,8 @@ from pathlib import Path
 
 import run_all
 
-R03, R04, R05 = "references/03_HUMAN_SYNC_PROTOCOL.md", "references/04_ULA_PROTOCOL.md", "references/05_MINDMAP_PROTOCOL.md"
+R01 = "references/01_OPERATIONAL_CORE.md"
+R03, R04, R05 ="references/03_HUMAN_SYNC_PROTOCOL.md", "references/04_ULA_PROTOCOL.md", "references/05_MINDMAP_PROTOCOL.md"
 R06, R07 = "references/06_KNOWLEDGE_PERSISTENCE.md", "references/07_INTEGRITY_CHECKS.md"
 
 # (id, description, [(file, regex, replacement)], expected failing suites)
@@ -51,6 +52,14 @@ MUTATIONS = [
      ["static"]),
     ("P8-M7", "07 §L.6 renumbered; SKILL.md pointer becomes stale",
      [(R07, r"^### L\.6 Command$", "### L.9 Command")], ["static"]),
+    ("ISO-M1", "01 §0 additional working directories become a project root source",
+     [(R01, r"^\| Additional working directories \| NO \|$", "| Additional working directories | YES |")], ["isolation"]),
+    ("ISO-M2", "06 §2.3 personal library inside docs/learning/ accepted",
+     [(R06, r"^(\| Path bir `docs/learning/` dizinini veya altını gösteriyor \|) CONFIG ERROR \|$", r"\1 Library olarak kullanılır. |")],
+     ["isolation"]),
+    ("ISO-M3", "development-project identifier leaks into runtime first-run rule",
+     [("references/02_COVERAGE_PROTOCOL.md", r"project adı \(= active project root klasör adı\)", "project adı (= V8_Clean_Validation)")],
+     ["static"]),
 ]
 
 

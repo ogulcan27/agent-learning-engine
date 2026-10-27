@@ -69,8 +69,10 @@ Outside knowledge: `ALLOWED WITH LABELS`. Project facts için project sources au
 | Katman | Konum | Yazma |
 |---|---|---|
 | UNIVERSAL SKILL LOGIC | Bu skill klasörü | Runtime'da read-only kabul edilir. Buraya state yazma. |
-| PROJECT-SPECIFIC STATE | `docs/learning/` (project root'a göre) | `/stay-in-the-loop` yazar |
+| PROJECT-SPECIFIC STATE | `<ACTIVE_PROJECT_ROOT>/docs/learning/` | `/stay-in-the-loop` yazar |
 | PERSONAL CROSS-PROJECT STATE | `LEARNING_CONFIG.md → personal_library_path` | Yalnız yapılandırılmışsa |
+
+`ACTIVE_PROJECT_ROOT` = çağrı başındaki primary working directory'nin git top-level'ı (`references/01_OPERATIONAL_CORE.md` §0). Additional working directory, personal library, example veya başka repository project seçmez. Belirlenemezse `BLOCKED`.
 
 `personal_library_path` hard-code edilmez. Yapılandırılmadıysa hata verme. Kullanıcıya sor: yapılandır / `LOCAL_TEMPORARY` / ertele (`references/06_KNOWLEDGE_PERSISTENCE.md` §2.2).
 
@@ -154,7 +156,7 @@ Token kuralı: Yalnız aktif adımın dosyasını oku. Bir dosyayı aynı çağr
 **Default olarak ASLA otomatik yükleme:**
 
 - `references/00_MASTER_SYSTEM_SPEC.md`
-- `ula/examples/`
+- Historical audit, example veya construction source material (runtime paketinde yoktur)
 - Full ULA source set (spec + üç rol + `ula/templates/` birlikte)
 - Personal Technical Library (normal project work sırasında hiç; persistence sırasında yalnız `06` §25 kadar)
 
@@ -162,7 +164,7 @@ Master yalnız ambiguity, audit, maintenance veya explicit deep verification ger
 
 ## 9. Project-state initialization
 
-Startup'ta `docs/learning/state/` veya içindeki dosyalardan biri yoksa proje initialize edilmemiştir. Ayrıntı: `references/02_COVERAGE_PROTOCOL.md` §11.
+Startup'ta `<ACTIVE_PROJECT_ROOT>/docs/learning/state/` veya içindeki dosyalardan biri yoksa bu proje initialize edilmemiştir. Başka project aranmaz. Ayrıntı: `references/02_COVERAGE_PROTOCOL.md` §11.
 
 1. Kullanıcıya initialization gerektiğini bildir.
 2. Kullanıcı onayı olmadan dosya oluşturma.

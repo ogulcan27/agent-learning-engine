@@ -438,11 +438,11 @@ ULA şu dönüşümü tercih eder:
 
 Kötü:
 
-> “The semi-Markovian specification relaxes the implicit memoryless sojourn-time restriction…”
+> “The write-through policy eliminates the staleness window inherent in lazy cache invalidation…”
 
 ULA:
 
-> HMM'de persistence self-transition ile modellenir. Bu nedenle implied duration geometric olur. HSMM duration'ı ayrı bir model nesnesi yapar. Böylece geometric duration varsayımı zorunlu değildir.
+> Lazy invalidation'da cache eski değeri bir süre tutabilir. Bu süre staleness window'dur. Write-through her write'ta cache'i hemen günceller. Böylece staleness window kapanır.
 
 Teknik içerik korunur.
 
@@ -529,9 +529,9 @@ ULA formülü zorla üretmez.
 
 Gerektiğinde özellikle L1 veya L2'de kullanılır.
 
-Örneğin HMM:
+Örneğin retry:
 
-> Bir rejimin her gün %80 ihtimalle kendisinde kaldığını düşün. HMM her gün yeniden “bir gün daha kalacak mıyım?” sorusunu uygular.
+> Bir request'in her denemede %20 ihtimalle başarısız olduğunu düşün. Retry policy her başarısızlıktan sonra yeniden “bir daha deneyeyim mi?” sorusunu uygular.
 
 Örnek mekanizmayı anlamayı kolaylaştırıyorsa kullanılır.
 
@@ -582,7 +582,7 @@ Amaç:
 
 Ama R ana öğrenme ekranını işgal etmez.
 
-Bu, HSMM Defense Guide deneyiminden çıkan önemli bir tasarım kuralıdır.
+Bu, ULA'nın önemli bir tasarım kuralıdır.
 
 ---
 
@@ -715,7 +715,7 @@ Data
 Örnek:
 
 - Regression,
-- HMM,
+- Time-Series Model,
 - Random Forest,
 - Neural Network.
 
@@ -811,7 +811,7 @@ Question
 → Limitations
 ```
 
-HSMM çalışması bu adapter'ın örneğidir.
+Bir model validation çalışması bu adapter'ın örneğidir.
 
 ---
 
@@ -972,7 +972,7 @@ Temel kurallar:
 
 ULA:
 
-> Regularisation modelin serbestliğini sınırlar. Burada duration PMF'yi geometric referansa doğru çeker.
+> Regularisation modelin serbestliğini sınırlar. Burada weight'leri sıfıra doğru çeker.
 
 ---
 
@@ -983,15 +983,15 @@ Bir içerik içinde aynı nesne farklı isimlerle çağrılmamalıdır.
 Örneğin:
 
 ```text
-duration PMF
+feature store
 ```
 
 seçildiyse sürekli:
 
-- dwell table,
-- duration table,
-- sojourn array,
-- state duration vector
+- feature table,
+- feature cache,
+- feature repository,
+- feature database
 
 gibi isimlere rastgele geçilmez.
 
@@ -1248,7 +1248,7 @@ Sıra:
 
 Mimari onaylanmadan uzun içerik üretilmemelidir.
 
-Bu bizim HSMM deneyiminden çıkardığımız en önemli üretim kurallarından biri.
+Bu, en önemli üretim kurallarından biridir.
 
 ---
 

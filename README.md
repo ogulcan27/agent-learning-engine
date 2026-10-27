@@ -164,6 +164,8 @@ Updating or uninstalling Stay in the Loop does not delete project learning state
 
 On the first run in a project, the skill asks for your approval before creating `docs/learning/`. Committing that directory to your repository is your choice.
 
+The active project is always the directory Claude Code was started in (its git top level). Additional working directories, other repositories and the Personal Technical Library never select or replace the active project.
+
 The **Personal Technical Library** follows *One Concept, One Home*: each concept has one canonical page that all your projects link to. Its location is set in `docs/learning/state/LEARNING_CONFIG.md`. If it is not configured, the skill asks whether to set it up, keep knowledge local to the project, or decide later.
 
 ## Updating
