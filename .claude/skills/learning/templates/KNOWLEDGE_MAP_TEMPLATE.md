@@ -1,18 +1,41 @@
-# Knowledge Map Template
+# Horizontal Knowledge Map
 
-**Status:** NOT IMPLEMENTED YET
-**Planned Phase:** Phase 6 (tentative)
-**Target file:** `docs/learning/maps/`
+> Template: `.claude/skills/learning/templates/KNOWLEDGE_MAP_TEMPLATE.md`
+> Target: `docs/learning/maps/HORIZONTAL_MAP.md`
+> Rules: `references/05_MINDMAP_PROTOCOL.md` §12
+> Role: **GENERATED VIEW — elle düzenleme.** `SEMANTIC_GRAPH.md` her başarılı mutation'dan sonra bu dosyayı yeniden üretir.
+> Node metadata buraya kopyalanmaz. Ayrıntı: `/learning map <node-id>`.
 
-## Purpose
+## Map Metadata
 
-Semantic graph ve text MindMap view formatını tanımlar.
+```yaml
+generated_from_graph_version: 0
+generated_at: YYYY-MM-DD
+```
 
-## Future Schema
+## Root Map
 
-- Nodes
-- Edges (source, target, relation type, meaning)
-- Text / ASCII view
-- Breadcrumb: WORLD → REGION → CURRENT NODE → CURRENT DEPTH
+```text
+<[Block] (+N) → [Block] (+N) → ...>
+<zincir dışı block'lar>
+<… +N block (map <root-id>)>
+Unplaced: <parent_id - olan node'lar>
+```
 
-Alanlar ilgili phase içinde tanımlanacak. Bu dosya o zamana kadar initialization için kullanılmaz.
+## Legend
+
+| Sembol | Anlam |
+|---|---|
+| `→` | NEXT |
+| `↳` | Primary child (`parent_id`) |
+| `-RELATION→` | Diğer canonical relation |
+| `(+N)` | Açılmamış child sayısı |
+| `(DEBT)` | Knowledge Debt node |
+
+## Navigation
+
+```text
+/learning map <node-id>        local zoom
+/learning map <node-id> L2     depth view
+/learning map debt             DEBT node'ları
+```

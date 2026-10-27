@@ -3,7 +3,7 @@ name: learning
 description: Run the project's manual System Design + Problem-Pattern DSA + ULA learning workflow and maintain project learning coverage.
 disable-model-invocation: true
 user-invocable: true
-argument-hint: "[latest | pending | catch-up | show skipped | resume | new | abandon <pass-id> | <work-unit-id>]"
+argument-hint: "[latest | pending | catch-up | show skipped | resume | new | abandon <pass-id> | map [<node-id> [L1-L4] | debt | sync] | <work-unit-id>]"
 ---
 
 # /learning — Entry Router
@@ -87,6 +87,11 @@ Outside knowledge: `ALLOWED WITH LABELS`. Project facts için project sources au
 | `resume` | Active pass'e devam et (`04` §10.2) |
 | `new` | Active pass varken yeni pass başlat; overlap → CONFLICT (`04` §10.3) |
 | `abandon <pass-id>` | Pass'i `ABANDONED` yap; ledger açık kalır (`04` §10.4) |
+| `map` | Root Knowledge Map (`05` §12). Coverage çalışmaz. |
+| `map <node-id>` | Recursive local zoom (`05` §13) |
+| `map <node-id> L1`…`L4` | Depth view; yalnız mevcut seviye (`05` §14) |
+| `map debt` | `DEBT` node listesi |
+| `map sync` | `COMPLETE` pass'lerde bekleyen map sync (`05` §8) |
 
 Argüman belirsizse tahmin etme. Kullanıcıya sor.
 
@@ -104,11 +109,13 @@ Argüman belirsizse tahmin etme. Kullanıcıya sor.
 | 8 | ULA ROUTING + EARLY COMPLETION CHECK | `references/04_ULA_PROTOCOL.md` §3–§5 | IMPLEMENTED |
 | 9 | LIGHT ULA / FULL ULA (retrieval prompt dahil) | `references/04_ULA_PROTOCOL.md` §6–§8 | IMPLEMENTED |
 | 10 | COVERAGE COMPLETION COMMIT (unit bazında) | `references/04_ULA_PROTOCOL.md` §11 + `references/02_COVERAGE_PROTOCOL.md` §9–§10 | IMPLEMENTED |
-| 11 | MINDMAP / SEMANTIC GRAPH UPDATE | `references/05_MINDMAP_PROTOCOL.md` | NOT IMPLEMENTED YET |
+| 11 | MAP SYNC: SEMANTIC GRAPH + HORIZONTAL MAP | `references/05_MINDMAP_PROTOCOL.md` §6–§12 | IMPLEMENTED (yalnız pass COMPLETE ise; completion'ı geri almaz) |
 | 12 | KNOWLEDGE PERSISTENCE | `references/06_KNOWLEDGE_PERSISTENCE.md` | NOT IMPLEMENTED YET |
-| 13 | INTEGRITY CHECK | `references/07_INTEGRITY_CHECKS.md` | §C, §E, §U IMPLEMENTED; §L NOT IMPLEMENTED YET |
+| 13 | INTEGRITY CHECK | `references/07_INTEGRITY_CHECKS.md` | §C, §E, §U, §M IMPLEMENTED; §L NOT IMPLEMENTED YET |
 
 Startup'ta active pass varsa önce resume / new / abandon sorulur (`references/04_ULA_PROTOCOL.md` §10). Resume, pass'in `current_stage` adımından devam eder.
+
+`map ...` argümanları run loop'u çalıştırmaz. Doğrudan `references/05_MINDMAP_PROTOCOL.md` §15'e gider.
 
 Genel akış ve dur kuralları: `references/01_OPERATIONAL_CORE.md`.
 
@@ -119,7 +126,7 @@ Genel akış ve dur kuralları: `references/01_OPERATIONAL_CORE.md`.
 3. Bu adımda ve sonraki adımlarda project state yazma. Completion Commit yapma.
 4. Dur.
 
-Adım 1–10 implement edilmiştir. Ledger yalnız Discovery, Scope ve Completion Commit ile yazılır (`02_COVERAGE_PROTOCOL.md` §10). Retrieval yalnız ULA artifact içindeki prompt'tur; interactive retrieval session yoktur. Bugünkü akış:
+Adım 1–11 implement edilmiştir. Ledger yalnız Discovery, Scope ve Completion Commit ile yazılır (`02_COVERAGE_PROTOCOL.md` §10). Retrieval yalnız ULA artifact içindeki prompt'tur; interactive retrieval session yoktur. Bugünkü akış:
 
 ```text
 Coverage              → IMPLEMENTED
@@ -127,9 +134,9 @@ Human Sync            → IMPLEMENTED
 ULA Routing           → IMPLEMENTED
 Light ULA             → IMPLEMENTED
 Full ULA              → IMPLEMENTED
-Coverage Completion   → IMPLEMENTED
-MindMap (11)          → NOT IMPLEMENTED YET → STOP
-Knowledge Persistence → NOT IMPLEMENTED YET
+Completion            → IMPLEMENTED
+MindMap / Semantic Graph → IMPLEMENTED
+Knowledge Persistence (12) → NOT IMPLEMENTED YET → STOP
 ```
 
 ## 8. Load map
@@ -144,6 +151,7 @@ Token kuralı: Yalnız aktif adımın dosyasını oku. Bir dosyayı aynı çağr
 | ULA Routing / Completion | `references/04_ULA_PROTOCOL.md` + pass `LEARNING_PASS.md` + `references/07_INTEGRITY_CHECKS.md` §U |
 | Light ULA | `references/04_ULA_PROTOCOL.md` + `templates/LIGHT_ULA_TEMPLATE.md` + gerekli project evidence |
 | Full ULA | Sırayla, aynı anda değil: `ula/LEARNING_ARCHITECT.md` → user review → `ula/CONTENT_BUILDER.md` → `ula/LEARNING_AUDITOR.md`. Stage başına dosyalar: `references/04_ULA_PROTOCOL.md` §12 |
+| Map sync / `map ...` | `references/05_MINDMAP_PROTOCOL.md` + `docs/learning/maps/SEMANTIC_GRAPH.md` (+ `HORIZONTAL_MAP.md`) + `references/07_INTEGRITY_CHECKS.md` §M. Depth view: yalnız ilgili artifact bölümü. |
 | Persistence | `references/06_KNOWLEDGE_PERSISTENCE.md` + gerekli `templates/` dosyası |
 | Integrity | `references/07_INTEGRITY_CHECKS.md` |
 

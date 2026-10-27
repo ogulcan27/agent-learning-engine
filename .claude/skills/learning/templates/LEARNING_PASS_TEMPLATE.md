@@ -84,8 +84,18 @@ Kurallar: 04 §4. Artifact içeriği buraya kopyalanmaz. `Artifact` = `ula/<even
 | Event ID | Mode | Reason | User Override | ULA Status | Artifact |
 |---|---|---|---|---|---|
 
+## Map Sync
+
+Pass `COMPLETE` olduktan sonra doldurulur. Post-completion enrichment. Coverage'ı ve pass status'u değiştirmez (05 §10).
+
+| Event ID | Map Sync | Node IDs | Experience Persistence |
+|---|---|---|---|
+
+- `Map Sync`: `PENDING` · `COMPLETE` · `NOT_APPLICABLE` · `BLOCKED`
+- `Experience Persistence`: `PENDING` · `NOT_APPLICABLE` (Phase 7 handoff marker)
+
 ## Pipeline Handoff
 
 ```text
-Next Stage: <ULA ROUTING | COMPLETION | MINDMAP / KNOWLEDGE PERSISTENCE>
+Next Stage: <ULA ROUTING | COMPLETION | MAP SYNC | KNOWLEDGE PERSISTENCE>
 ```

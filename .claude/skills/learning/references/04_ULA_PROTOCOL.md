@@ -516,7 +516,7 @@ Kurallar:
 
 Açık ULA veya `UNRESOLVED` event varken `COMPLETE` yazılmaz.
 
-Pass `COMPLETE` sonrası Next Stage: MINDMAP / KNOWLEDGE PERSISTENCE.
+Pass `COMPLETE` sonrası Next Stage: MAP SYNC (`05_MINDMAP_PROTOCOL.md` §8). Map sync pass status'u değiştirmez.
 
 ---
 

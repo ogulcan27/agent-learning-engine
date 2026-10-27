@@ -1,6 +1,6 @@
 # 07 — Integrity Checks
 
-**Status:** §C Coverage Integrity IMPLEMENTED (Phase 3). §E Event Integrity IMPLEMENTED (Phase 4). §U ULA / Pass Integrity IMPLEMENTED (Phase 5). §L NOT IMPLEMENTED YET.
+**Status:** §C Coverage Integrity IMPLEMENTED (Phase 3). §E Event Integrity IMPLEMENTED (Phase 4). §U ULA / Pass Integrity IMPLEMENTED (Phase 5). §M MindMap / Semantic Graph Integrity IMPLEMENTED (Phase 6). §L NOT IMPLEMENTED YET.
 
 ## Purpose
 
@@ -108,6 +108,42 @@ Bu bölüm ULA content audit yapmaz. Content audit `ula/LEARNING_AUDITOR.md` rol
 
 ---
 
+## M. MindMap / Semantic Graph Integrity
+
+Ne zaman çalışır:
+
+- Map sync sırasında, aday graph üzerinde, write'tan önce (`05_MINDMAP_PROTOCOL.md` §8–§9).
+- `/learning map` komutlarında, mevcut graph ve view üzerinde (M-12, M-15, M-16).
+
+| ID | Kontrol | Sonuç | Aksiyon |
+|---|---|---|---|
+| M-01 | Duplicate `node_id` | FAIL | Write yok. Event `BLOCKED`. |
+| M-02 | Duplicate `edge_id` | FAIL | Write yok. |
+| M-03 | Edge `source_node_id` graph'ta yok | FAIL | Write yok. |
+| M-04 | Edge `target_node_id` graph'ta yok | FAIL | Write yok. |
+| M-05 | Unknown `relation_type` | FAIL | Write yok. |
+| M-06 | Unknown `node_type` | FAIL | Write yok. |
+| M-07 | Unknown `node_status` | FAIL | Write yok. |
+| M-08 | Combined hierarchy cycle (`parent_id` + `PART_OF` edge birlikte) | FAIL | Write yok. |
+| M-09 | Node kendi parent'ı veya kendi `PART_OF` hedefi | FAIL | Write yok. |
+| M-10 | `SUPERSEDED` ve `superseded_by` boş veya geçersiz | FAIL | Write yok. |
+| M-11 | Duplicate semantic edge (aynı source, relation, target) | FAIL | Write yok. |
+| M-12 | View graph'ta olmayan node gösteriyor | WARNING | View'ı yeniden üret. |
+| M-13 | `source_artifacts` path'i yok | FAIL | Write yok. |
+| M-14 | `available_depth` içindeki seviye için artifact / bölüm yok | FAIL | Write yok. |
+| M-15 | `generated_from_graph_version > graph_version` | FAIL | View'ı yeniden üret. Kullanıcıya bildir. |
+| M-16 | Stale `HORIZONTAL_MAP` (`generated_from_graph_version < graph_version`) | WARNING | View'ı yeniden üret. |
+| M-17 | Bir node veya edge listesinde duplicate `source_event_id` / appearance | FAIL | Write yok. |
+| M-18 | `map_sync_status: COMPLETE` ama event graph'ta hiçbir node veya edge'de yok | FAIL | Status'u `PENDING` yap. Sync tekrar. |
+| M-19 | `ACTIVE` node veya edge kaynağı `UNRESOLVED` veya tamamlanmamış ULA event | FAIL | Write yok. |
+| M-20 | `DEBT` node ve `debt_id` boş ya da §B'de yok | FAIL | Write yok. |
+| M-21 | Primary parent ayrıca `PART_OF` edge olarak yazılmış (`node.parent_id = X` ve `node PART_OF X`) | FAIL | Write yok. |
+| M-22 | Birden fazla `ROOT` node | FAIL | Write yok. |
+
+FAIL olduğunda graph overwrite edilmez, `graph_version` değişmez, view yeniden üretilmez. Coverage ve pass status değişmez.
+
+---
+
 ## L. Learning State Integrity (pointer, passes, maps)
 
 NOT IMPLEMENTED YET.
@@ -118,4 +154,5 @@ NOT IMPLEMENTED YET.
 - `references/02_COVERAGE_PROTOCOL.md` §1, §9, §10.
 - `references/03_HUMAN_SYNC_PROTOCOL.md` §7, §9, §13, §14, §15.
 - `references/04_ULA_PROTOCOL.md` §2, §5, §7, §9, §10, §11.
+- `references/05_MINDMAP_PROTOCOL.md` §3–§11.
 - Content audit: `ula/LEARNING_AUDITOR.md`.

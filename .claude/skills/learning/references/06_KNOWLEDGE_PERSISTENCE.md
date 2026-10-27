@@ -32,6 +32,19 @@ General knowledge ile project experience'ı ayrı ve tekrarsız saklar.
 - Library yolunu hard-code etmez.
 - Library yoksa hata vermez.
 
+## Phase 6 boundary
+
+```text
+Semantic Graph                        → project-local knowledge structure (05, IMPLEMENTED)
+Concept Home / Experience persistence → bu dosya (Phase 7, NOT IMPLEMENTED YET)
+```
+
+Phase 6 handoff girdileri:
+
+- Graph node `home_ref: UNASSIGNED` → Concept Home ataması burada yapılacak.
+- Pass `## Map Sync` tablosu `Experience Persistence: PENDING` → Experience Note / Map burada yazılacak.
+- `DEBT` node → debt `RESOLVED` lifecycle burada tamamlanacak.
+
 ## Authoritative Source
 
 - `00_MASTER_SYSTEM_SPEC.md` §5, §8, §9, §32, §33, §38, §39, §45.

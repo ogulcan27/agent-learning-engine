@@ -1,6 +1,6 @@
 # 01 — Operational Core
 
-**Status:** Startup → Coverage Completion IMPLEMENTED (Phase 3–5). MindMap ve Knowledge Persistence NOT IMPLEMENTED YET.
+**Status:** Startup → Map Sync IMPLEMENTED (Phase 3–6). Knowledge Persistence NOT IMPLEMENTED YET.
 
 ## Purpose
 
@@ -13,7 +13,7 @@
 
 ---
 
-## 1. Implemented boundary (Phase 5)
+## 1. Implemented boundary (Phase 6)
 
 ```text
 /learning
@@ -41,8 +41,13 @@ ULA ROUTING
 ↓
 COMPLETION
 12. unit bazında Completion Commit + pass sonucu (04 §11)
-↓
-NEXT: MINDMAP / KNOWLEDGE PERSISTENCE — NOT IMPLEMENTED YET
+↓                      pass COMPLETE değilse burada dur
+MAP SYNC
+13. eligibility + identity + delta + integrity (07 §M) + graph write + view (05 §6–§12)
+↓                      post-completion enrichment; completion'ı geri alamaz
+NEXT: KNOWLEDGE PERSISTENCE — NOT IMPLEMENTED YET
+
+Map komutları (`/learning map ...`) bu akışı çalıştırmaz. Doğrudan 05 §15'e gider.
 ```
 
 ## 2. Stop rules
@@ -59,6 +64,7 @@ NEXT: MINDMAP / KNOWLEDGE PERSISTENCE — NOT IMPLEMENTED YET
 | ULA / pass integrity (07 §U) FAIL | Stage geçişi ve Completion Commit yapma. Dur. |
 | `pass_status: WAITING_USER` | Kullanıcı kararını iste. Pass'i kaydet. Dur. |
 | `pass_status: BLOCKED` | Eksik evidence / artifact'i göster. Dur. |
+| Map integrity (07 §M) FAIL veya identity AMBIGUOUS | Graph yazma. Event `map_sync_status: BLOCKED`. Coverage ve pass değişmez. Dur. |
 | Sonraki protocol `NOT IMPLEMENTED YET` | Pass sonucunu göster. Adımın henüz implement edilmediğini bildir. Dur. |
 
 ## 3. Write rules
@@ -69,12 +75,13 @@ NEXT: MINDMAP / KNOWLEDGE PERSISTENCE — NOT IMPLEMENTED YET
 | Handoff | `passes/<learning-pass-id>/LEARNING_PASS.md`, queue §B `OPEN` debt | Ledger |
 | ULA | `passes/<learning-pass-id>/ula/<event-id>/`, pass routing tablosu ve metadata | Ledger |
 | Completion | Ledger `COVERED` / `PARTIAL` / `NOT_LEARNING_RELEVANT`; pass status | — |
+| Map sync | `maps/SEMANTIC_GRAPH.md` (delta, atomic), `maps/HORIZONTAL_MAP.md` (view), pass `## Map Sync` tablosu | Ledger, pass status, `current_stage` |
 | Abandon | Pass `pass_status: ABANDONED` | Ledger, queue §B |
 
 - Ledger yalnız Discovery Commit, Scope Commit ve Completion Commit ile yazılır (02 §10).
 - Her ledger commit sonrası state ve queue §A yeniden üretilir.
 
-## 4. Steps after completion
+## 4. Steps after map sync
 
 NOT IMPLEMENTED YET. Sıra `SKILL.md` Bölüm 7'dedir.
 
