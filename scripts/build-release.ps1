@@ -3,12 +3,12 @@
     Build distribution/manifest.json and the release package in dist/.
 
 .DESCRIPTION
-    Development repository script. Reads VERSION and .claude/skills/learning/.
+    Development repository script. Reads VERSION and .claude/skills/stay-in-the-loop/.
     Writes:
       distribution/manifest.json
-      dist/agent-learning-engine-v<VERSION>.zip
+      dist/stay-in-the-loop-v<VERSION>.zip
       dist/SHA256SUMS.txt
-    The ZIP holds only .claude/skills/learning/ and distribution/manifest.json.
+    The ZIP holds only .claude/skills/stay-in-the-loop/ and distribution/manifest.json.
     Entry order and timestamps are fixed, so the ZIP is deterministic.
 #>
 [CmdletBinding()]
@@ -20,7 +20,7 @@ $ErrorActionPreference = 'Stop'
 if (-not $RepoRoot) { $RepoRoot = Split-Path -Parent $PSScriptRoot }
 Add-Type -AssemblyName System.IO.Compression
 
-$skillRel = '.claude/skills/learning'
+$skillRel = '.claude/skills/stay-in-the-loop'
 $skillDir = Join-Path $RepoRoot $skillRel
 $version = (Get-Content -Raw (Join-Path $RepoRoot 'VERSION')).Trim()
 if (-not $OutDir) { $OutDir = Join-Path $RepoRoot 'dist' }
@@ -42,7 +42,7 @@ $files = @(Get-SkillFiles $skillDir | ForEach-Object {
 })
 $manifest = [ordered]@{
     version     = $version
-    skill_name  = 'learning'
+    skill_name  = 'stay-in-the-loop'
     entry_point = 'SKILL.md'
     package_root = $skillRel
     files       = $files
@@ -54,7 +54,7 @@ $json = ($manifest | ConvertTo-Json -Depth 5) -replace "`r`n", "`n"
 [IO.File]::WriteAllText($manifestPath, $json + "`n", (New-Object Text.UTF8Encoding $false))
 
 New-Item -ItemType Directory -Force -Path $OutDir | Out-Null
-$zipName = "agent-learning-engine-v$version.zip"
+$zipName = "stay-in-the-loop-v$version.zip"
 $zipPath = Join-Path $OutDir $zipName
 if (Test-Path -LiteralPath $zipPath) { Remove-Item -LiteralPath $zipPath -Force }
 

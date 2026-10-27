@@ -1,6 +1,6 @@
 # Learning Queue
 
-> Template: `.claude/skills/learning/templates/LEARNING_QUEUE_TEMPLATE.md`
+> Template: `.claude/skills/stay-in-the-loop/templates/LEARNING_QUEUE_TEMPLATE.md`
 > Target: `docs/learning/state/LEARNING_QUEUE.md`
 > Role: §A open work unit view (derived). §B Knowledge Debt record (authoritative).
 

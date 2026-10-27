@@ -1,6 +1,6 @@
 # Learning Pass
 
-> Template: `.claude/skills/learning/templates/LEARNING_PASS_TEMPLATE.md`
+> Template: `.claude/skills/stay-in-the-loop/templates/LEARNING_PASS_TEMPLATE.md`
 > Target: `docs/learning/passes/<learning-pass-id>/LEARNING_PASS.md`
 > Rules: `references/03_HUMAN_SYNC_PROTOCOL.md`, `references/04_ULA_PROTOCOL.md`
 > Role: Pipeline handoff ve resume artifact. Event kaydı burada tutulur. Disposition listeleri ve routing tablosu yalnız ID ve pointer verir.

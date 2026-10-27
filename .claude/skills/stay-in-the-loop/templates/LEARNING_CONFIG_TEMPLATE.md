@@ -1,8 +1,8 @@
 # Learning Config
 
-> Template: `.claude/skills/learning/templates/LEARNING_CONFIG_TEMPLATE.md`
+> Template: `.claude/skills/stay-in-the-loop/templates/LEARNING_CONFIG_TEMPLATE.md`
 > Target: `docs/learning/state/LEARNING_CONFIG.md`
-> Role: Project preferences. Kullanıcı düzenler. `/learning` yalnız kullanıcı onayı ile değiştirir.
+> Role: Project preferences. Kullanıcı düzenler. `/stay-in-the-loop` yalnız kullanıcı onayı ile değiştirir.
 
 ```yaml
 learning_config_version: 1

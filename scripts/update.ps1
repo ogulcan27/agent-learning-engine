@@ -1,6 +1,6 @@
 <#
 .SYNOPSIS
-    Update an existing Agent Learning Engine learning skill install.
+    Update an existing Stay in the Loop skill (stay-in-the-loop) install.
 
 .DESCRIPTION
     Calls install.ps1 in update mode. Same parameters and source modes as install.ps1.

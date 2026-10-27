@@ -1,6 +1,6 @@
 # Semantic Graph
 
-> Template: `.claude/skills/learning/templates/SEMANTIC_GRAPH_TEMPLATE.md`
+> Template: `.claude/skills/stay-in-the-loop/templates/SEMANTIC_GRAPH_TEMPLATE.md`
 > Target: `docs/learning/maps/SEMANTIC_GRAPH.md`
 > Rules: `references/05_MINDMAP_PROTOCOL.md`
 > Role: **AUTHORITATIVE** project-local knowledge graph. `HORIZONTAL_MAP.md` bu dosyadan üretilir.

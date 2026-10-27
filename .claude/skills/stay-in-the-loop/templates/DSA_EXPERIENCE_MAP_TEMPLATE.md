@@ -1,6 +1,6 @@
 # DSA Experience Map
 
-> Template: `.claude/skills/learning/templates/DSA_EXPERIENCE_MAP_TEMPLATE.md`
+> Template: `.claude/skills/stay-in-the-loop/templates/DSA_EXPERIENCE_MAP_TEMPLATE.md`
 > Target: `<personal_library_path>/experience-maps/DSA_EXPERIENCE_MAP.md`
 > Rules: `references/06_KNOWLEDGE_PERSISTENCE.md` §17.2–§17.4
 > Role: Kullanıcının gerçekten karşılaştığı DSA deneyimleri. Universal pattern sözlüğü değildir (`06` §17.3).

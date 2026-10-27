@@ -1,6 +1,6 @@
 # Light ULA
 
-> Template: `.claude/skills/learning/templates/LIGHT_ULA_TEMPLATE.md`
+> Template: `.claude/skills/stay-in-the-loop/templates/LIGHT_ULA_TEMPLATE.md`
 > Target: `docs/learning/passes/<learning-pass-id>/ula/<event-id>/LIGHT_ULA.md`
 > Rules: `references/04_ULA_PROTOCOL.md` §6
 > Dil: Türkçe açıklama. Canonical technical term İngilizce kalabilir.

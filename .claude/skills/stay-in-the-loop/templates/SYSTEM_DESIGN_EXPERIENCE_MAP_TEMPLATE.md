@@ -1,6 +1,6 @@
 # System Design Experience Map
 
-> Template: `.claude/skills/learning/templates/SYSTEM_DESIGN_EXPERIENCE_MAP_TEMPLATE.md`
+> Template: `.claude/skills/stay-in-the-loop/templates/SYSTEM_DESIGN_EXPERIENCE_MAP_TEMPLATE.md`
 > Target: `<personal_library_path>/experience-maps/SYSTEM_DESIGN_EXPERIENCE_MAP.md`
 > Rules: `references/06_KNOWLEDGE_PERSISTENCE.md` §17.1, §17.4
 > Role: Cross-project experience index. General theory yazılmaz. Hücre kısa ifadedir. Satır silinmez.

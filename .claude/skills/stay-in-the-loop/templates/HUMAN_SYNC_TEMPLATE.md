@@ -1,6 +1,6 @@
 # Human Synchronization
 
-> Template: `.claude/skills/learning/templates/HUMAN_SYNC_TEMPLATE.md`
+> Template: `.claude/skills/stay-in-the-loop/templates/HUMAN_SYNC_TEMPLATE.md`
 > Target: `docs/learning/passes/<learning-pass-id>.md` içinde `## Human Synchronization` bölümü
 > Rules: `references/03_HUMAN_SYNC_PROTOCOL.md` §5–§7
 > Scope başına bir çıktı. Work unit başına ayrı çıktı üretme.

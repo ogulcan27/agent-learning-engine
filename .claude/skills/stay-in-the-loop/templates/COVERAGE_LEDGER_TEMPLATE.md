@@ -1,6 +1,6 @@
 # Learning Coverage Ledger
 
-> Template: `.claude/skills/learning/templates/COVERAGE_LEDGER_TEMPLATE.md`
+> Template: `.claude/skills/stay-in-the-loop/templates/COVERAGE_LEDGER_TEMPLATE.md`
 > Target: `docs/learning/state/COVERAGE_LEDGER.md`
 > Role: **Authoritative coverage truth.**
 > Kurallar: `references/02_COVERAGE_PROTOCOL.md`
@@ -15,7 +15,7 @@ last_updated: <YYYY-MM-DD>
 
 ## Work Units
 
-Bu tablo tek canonical kayıttır. Open, Skipped ve Closed listeleri burada saklanmaz. Her `/learning` çağrısında bu tablodan hesaplanır.
+Bu tablo tek canonical kayıttır. Open, Skipped ve Closed listeleri burada saklanmaz. Her `/stay-in-the-loop` çağrısında bu tablodan hesaplanır.
 
 Satır silinmez. Yalnız status değişir.
 

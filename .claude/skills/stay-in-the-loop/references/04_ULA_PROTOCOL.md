@@ -400,7 +400,7 @@ updated_at: YYYY-MM-DD
 
 ### 10.1 Startup check
 
-Her `/learning` çağrısında, discovery'den önce, `docs/learning/passes/*/LEARNING_PASS.md` içinde active pass ara.
+Her `/stay-in-the-loop` çağrısında, discovery'den önce, `docs/learning/passes/*/LEARNING_PASS.md` içinde active pass ara.
 
 Active pass varsa yeni pass'i sessizce başlatma. Göster:
 

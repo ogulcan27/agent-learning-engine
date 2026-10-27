@@ -26,7 +26,8 @@ SKILL = skill_dir()
 RESULTS = []
 TMP = Path(tempfile.mkdtemp(prefix="p9_dist_"))
 atexit.register(shutil.rmtree, TMP, True)
-REL = Path(".claude/skills/learning")
+REL = Path(".claude/skills/stay-in-the-loop")
+OLD_REL = Path(".claude/skills/learning")
 REAL_PERSONAL = Path(os.environ.get("USERPROFILE") or os.environ["HOME"]) / REL
 REAL_PERSONAL_BEFORE = REAL_PERSONAL.exists()
 FAKE_HOME = TMP / "home"
@@ -76,7 +77,7 @@ def build(src, out=None):
 
 def zip_of(src):
     v = (src / "VERSION").read_text(encoding="utf-8").strip()
-    return src / "dist" / f"agent-learning-engine-v{v}.zip"
+    return src / "dist" / f"stay-in-the-loop-v{v}.zip"
 
 
 def project(name, state=True):
@@ -112,7 +113,7 @@ def library(name):
 
 
 def leftovers(p):
-    return sorted(x.name for x in (Path(p) / ".claude").glob(".learning-*"))
+    return sorted(x.name for x in (Path(p) / ".claude").glob(".stay-in-the-loop-*"))
 
 
 SRC = make_source("src")
@@ -122,9 +123,10 @@ V1_ZIP = zip_of(SRC)
 
 # Test A - package manifest
 check("A manifest version = VERSION", MANIFEST["version"], (REPO / "VERSION").read_text(encoding="utf-8").strip())
-check("A manifest skill_name / entry_point", (MANIFEST["skill_name"], MANIFEST["entry_point"]), ("learning", "SKILL.md"))
+check("A manifest skill_name / entry_point", (MANIFEST["skill_name"], MANIFEST["entry_point"]), ("stay-in-the-loop", "SKILL.md"))
 check("A manifest file set = runtime skill", sorted(f["path"] for f in MANIFEST["files"]), sorted(V1))
 check("A manifest sha256 = runtime skill", {f["path"]: f["sha256"] for f in MANIFEST["files"]}, V1)
+check("A manifest package_root", MANIFEST["package_root"], REL.as_posix())
 check("A entry point listed", "SKILL.md" in V1, True)
 check("A no non-markdown runtime file", [k for k in V1 if not k.endswith(".md")], [])
 if SKILL.resolve() == DEFAULT_SKILL.resolve():
@@ -155,6 +157,7 @@ bare = project("proj_bare", state=False)
 rc, log = ps(SRC, "install.ps1", "-Scope", "Project", "-ProjectPath", bare)
 check("D project install exit 0", rc, 0)
 check("D target = manifest", tree(bare / REL), V1)
+check("D old .claude/skills/learning absent", (bare / OLD_REL).exists(), False)
 check("D docs/learning not created", (bare / "docs/learning").exists(), False)
 check("D no staging leftovers", leftovers(bare), [])
 rc, log = ps(SRC, "verify-install.ps1", "-Scope", "Project", "-ProjectPath", bare)
@@ -169,7 +172,7 @@ check("E same package -> ALREADY INSTALLED", (rc, "ALREADY INSTALLED" in log), (
 (bare / REL / "SKILL.md").write_text("locally edited\n", encoding="utf-8")
 edited = tree(bare / REL)
 rc, log = ps(SRC, "install.ps1", "-Scope", "Project", "-ProjectPath", bare)
-check("E different package -> refused, no silent overwrite", (rc != 0, "different learning skill" in log), (True, True))
+check("E different package -> refused, no silent overwrite", (rc != 0, "different stay-in-the-loop skill" in log), (True, True))
 check("E refused install left target unchanged", tree(bare / REL), edited)
 rc, log = ps(SRC, "install.ps1", "-Scope", "Project", "-ProjectPath", bare, "-Force")
 check("E -Force replaces", (rc, tree(bare / REL)), (0, V1))
@@ -177,10 +180,11 @@ check("E -Force replaces", (rc, tree(bare / REL)), (0, V1))
 # Test F - personal install (temporary HOME)
 rc, log = ps(SRC, "install.ps1", "-Scope", "Personal")
 check("F personal install exit 0", rc, 0)
-check("F target = <temp-home>/.claude/skills/learning", tree(FAKE_HOME / REL), V1)
+check("F target = <temp-home>/.claude/skills/stay-in-the-loop", tree(FAKE_HOME / REL), V1)
 p1, p2 = project("proj_p1", state=False), project("proj_p2", state=False)
 rc1, log1 = ps(SRC, "install.ps1", "-Scope", "Personal", cwd=p1)
 rc2, log2 = ps(SRC, "verify-install.ps1", "-Scope", "Personal", cwd=p2)
+check("F old personal .claude/skills/learning absent", (FAKE_HOME / OLD_REL).exists(), False)
 check("F two projects resolve the same personal target", (rc1, "ALREADY INSTALLED" in log1, rc2, "PASS:" in log2), (0, True, 0, True))
 check("F personal install writes nothing into projects", (p1 / ".claude").exists() or (p2 / ".claude").exists(), False)
 check("F real personal skill untouched", REAL_PERSONAL.exists(), REAL_PERSONAL_BEFORE)
@@ -252,11 +256,11 @@ ps(SRC, "install.ps1", "-Scope", "Project", "-ProjectPath", inst)
 rc, log = ps(bad, "update.ps1", "-Scope", "Project", "-ProjectPath", inst)
 check("I bad hash update -> old install intact", (rc != 0, tree(inst / REL)), (True, V1))
 crash = project("proj_crash", state=False)
-(crash / ".claude/.learning-install-deadbeef/stage").mkdir(parents=True)
-(crash / ".claude/.learning-install-deadbeef/stage/SKILL.md").write_text("half\n", encoding="utf-8")
+(crash / ".claude/.stay-in-the-loop-install-deadbeef/stage").mkdir(parents=True)
+(crash / ".claude/.stay-in-the-loop-install-deadbeef/stage/SKILL.md").write_text("half\n", encoding="utf-8")
 rc, log = ps(SRC, "install.ps1", "-Scope", "Project", "-ProjectPath", crash)
 check("I leftover from interrupted run does not block install", (rc, tree(crash / REL)), (0, V1))
-check("I leftover lives outside .claude/skills (not a skill)", (crash / ".claude/skills/.learning-install-deadbeef").exists(), False)
+check("I leftover lives outside .claude/skills (not a skill)", (crash / ".claude/skills/.stay-in-the-loop-install-deadbeef").exists(), False)
 check("I missing project path -> refused", ps(SRC, "install.ps1", "-Scope", "Project", "-ProjectPath", TMP / "nope")[0] != 0, True)
 
 # Test J - verify FAIL cases
@@ -341,10 +345,10 @@ rc, log = one_liner(rt, "missing-ref")
 check("L download failure -> nothing written", (rc != 0, (rt / ".claude").exists()), (True, False))
 
 # Test M - interactive quick install (irm | iex) and Repository / Ref defaults
-(srv / "ogulcan27/agent-learning-engine/archive").mkdir(parents=True)
-shutil.copy(srv / "owner/repo/archive/v1.0.0.zip", srv / "ogulcan27/agent-learning-engine/archive/v1.0.0.zip")
-github_archive(SRC2, srv / "ogulcan27/agent-learning-engine/archive/v2-test.zip")
-MENU = "choose where to install the learning skill"  # Read-Host prompt text is not echoed when stdin is redirected
+(srv / "ogulcan27/stay-in-the-loop/archive").mkdir(parents=True)
+shutil.copy(srv / "owner/repo/archive/v1.0.0.zip", srv / "ogulcan27/stay-in-the-loop/archive/v1.0.0.zip")
+github_archive(SRC2, srv / "ogulcan27/stay-in-the-loop/archive/v2-test.zip")
+MENU = "choose where to install the stay-in-the-loop skill"  # Read-Host prompt text is not echoed when stdin is redirected
 
 
 def run_ps(args, answers="", cwd=None):
@@ -366,12 +370,14 @@ before = outside_skill(mp)
 rc, log = irm_iex("1\n", mp)
 check("M irm|iex shows the scope menu", (MENU in log, "[1] Project" in log, "[2] Personal" in log), (True, True, True))
 check("M interactive 1 -> Project install in current directory", (rc, tree(mp / REL)), (0, V1))
+check("M interactive Project -> no old learning directory", (mp / OLD_REL).exists(), False)
 check("M interactive Project keeps state; personal untouched", (outside_skill(mp), (FAKE_HOME / REL).exists()), (before, False))
-check("M default Repository / Ref used", "/ogulcan27/agent-learning-engine/archive/v1.0.0.zip" in log, True)
+check("M default Repository / Ref used", "/ogulcan27/stay-in-the-loop/archive/v1.0.0.zip" in log, True)
 check("M caller session ErrorActionPreference unchanged", "CALLER_EAP=Continue" in log, True)
 mq = project("proj_iex_personal", state=False)
 rc, log = irm_iex("2\n", mq)
 check("M interactive 2 -> Personal install", (rc, tree(FAKE_HOME / REL)), (0, V1))
+check("M interactive Personal -> no old learning directory", (FAKE_HOME / OLD_REL).exists(), False)
 check("M interactive Personal writes nothing into the project", (mq / ".claude").exists(), False)
 mr = project("proj_iex_retry", state=False)
 rc, log = irm_iex("9\nfoo\nProject\n", mr)
@@ -394,15 +400,15 @@ standalone.mkdir()
 shutil.copy(SRC / "scripts/install.ps1", standalone / "install.ps1")
 mz = project("proj_standalone", state=False)
 rc, log = run_ps(["-File", str(standalone / "install.ps1"), "-Scope", "Project", "-ProjectPath", str(mz)])
-check("M downloaded install.ps1 (no repo) -> default Repository / Ref", (rc, "/ogulcan27/agent-learning-engine/archive/v1.0.0.zip" in log, tree(mz / REL) == V1), (0, True, True))
+check("M downloaded install.ps1 (no repo) -> default Repository / Ref", (rc, "/ogulcan27/stay-in-the-loop/archive/v1.0.0.zip" in log, tree(mz / REL) == V1), (0, True, True))
 mo = project("proj_override_repo", state=False)
 rc, log = run_ps(["-File", str(standalone / "install.ps1"), "-Scope", "Project", "-ProjectPath", str(mo), "-Repository", "owner/repo"])
 check("M explicit -Repository overrides default (Ref default kept)", (rc, "/owner/repo/archive/v1.0.0.zip" in log, tree(mo / REL) == V1), (0, True, True))
 mr2 = project("proj_override_ref", state=False)
 rc, log = run_ps(["-File", str(standalone / "install.ps1"), "-Scope", "Project", "-ProjectPath", str(mr2), "-Ref", "v2-test"])
-check("M explicit -Ref overrides default", (rc, "/ogulcan27/agent-learning-engine/archive/v2-test.zip" in log, tree(mr2 / REL) == V2), (0, True, True))
+check("M explicit -Ref overrides default", (rc, "/ogulcan27/stay-in-the-loop/archive/v2-test.zip" in log, tree(mr2 / REL) == V2), (0, True, True))
 rc, log = run_ps(["-File", str(standalone / "install.ps1"), "-Scope", "Project", "-ProjectPath", str(mr2)])
-check("M existing different install still refused without -Force", (rc != 0, "different learning skill" in log, tree(mr2 / REL) == V2), (True, True, True))
+check("M existing different install still refused without -Force", (rc != 0, "different stay-in-the-loop skill" in log, tree(mr2 / REL) == V2), (True, True, True))
 check("M invalid explicit -Scope refused", run_ps(["-File", str(SRC / "scripts/install.ps1"), "-Scope", "Global"])[0] != 0, True)
 default_ref = next(l.split("'")[1] for l in (SRC / "scripts/install.ps1").read_text().splitlines() if "$DefaultRef =" in l)
 check("M default Ref = v<VERSION>", default_ref, "v" + MANIFEST["version"])

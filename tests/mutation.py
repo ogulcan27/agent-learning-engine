@@ -65,7 +65,7 @@ def main(skill):
     ok = True
     for mid, desc, edits, expected in MUTATIONS:
         tmp = Path(tempfile.mkdtemp(prefix=f"mut_{mid}_"))
-        copy = tmp / "learning"
+        copy = tmp / "stay-in-the-loop"
         shutil.copytree(skill, copy)
         for edit in edits:
             mutate(copy, *edit)

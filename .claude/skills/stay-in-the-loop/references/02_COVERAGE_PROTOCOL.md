@@ -4,7 +4,7 @@
 
 ## Purpose
 
-`/learning` çağrıları arasında project work unit'lerinin learning coverage durumunu takip eder.
+`/stay-in-the-loop` çağrıları arasında project work unit'lerinin learning coverage durumunu takip eder.
 
 ## Responsibility
 
@@ -271,7 +271,7 @@ Scope seçildikten sonra:
 Sonra: 10 selected (UNCOVERED kalır), 4–9 DEFERRED
 ```
 
-Step 4–9 kaybolmaz. Sonraki `/learning` çağrısında OPEN COVERAGE içinde görünür.
+Step 4–9 kaybolmaz. Sonraki `/stay-in-the-loop` çağrısında OPEN COVERAGE içinde görünür.
 
 ### 8.5 First run baseline
 

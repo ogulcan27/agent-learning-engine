@@ -1,10 +1,10 @@
 # Horizontal Knowledge Map
 
-> Template: `.claude/skills/learning/templates/KNOWLEDGE_MAP_TEMPLATE.md`
+> Template: `.claude/skills/stay-in-the-loop/templates/KNOWLEDGE_MAP_TEMPLATE.md`
 > Target: `docs/learning/maps/HORIZONTAL_MAP.md`
 > Rules: `references/05_MINDMAP_PROTOCOL.md` §12
 > Role: **GENERATED VIEW — elle düzenleme.** `SEMANTIC_GRAPH.md` her başarılı mutation'dan sonra bu dosyayı yeniden üretir.
-> Node metadata buraya kopyalanmaz. Ayrıntı: `/learning map <node-id>`.
+> Node metadata buraya kopyalanmaz. Ayrıntı: `/stay-in-the-loop map <node-id>`.
 
 ## Map Metadata
 
@@ -35,7 +35,7 @@ Unplaced: <parent_id - olan node'lar>
 ## Navigation
 
 ```text
-/learning map <node-id>        local zoom
-/learning map <node-id> L2     depth view
-/learning map debt             DEBT node'ları
+/stay-in-the-loop map <node-id>        local zoom
+/stay-in-the-loop map <node-id> L2     depth view
+/stay-in-the-loop map debt             DEBT node'ları
 ```

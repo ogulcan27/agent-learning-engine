@@ -1,6 +1,6 @@
 # Concept Home — <Canonical Name>
 
-> Template: `.claude/skills/learning/templates/CONCEPT_HOME_TEMPLATE.md`
+> Template: `.claude/skills/stay-in-the-loop/templates/CONCEPT_HOME_TEMPLATE.md`
 > Target: `<personal_library_path>/concepts/<concept-id>.md` (PERSONAL) veya `docs/learning/concepts/<concept-id>.md` (LOCAL_TEMPORARY)
 > Rules: `references/06_KNOWLEDGE_PERSISTENCE.md` §8–§14
 > Role: General technical knowledge. Project story değildir. Tek concept, tek Home.

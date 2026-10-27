@@ -1,17 +1,18 @@
 # Learning Skill — V1 Architecture Manifest
 
 **Architecture Status:** V1 FROZEN (Phase 8, 2026-10-27)
+**Identity (1.0.0 release):** skill `stay-in-the-loop`, komut `/stay-in-the-loop`, project state `docs/learning/` (değişmedi).
 **Rol:** Maintenance haritası. Runtime protocol değildir. Kural burada değil, `Primary File` içindedir.
 
 ## Akış
 
 ```text
-/learning (manual)
+/stay-in-the-loop (manual)
 ↓
 START → COVERAGE → HUMAN SYNC → ULA → COMPLETION → MAP SYNC → KNOWLEDGE PERSISTENCE → FINAL INTEGRITY → DONE
 ```
 
-- Giriş noktası tek: `.claude/skills/learning/SKILL.md`.
+- Giriş noktası tek: `.claude/skills/stay-in-the-loop/SKILL.md`.
 - Doğrudan komutlar: `map ...` (05 §15), `concept` / `library` / `experiences` / `debt` (06 §24), `integrity` (07 §L.6). Bunlar run loop'u çalıştırmaz.
 - `DONE`: Bu Learning Pass için required pipeline ve blocking integrity checks tamamlandı (01 §5). Final integrity `PASS` veya `PASS_WITH_WARNINGS` olmalıdır.
 
@@ -19,8 +20,8 @@ START → COVERAGE → HUMAN SYNC → ULA → COMPLETION → MAP SYNC → KNOWLE
 
 | Katman | Konum | Yazan |
 |---|---|---|
-| UNIVERSAL | `.claude/skills/learning/` | Kimse (runtime'da read-only) |
-| PROJECT | `docs/learning/` (target project) | `/learning` |
+| UNIVERSAL | `.claude/skills/stay-in-the-loop/` | Kimse (runtime'da read-only) |
+| PROJECT | `docs/learning/` (target project) | `/stay-in-the-loop` |
 | PERSONAL | `LEARNING_CONFIG.md → personal_library_path` | Persistence, yalnız configured ise, write lock ile |
 
 ## Layers
@@ -29,7 +30,7 @@ START → COVERAGE → HUMAN SYNC → ULA → COMPLETION → MAP SYNC → KNOWLE
 
 | Alan | Değer |
 |---|---|
-| Purpose | Learning yalnız kullanıcı `/learning` yazınca çalışır. Passive tracking yok. |
+| Purpose | Learning yalnız kullanıcı `/stay-in-the-loop` yazınca çalışır. Passive tracking yok. |
 | Primary File | `SKILL.md` (router), `references/01_OPERATIONAL_CORE.md` (run loop, stop / write rules, DONE) |
 | Authoritative State | `state/LEARNING_CONFIG.md` |
 | Input | Argüman, config |

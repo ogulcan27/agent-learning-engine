@@ -1,6 +1,6 @@
 # Personal Technical Library Index
 
-> Template: `.claude/skills/learning/templates/PERSONAL_LIBRARY_INDEX_TEMPLATE.md`
+> Template: `.claude/skills/stay-in-the-loop/templates/PERSONAL_LIBRARY_INDEX_TEMPLATE.md`
 > Target: `<personal_library_path>/LIBRARY_INDEX.md`
 > Rules: `references/06_KNOWLEDGE_PERSISTENCE.md` §18.2
 > Role: **GENERATED VIEW — elle düzenleme.** Concept Home dosyalarından yeniden üretilir. Home kazanır.

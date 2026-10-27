@@ -100,6 +100,10 @@ check("X 07 status lists §L implemented", "§L IMPLEMENTED" in text(SKILL / "re
 PORT = re.compile(r"[A-Za-z]:[\\/]|/Users/|/home/|scratchpad|AppData|Incubator|Claude Learning Skill|INC-\d", re.I)
 check("X no absolute path / user / project value", [f"{f.relative_to(SKILL).as_posix()}: {m}" for f in FILES
                                                     for m in PORT.findall(text(f))], [])
+check("X frontmatter name = skill directory = stay-in-the-loop",
+      (re.search(r"^name: (\S+)$", text(SKILL / "SKILL.md"), re.M).group(1), SKILL.name), ("stay-in-the-loop", "stay-in-the-loop"))
+check("X no old /learning command or .claude/skills/learning path", [f"{f.relative_to(SKILL).as_posix()}: {m}" for f in FILES
+      for m in re.findall(r"(?<![\w./-])/learning\b|\.claude/skills/learning\b", text(f))], [])
 check("X no project state in skill", sorted(p.name for p in SKILL.rglob("*") if p.name in (
     "LEARNING_STATE.md", "COVERAGE_LEDGER.md", "LEARNING_QUEUE.md", "LEARNING_CONFIG.md", "SEMANTIC_GRAPH.md", "LIBRARY_INDEX.md",
     "CONCEPT_REGISTRY.md", "docs", "passes", ".learning-write-lock")), [])

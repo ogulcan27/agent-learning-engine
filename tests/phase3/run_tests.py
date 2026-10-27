@@ -24,7 +24,7 @@ def check(name, actual, expected):
 
 
 def roundtrip(ledger):
-    """Write the ledger to Markdown and read it back, as /learning would."""
+    """Write the ledger to Markdown and read it back, as /stay-in-the-loop would."""
     return Ledger.parse(COLUMNS, ledger.render())
 
 

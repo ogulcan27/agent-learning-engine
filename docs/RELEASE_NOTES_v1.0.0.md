@@ -1,13 +1,14 @@
-# Agent Learning Engine v1.0.0
+# Stay in the Loop v1.0.0
 
-Turn AI-assisted project work into knowledge you can understand, retain, and reuse.
+**In the loop.** Stay aligned with AI-assisted project work. Understand what changed, learn what matters, and retain what you learn.
 
+- **Skill:** `stay-in-the-loop`
+- **Command:** `/stay-in-the-loop`
 - **Current integration:** Claude Code
-- **Runtime skill:** `learning` (invoked with `/learning`)
 
 ## Highlights
 
-- **Manual learning workflow.** Run `/learning` when you want to catch up on what your AI-assisted work changed. Nothing runs in the background.
+- **Manual learning workflow.** Run `/stay-in-the-loop` when you want to catch up on what your AI-assisted work changed. Nothing runs in the background.
 - **Coverage.** Finds unlearned work units from persistent project evidence such as git commits, plan documents, and issue keys.
 - **Human Synchronization.** Short summaries of what changed and why.
 - **Light / Full ULA.** Teaching material only for concepts you need, at the depth you need.
@@ -23,17 +24,17 @@ See the [README](../README.md#installation) for full instructions.
 | Method | Summary |
 |---|---|
 | Clone and install | `scripts\install.ps1 -Scope Project` or `-Scope Personal` |
-| Release package | `install.ps1 -Archive agent-learning-engine-v1.0.0.zip` |
-| Quick install | `irm https://raw.githubusercontent.com/ogulcan27/agent-learning-engine/v1.0.0/scripts/install.ps1 \| iex` (asks for Project or Personal scope) |
+| Release package | `install.ps1 -Archive stay-in-the-loop-v1.0.0.zip` |
+| Quick install | `irm https://raw.githubusercontent.com/ogulcan27/stay-in-the-loop/v1.0.0/scripts/install.ps1 \| iex` (asks for Project or Personal scope) |
 
-Release assets: `agent-learning-engine-v1.0.0.zip` and `SHA256SUMS.txt`.
+Release assets: `stay-in-the-loop-v1.0.0.zip` and `SHA256SUMS.txt`.
 
 ## Compatibility
 
 - Claude Code with project / personal skills support (tested with 2.1.311). No other agent platform is supported in this release.
 - Installer tested on Windows PowerShell 5.1.
 - Using the skill requires no Python, Git, or other dependency.
-- If `learning` is installed in both Personal and Project scope, Claude Code uses the Personal one.
+- If `stay-in-the-loop` is installed in both Personal and Project scope, Claude Code uses the Personal one.
 
 ## Known Limitations
 

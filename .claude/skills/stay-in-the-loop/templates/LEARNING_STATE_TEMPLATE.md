@@ -1,6 +1,6 @@
 # Learning State
 
-> Template: `.claude/skills/learning/templates/LEARNING_STATE_TEMPLATE.md`
+> Template: `.claude/skills/stay-in-the-loop/templates/LEARNING_STATE_TEMPLATE.md`
 > Target: `docs/learning/state/LEARNING_STATE.md`
 > Role: **Derived runtime summary.** Elle düzenlenmez. Her ledger commit'inden sonra yeniden üretilir.
 

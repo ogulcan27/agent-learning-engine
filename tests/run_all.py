@@ -31,7 +31,7 @@ def run_suite(name, skill):
 
 def main():
     args = [a for a in sys.argv[1:] if not a.startswith("--")]
-    skill = Path(args[0]) if args else ROOT.parent / ".claude" / "skills" / "learning"
+    skill = Path(args[0]) if args else ROOT.parent / ".claude" / "skills" / "stay-in-the-loop"
     ok = True
     print(f"Skill under test: {skill}\n")
     for name in SUITES + DISTRIBUTION:

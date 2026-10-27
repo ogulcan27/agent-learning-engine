@@ -1,241 +1,179 @@
-# Agent Learning Engine
+<h1 align="center">Stay in the Loop</h1>
 
-Turn AI-assisted project work into knowledge you can understand, retain, and reuse.
+<p align="center">
+  <strong>In the loop.</strong>
+</p>
 
-Agent Learning Engine is a project-driven learning system for AI-assisted development. It converts completed project work into structured understanding, targeted learning, semantic knowledge, and reusable technical experience.
+<p align="center">
+  Stay aligned with AI-assisted project work.<br>
+  Understand what changed, learn what matters, and retain what you learn.
+</p>
 
-Agent Learning Engine is designed as a platform-neutral learning architecture. **Version 1.0.0 ships with a Claude Code skill integration**: you install the `learning` skill and start it with `/learning`.
+<p align="center">
+  <img alt="Version 1.0.0" src="https://img.shields.io/badge/version-1.0.0-blue">
+  <img alt="Claude Code skill" src="https://img.shields.io/badge/Claude%20Code-skill-D97757">
+  <img alt="Manual only" src="https://img.shields.io/badge/invocation-manual--only-555555">
+  <img alt="Tests passing" src="https://img.shields.io/badge/tests-passing-brightgreen">
+  <img alt="PowerShell installer" src="https://img.shields.io/badge/installer-PowerShell%205.1%2B-5391FE">
+</p>
+
+## ⚡ Quick Install
+
+Run in PowerShell from your project directory:
 
 ```powershell
-irm https://raw.githubusercontent.com/ogulcan27/agent-learning-engine/v1.0.0/scripts/install.ps1 | iex
+irm https://raw.githubusercontent.com/ogulcan27/stay-in-the-loop/v1.0.0/scripts/install.ps1 | iex
 ```
 
-The installer asks whether to install for the current project or for all your local Claude Code projects. Then, in Claude Code: `/learning`
+The installer asks where to install:
 
-## What It Does
+```text
+[1] Project
+    Current project only
 
-When an AI agent writes much of your code, the project moves faster than your understanding of it. Agent Learning Engine closes that gap on demand:
+[2] Personal
+    All local Claude Code projects
+```
 
-- It finds the project work you have not reviewed yet, using persistent evidence such as git commits, plan or phase documents, and issue keys.
-- It summarizes what changed and why, in a short, human-readable form.
-- It teaches only the concepts you actually need, and only to the depth you need.
-- It stores what you learned as reusable knowledge that carries across projects.
+Then start the workflow in Claude Code:
 
-System Design is the primary learning axis. Data structures and algorithms appear only when they are computationally relevant to the work.
+```text
+/stay-in-the-loop
+```
+
+**Inspect first?** Download the script, read it, then run it:
+
+```powershell
+irm https://raw.githubusercontent.com/ogulcan27/stay-in-the-loop/v1.0.0/scripts/install.ps1 -OutFile install.ps1
+notepad install.ps1
+.\install.ps1
+```
+
+If your execution policy blocks local scripts, run `powershell -ExecutionPolicy Bypass -File .\install.ps1` instead.
+
+## Why Stay in the Loop?
+
+AI coding agents can move through a project faster than you can understand every decision and implementation detail. The code works, but your mental model of it falls behind.
+
+Stay in the Loop closes that comprehension gap. When you choose to, it reviews the work that has been done, explains what changed and why, teaches the concepts you actually need, and keeps that knowledge for your next project.
 
 ## How It Works
 
 ```text
-Project Work
-    ↓
-/learning
-    ↓
-Coverage                         which work units have not been learned yet?
-    ↓
-Human Synchronization            what changed, and why?
-    ↓
-Learning Events                  which changes are worth learning?
-    ↓
-Light / Full ULA when needed     targeted teaching material
-    ↓
-Semantic Graph                   concepts and their relationships
-    ↓
-Concept Home / Experience Notes  reusable knowledge
-    ↓
-Final Integrity                  PASS / PASS_WITH_WARNINGS / FAIL
+AI-assisted project work
+          ↓
+  /stay-in-the-loop
+          ↓
+      Understand
+          ↓
+   Learn if needed
+          ↓
+       Connect
+          ↓
+        Retain
 ```
 
-Routine changes are marked as not learning-relevant. Nothing is taught just because it changed.
+- **Understand.** It finds project work you have not caught up on, using persistent evidence such as git commits, plan documents, and issue keys, and summarizes it for you.
+- **Learn if needed.** Only changes you must understand, and do not yet, become learning material. Routine changes are skipped.
+- **Connect.** Concepts are linked into a per-project knowledge map.
+- **Retain.** Reusable concepts and project experience are stored so they carry across projects.
+
+Stay in the Loop is manual by design. It runs only when you type `/stay-in-the-loop`. Normal project work never starts it, and there is no background tracking.
+
+System Design is the primary learning axis. Data structures and algorithms appear only when they are computationally relevant.
 
 ## Core Learning Model
 
-```text
-Human Synchronization
-→ Understand what the AI-assisted project work actually changed and why.
-
-Light / Full ULA (Universal Learning Architecture)
-→ Learn only the concepts that matter and only to the depth required.
-
-Semantic Graph + Persistence
-→ Connect reusable concepts, decisions, and project experience into persistent knowledge.
-```
-
-Light ULA produces a short learning note. Full ULA is a three-stage process (Architect, Builder, Auditor) and asks for your approval of the learning architecture before building content.
-
-## Requirements
-
-| Component | Requirement |
-|---|---|
-| Runtime | Claude Code with project / personal skills (tested with Claude Code 2.1.311) |
-| Installer | Windows PowerShell 5.1+ (tested on 5.1; PowerShell 7, macOS and Linux are untested) |
-| Git | Optional. Not needed to install. When present, git history is used as project evidence. |
-| Development tests | Python 3, standard library only |
-
-Python is not required to use the learning skill itself. The skill consists only of Markdown files: no binaries, no dependencies, no network calls.
-
-## Installation
-
-There are two installation scopes:
-
-| Scope | Location | Available in |
+| Understand | Learn | Retain |
 |---|---|---|
-| Project | `<project>/.claude/skills/learning/` | That repository only |
-| Personal | `~/.claude/skills/learning/` | All local Claude Code projects on this machine |
+| **Human Synchronization** | **Light / Full ULA** | **Semantic Graph + Persistence** |
+| Understand what changed and why. | Learn only what matters, to the depth required. | Connect reusable knowledge and experience over time. |
 
-The remote commands below work only after the `v1.0.0` tag and release have been published.
-
-### Project Installation
-
-The most inspectable path is to clone the repository, review `scripts/install.ps1`, and run it locally:
-
-```powershell
-git clone https://github.com/ogulcan27/agent-learning-engine.git
-cd agent-learning-engine
-git checkout v1.0.0
-
-powershell -ExecutionPolicy Bypass -File scripts\install.ps1 -Scope Project -ProjectPath C:\path\to\your-project
-```
-
-If `-ProjectPath` is omitted, the current directory is used. `-ExecutionPolicy Bypass` applies only to that single PowerShell process.
-
-### Personal Installation
-
-From the cloned repository:
-
-```powershell
-powershell -ExecutionPolicy Bypass -File scripts\install.ps1 -Scope Personal
-```
-
-This installs the skill into `~/.claude/skills/learning/` and makes it available to all local Claude Code projects.
-
-### Quick Install
-
-Run this in PowerShell from your project directory:
-
-```powershell
-irm https://raw.githubusercontent.com/ogulcan27/agent-learning-engine/v1.0.0/scripts/install.ps1 | iex
-```
-
-The installer asks for the scope:
-
-```text
-[1] Project    Current project only  → <current-project>/.claude/skills/learning/
-[2] Personal   All local Claude Code projects → ~/.claude/skills/learning/
-```
-
-It downloads the `v1.0.0` source archive from `ogulcan27/agent-learning-engine`, verifies every file against `distribution/manifest.json`, and only then installs. Nothing is written before you choose a scope; press Ctrl+C at the prompt to cancel.
-
-Running a remote script executes code from the referenced repository. For the most inspectable installation path, clone the repository, review `scripts/install.ps1`, and run it locally.
-
-### Inspect before running
-
-Download the script, read it, then run it:
-
-```powershell
-irm https://raw.githubusercontent.com/ogulcan27/agent-learning-engine/v1.0.0/scripts/install.ps1 -OutFile install.ps1
-notepad install.ps1
-powershell -ExecutionPolicy Bypass -File .\install.ps1
-```
-
-A standalone `install.ps1` uses the same defaults (`-Repository ogulcan27/agent-learning-engine -Ref v1.0.0`) and shows the same menu.
-
-### Non-interactive install
-
-Pass `-Scope` to skip the menu (for scripts and automation):
-
-```powershell
-.\scripts\install.ps1 -Scope Project
-.\scripts\install.ps1 -Scope Personal
-```
-
-From a cloned repository this installs the local copy. Elsewhere it downloads the default release. `-Repository <owner/repo>` and `-Ref <tag-or-commit>` override the defaults; always pin a tag or commit, not a branch. With `irm | iex` you cannot pass parameters; use the scriptblock form instead:
-
-```powershell
-& ([scriptblock]::Create((irm https://raw.githubusercontent.com/ogulcan27/agent-learning-engine/v1.0.0/scripts/install.ps1))) -Scope Personal
-```
-
-If your execution policy blocks `.\scripts\install.ps1`, run it as `powershell -ExecutionPolicy Bypass -File .\scripts\install.ps1 -Scope Project`.
-
-### Release Package
-
-Each GitHub Release provides `agent-learning-engine-v1.0.0.zip` and `SHA256SUMS.txt`. Check the hash, then install with the `install.ps1` from the same tag:
-
-```powershell
-(Get-FileHash .\agent-learning-engine-v1.0.0.zip -Algorithm SHA256).Hash.ToLower()
-Get-Content .\SHA256SUMS.txt
-
-powershell -ExecutionPolicy Bypass -File .\install.ps1 -Scope Project -ProjectPath C:\path\to\your-project -Archive .\agent-learning-engine-v1.0.0.zip
-```
-
-### Installer behavior
-
-- If hash verification fails, nothing is written.
-- If the same package is already installed, the installer reports `ALREADY INSTALLED`.
-- If a different version is installed, the installer stops. Use `update.ps1` (or `install.ps1 -Force`) to replace it.
-- Installation is staged and verified first. On failure the previous install is restored; no partial skill is left behind.
-- The installer only owns `.claude/skills/learning/`. It never touches `docs/learning/`, the Personal Technical Library, `CLAUDE.md`, your source code, git history, other skills, or other `.claude` settings.
-
-### Project and Personal at the same time
-
-Claude Code resolves skills with the same name as **enterprise > personal > project**. If `learning` exists in both scopes, Claude Code uses the Personal one.
-
-Use one installation scope for `learning` unless you intentionally manage version precedence.
-
-### Other platforms
-
-The installer is tested only on Windows PowerShell. On macOS or Linux you can copy `.claude/skills/learning/` from a release manually; this path is untested.
-
-## Usage
-
-The learning workflow runs only when you explicitly invoke `/learning`. Normal project work never starts it, and there is no passive tracking. This is an intentional design property: the skill sets `disable-model-invocation: true`, so the agent cannot start it on its own.
-
-On the first `/learning` run in a project, the skill detects that no learning state exists and asks for your approval before creating `docs/learning/`. The installer never creates this directory.
+ULA (Universal Learning Architecture) has two depths. Light ULA produces a short learning note. Full ULA is a three-stage process (architect, build, audit) and asks for your approval before building content. Every run ends with an integrity check across all stored knowledge.
 
 ## Commands
 
-| Command | Description |
+| Command | What it does |
 |---|---|
-| `/learning` | Run the full workflow; asks for scope if several work units are open. |
-| `/learning latest` | Learn from the most recent work unit only. |
-| `/learning pending` | Return to deferred or partially learned work units. |
-| `/learning catch-up` | Work through all open learning gaps. |
-| `/learning resume` | Continue an unfinished learning pass. |
-| `/learning map` | Show the root knowledge map. |
-| `/learning map <node-id>` | Zoom into one node of the map (add `L1`–`L4` for a depth view). |
-| `/learning concept <concept-id>` | Show a concept's home page and its project pointer. |
-| `/learning library` | Show Personal Technical Library status and index. |
-| `/learning experiences` | List project experience notes. |
-| `/learning debt` | List open knowledge debt. |
-| `/learning integrity` | Run the final integrity check and suggest repairs for derived files. |
+| `/stay-in-the-loop` | Run the full workflow; asks for scope when several work units are open. |
+| `/stay-in-the-loop latest` | Catch up on the most recent work unit only. |
+| `/stay-in-the-loop pending` | Return to deferred or partially covered work. |
+| `/stay-in-the-loop catch-up` | Work through all open gaps. |
+| `/stay-in-the-loop resume` | Continue an unfinished learning pass. |
+| `/stay-in-the-loop map` | Show the project knowledge map. |
+| `/stay-in-the-loop map <node-id>` | Zoom into one concept (add `L1`–`L4` for a depth view). |
+| `/stay-in-the-loop concept <concept-id>` | Show a concept's home page. |
+| `/stay-in-the-loop library` | Show the Personal Technical Library. |
+| `/stay-in-the-loop experiences` | List project experience notes. |
+| `/stay-in-the-loop debt` | List open knowledge debt: gaps left for later. |
+| `/stay-in-the-loop integrity` | Check stored knowledge and suggest safe repairs. |
 
-Further arguments (`show skipped`, `new`, `abandon <pass-id>`, `map debt`, `map sync`, `<work-unit-id>`) are listed in `.claude/skills/learning/SKILL.md`.
+More arguments (`show skipped`, `new`, `abandon <pass-id>`, `map debt`, `map sync`, `<work-unit-id>`) are listed in [`SKILL.md`](.claude/skills/stay-in-the-loop/SKILL.md).
 
-## Skill State vs Project State
+## Installation
+
+| Scope | Installs to | Available in |
+|---|---|---|
+| Project | `<project>/.claude/skills/stay-in-the-loop/` | That repository only |
+| Personal | `~/.claude/skills/stay-in-the-loop/` | All local Claude Code projects |
+
+The Quick Install above covers most users. Other options:
+
+**Clone and install** (the most inspectable path):
+
+```powershell
+git clone https://github.com/ogulcan27/stay-in-the-loop.git
+cd stay-in-the-loop
+powershell -ExecutionPolicy Bypass -File scripts\install.ps1 -Scope Project -ProjectPath C:\path\to\your-project
+powershell -ExecutionPolicy Bypass -File scripts\install.ps1 -Scope Personal
+```
+
+**Non-interactive.** Pass `-Scope Project` or `-Scope Personal` to skip the menu. `-Repository <owner/repo>` and `-Ref <tag-or-commit>` override the defaults (`ogulcan27/stay-in-the-loop`, `v1.0.0`). With `irm | iex` you cannot pass parameters, so use the scriptblock form:
+
+```powershell
+& ([scriptblock]::Create((irm https://raw.githubusercontent.com/ogulcan27/stay-in-the-loop/v1.0.0/scripts/install.ps1))) -Scope Personal
+```
+
+**Release package.** Each GitHub Release provides `stay-in-the-loop-v1.0.0.zip` and `SHA256SUMS.txt`:
+
+```powershell
+(Get-FileHash .\stay-in-the-loop-v1.0.0.zip -Algorithm SHA256).Hash.ToLower()
+powershell -ExecutionPolicy Bypass -File .\install.ps1 -Scope Project -Archive .\stay-in-the-loop-v1.0.0.zip
+```
+
+**What the installer guarantees:**
+
+- Every file is checked against the SHA256 manifest before anything is written.
+- An identical install is reported as `ALREADY INSTALLED`. A different version is never overwritten silently; use `update.ps1` or `-Force`.
+- Installation is staged and swapped in atomically. On failure, the previous install is restored.
+- It only touches `.claude/skills/stay-in-the-loop/`. Your learning state, Personal Technical Library, `CLAUDE.md`, source code, git history, and other skills are left alone.
+
+**Project and Personal together.** When the same skill exists in several scopes, Claude Code uses **enterprise > personal > project**, so a Personal install wins over a Project install. Use one scope unless you intentionally manage that precedence.
+
+On macOS or Linux, copy `.claude/skills/stay-in-the-loop/` from a release manually. This path is untested.
+
+## Project State and Personal Knowledge
 
 | Layer | Location | Written by |
 |---|---|---|
-| Skill engine | `.claude/skills/learning/` | Installer only; read-only at runtime |
-| Project learning state | `docs/learning/` in your project | `/learning` |
-| Personal Technical Library | Configured separately through `personal_library_path` | `/learning`, only when configured |
+| Skill engine | `.claude/skills/stay-in-the-loop/` | The installer only |
+| Project learning state | `docs/learning/` in your project | `/stay-in-the-loop` |
+| Personal Technical Library | Configured separately (`personal_library_path`) | `/stay-in-the-loop`, only when configured |
 
-Updating or uninstalling the skill does not delete project learning state or the Personal Technical Library. Whether you commit `docs/learning/` to your own repository is your choice.
+Updating or uninstalling Stay in the Loop does not delete project learning state or the Personal Technical Library.
 
-## Personal Technical Library
+On the first run in a project, the skill asks for your approval before creating `docs/learning/`. Committing that directory to your repository is your choice.
 
-The Personal Technical Library is a cross-project knowledge store built on the principle *One Concept, One Home*: each concept has one canonical page, and projects link to it.
-
-- Its location is the `personal_library_path` value in `docs/learning/state/LEARNING_CONFIG.md`. Nothing is hard-coded.
-- If it is not configured, the skill asks you to configure it, keep knowledge local to the project (`LOCAL_TEMPORARY`), or defer the decision.
-- Writes use a single-machine write lock and an all-or-nothing transaction.
+The **Personal Technical Library** follows *One Concept, One Home*: each concept has one canonical page that all your projects link to. Its location is set in `docs/learning/state/LEARNING_CONFIG.md`. If it is not configured, the skill asks whether to set it up, keep knowledge local to the project, or decide later.
 
 ## Updating
 
 ```powershell
 powershell -ExecutionPolicy Bypass -File scripts\update.ps1 -Scope Project -ProjectPath C:\path\to\your-project
-powershell -ExecutionPolicy Bypass -File scripts\update.ps1 -Scope Personal -Repository ogulcan27/agent-learning-engine -Ref <tag>
+powershell -ExecutionPolicy Bypass -File scripts\update.ps1 -Scope Personal -Ref <tag>
 ```
 
-An update requires an existing install and replaces only the skill engine, atomically and with rollback. Version 1.0.0 has no state migration. Restart any open Claude Code session after updating.
+Updates replace only the skill engine, atomically and with rollback. Restart any open Claude Code session afterwards.
 
 ## Uninstalling
 
@@ -244,88 +182,44 @@ powershell -ExecutionPolicy Bypass -File scripts\uninstall.ps1 -Scope Project -P
 powershell -ExecutionPolicy Bypass -File scripts\uninstall.ps1 -Scope Personal
 ```
 
-Only the skill directory is removed. The script confirms:
+Only the skill directory is removed. To verify an install instead, run `scripts\verify-install.ps1` with the same parameters; it reports `PASS` or `FAIL`.
 
-```text
-Learning state retained.
-Personal Technical Library retained.
-```
+## Requirements
 
-To discard project learning state, delete `docs/learning/` yourself.
+| | |
+|---|---|
+| Runtime | Claude Code with skills support (tested with 2.1.311) |
+| Installer | Windows PowerShell 5.1+ (tested on 5.1) |
+| Git | Optional; used as project evidence when present |
+| Development tests | Python 3, standard library only |
 
-## Verification
-
-```powershell
-powershell -ExecutionPolicy Bypass -File scripts\verify-install.ps1 -Scope Project -ProjectPath C:\path\to\your-project
-```
-
-The check confirms that the skill exists, `SKILL.md` is present, the file set matches the manifest, every SHA256 matches, and no project state has been written inside the skill directory. The result is `PASS` or `FAIL`.
-
-## Development and Testing
-
-The test suite lives in the development repository and is not part of the installed skill.
-
-```text
-uv run --no-project python tests/run_all.py
-```
-
-Without `uv`, with Python 3 on your `PATH`:
-
-```text
-python tests/run_all.py
-```
-
-- Standard library only; no dependencies.
-- Suites: subsystem models, end-to-end integration, static audit, distribution (installer), and mutation checks.
-- The distribution suite requires Windows PowerShell and never writes to your real home directory or projects.
-- Build the release package with `powershell -ExecutionPolicy Bypass -File scripts\build-release.ps1`.
+Python is not required to use the skill. The skill is plain Markdown: no binaries, no dependencies, no network calls.
 
 ## Current Limitations
 
-- **Language.** Version 1.0.0 currently uses Turkish for the learning workflow and generated learning explanations. Technical terms stay in canonical English. Language configuration is not yet part of V1.
-- **Platform.** Claude Code is the only supported integration. Other agents (for example Codex, Gemini CLI, or Cursor) are not supported; they are possible future adapters, not current features.
-- **Manual only.** There is no automatic or background learning.
+- **Language.** Version 1.0.0 currently uses Turkish for generated learning explanations, with technical terms in English. Configurable learning-output language is not part of V1.
+- **Platform.** Current V1 integration: Claude Code. Other agents such as Codex, Gemini CLI, or Cursor are not supported; they are possible future adapters.
 - **Installer.** Tested only on Windows PowerShell 5.1.
-- **Single machine.** The Personal Technical Library write lock is local; there is no remote or multi-user library.
-- **No global graph.** The semantic graph is per project. There is no cross-project graph or HTML view.
-- **Judgment.** Some decisions, such as whether two concepts are equivalent, rely on the agent's judgment. When unsure, the skill asks you.
-- **Cost.** Full ULA uses significant tokens; it runs only for concepts that need it.
+- **Scope.** The knowledge map is per project. The Personal Technical Library is single-machine; there is no remote or shared library.
+- **Judgment.** Some decisions, such as whether two concepts are the same, rely on the agent's judgment. When unsure, the skill asks you.
+- **Cost.** Full ULA uses significant tokens, so it runs only for concepts that need it.
 
 ## Security
 
-- The skill is Markdown instructions only. It runs no code of its own and makes no network requests.
-- Remote installation downloads and runs a PowerShell script. Review it first and pin a tag or commit.
-- SHA256 verification against the manifest protects package integrity: it detects corrupted, incomplete, or modified files. It is not a cryptographic publisher-authentication system, because the manifest comes from the same source. Trust in the repository itself is still required.
-- For release archives, compare the ZIP hash with `SHA256SUMS.txt`.
+- The skill itself is Markdown instructions. It runs no code of its own and makes no network requests.
+- Quick Install runs a remote PowerShell script. Running a remote script executes code from the referenced repository; inspect it first if you prefer, and pin a tag or commit.
+- SHA256 verification protects package integrity: it detects corrupted, incomplete, or modified files. It is not publisher authentication, because the manifest comes from the same source.
 
-## Versioning
-
-Agent Learning Engine follows Semantic Versioning (`MAJOR.MINOR.PATCH`):
+## Development
 
 ```text
-MAJOR → breaking state or protocol compatibility change
-MINOR → backward-compatible capability
-PATCH → compatible fix
+uv run --no-project python tests/run_all.py     # or: python tests/run_all.py
 ```
 
-See [`CHANGELOG.md`](CHANGELOG.md) and [`docs/RELEASE_NOTES_v1.0.0.md`](docs/RELEASE_NOTES_v1.0.0.md).
+The suite uses only the Python standard library. It covers the protocol models, end-to-end integration, a static audit, the installer (Windows PowerShell), and mutation checks. Build the release package with `scripts\build-release.ps1`. Development audit records are in [`docs/audit/`](docs/audit/), and the architecture map is in [`docs/audit/V1_ARCHITECTURE_MANIFEST.md`](docs/audit/V1_ARCHITECTURE_MANIFEST.md).
 
-## Repository Structure
-
-```text
-.claude/skills/learning/     Runtime package (the only thing that gets installed)
-  SKILL.md                   Entry point and /learning router
-  references/                Protocol files
-  templates/                 State and artifact templates
-  ula/                       Universal Learning Architecture roles
-scripts/                     install, update, uninstall, verify, build-release
-distribution/manifest.json   Runtime file list with SHA256 hashes
-tests/                       Regression and distribution test suites
-docs/                        Release notes and release checklist
-docs/audit/                  Development audit records
-VERSION, CHANGELOG.md
-```
+Versioning follows [Semantic Versioning](https://semver.org/): MAJOR for breaking state or protocol changes, MINOR for compatible capabilities, PATCH for compatible fixes. See [`CHANGELOG.md`](CHANGELOG.md) and the [v1.0.0 release notes](docs/RELEASE_NOTES_v1.0.0.md).
 
 ## License
 
-No license has been selected yet. Until a license is added, no reuse rights are granted beyond what GitHub's terms allow.
+Stay in the Loop is released under the [MIT License](LICENSE).

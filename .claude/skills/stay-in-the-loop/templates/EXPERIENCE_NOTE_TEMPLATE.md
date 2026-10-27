@@ -1,6 +1,6 @@
 # Experience Note — <short title>
 
-> Template: `.claude/skills/learning/templates/EXPERIENCE_NOTE_TEMPLATE.md`
+> Template: `.claude/skills/stay-in-the-loop/templates/EXPERIENCE_NOTE_TEMPLATE.md`
 > Target: `docs/learning/experiences/<experience-id>.md`
 > Rules: `references/06_KNOWLEDGE_PERSISTENCE.md` §15
 > Role: Concept'in bu projede nasıl ve neden kullanıldığı. General theory tekrar edilmez.

@@ -1,4 +1,4 @@
-"""End-to-end driver: one temporary target project through the full /learning pipeline.
+"""End-to-end driver: one temporary target project through the full /stay-in-the-loop pipeline.
 
 Each stage calls the phase model that already encodes that protocol:
 coverage (phase3) -> human sync (phase4) -> ULA + completion (phase5) -> map sync (phase6)

@@ -212,6 +212,13 @@ Karar: `StudySystem_WithAI.txt` ve `Universal_Learning_Architecture/` working tr
 - Runtime identity değişmedi: `.claude/skills/learning/`, `/learning`, manifest `skill_name = learning`.
 - V1 platform: yalnız Claude Code. Başka platform desteği iddia edilmez.
 
+### Identity rename (release öncesi)
+
+- Product: **Stay in the Loop** (tagline: "In the loop."). Repository adı değişmedi: `ogulcan27/agent-learning-engine`. Asset: `agent-learning-engine-v1.0.0.zip`.
+- Skill: `.claude/skills/learning/` → `.claude/skills/stay-in-the-loop/`, `name: stay-in-the-loop`, komut `/stay-in-the-loop`. Manifest `skill_name` / `package_root` güncellendi.
+- Değişmeyen: `docs/learning/`, learning domain terimleri, bütün protocol kuralları. 38 runtime dosyasının her biri HEAD sürümü + yalnız identity substitution ile birebir aynıdır (program ile doğrulandı).
+- Bu rapordaki önceki `learning` / `/learning` ifadeleri o tarihteki identity'yi gösterir (historical).
+
 ## 21. Open Issues
 
 | ID | Konu | Sınıf |
@@ -241,13 +248,15 @@ Karar: `StudySystem_WithAI.txt` ve `Universal_Learning_Architecture/` working tr
 
 ## 23. Exact Publish Steps
 
+> Güncel (final identity): repository `ogulcan27/stay-in-the-loop`, asset `stay-in-the-loop-v1.0.0.zip`. Geçerli komutlar: `docs/GITHUB_RELEASE_CHECKLIST.md`. Aşağıdaki adımlar historical kayıttır.
+
 Kullanıcı tarafından çalıştırılır.
 
 Branding sonrası güncel: `origin` = `https://github.com/ogulcan27/agent-learning-engine.git` (yapılandırıldı, push yok). `main` Step 1'de; fast-forward mümkün.
 
 ```powershell
 uv run --no-project python tests/run_all.py
-powershell -ExecutionPolicy Bypass -File scriptsuild-release.ps1
+powershell -ExecutionPolicy Bypass -File scripts\build-release.ps1
 git add -A
 git commit -m "Release 1.0.0: Agent Learning Engine"
 git checkout main

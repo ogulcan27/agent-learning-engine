@@ -1,11 +1,11 @@
 <#
 .SYNOPSIS
-    Remove the Agent Learning Engine learning skill from one scope.
+    Remove the Stay in the Loop skill (stay-in-the-loop) from one scope.
 
 .DESCRIPTION
-    Removes only <base>/.claude/skills/learning/.
-      -Scope Project   <ProjectPath>/.claude/skills/learning/   (default: current directory)
-      -Scope Personal  <home>/.claude/skills/learning/
+    Removes only <base>/.claude/skills/stay-in-the-loop/.
+      -Scope Project   <ProjectPath>/.claude/skills/stay-in-the-loop/   (default: current directory)
+      -Scope Personal  <home>/.claude/skills/stay-in-the-loop/
     Never removes docs/learning/ or the Personal Technical Library.
     The skill directory is first moved aside (one rename), then deleted, so a failure leaves the old install intact.
 #>
@@ -24,10 +24,10 @@ else {
     $base = if ($ProjectPath) { $ProjectPath } else { (Get-Location).Path }
     if (-not (Test-Path -LiteralPath $base -PathType Container)) { throw "Project path not found: $base" }
 }
-$target = Join-Path $base '.claude/skills/learning'
+$target = Join-Path $base '.claude/skills/stay-in-the-loop'
 
 if (Test-Path -LiteralPath $target) {
-    $trash = Join-Path $base ".claude/.learning-uninstall-$([guid]::NewGuid().ToString('N').Substring(0, 8))"
+    $trash = Join-Path $base ".claude/.stay-in-the-loop-uninstall-$([guid]::NewGuid().ToString('N').Substring(0, 8))"
     [IO.Directory]::Move($target, $trash)
     Remove-Item -LiteralPath $trash -Recurse -Force
     Write-Output "REMOVED: $target"

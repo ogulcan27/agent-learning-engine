@@ -14,7 +14,7 @@ Graph'tan horizontal, recursive ve progressive-disclosure kullanan bir Knowledge
 - Incremental, idempotent ve atomic graph update.
 - Map sync status.
 - Horizontal root map, recursive zoom, depth view.
-- `/learning map ...` komutları.
+- `/stay-in-the-loop map ...` komutları.
 
 ## Must Not
 
@@ -438,7 +438,7 @@ Depth horizontal axis'e konmaz.
 
 ## 13. Recursive zoom
 
-Komut: `/learning map <node-id>`.
+Komut: `/stay-in-the-loop map <node-id>`.
 
 ```text
 <WORLD> → <REGION> → <CURRENT NODE>        breadcrumb (parent_id zinciri)
@@ -471,7 +471,7 @@ Depth: ✓ L1  ✓ L2  — L3  — L4
 
 ## 14. Depth view
 
-Komut: `/learning map <node-id> L1|L2|L3|L4`.
+Komut: `/stay-in-the-loop map <node-id> L1|L2|L3|L4`.
 
 - Yalnız `available_depth` içindeki seviye açılır.
 - Seviye yoksa: `L3 unavailable. Mevcut: L1, L2.` İçerik uydurulmaz. Kullanıcı isterse yeni learning pass önerilir.
@@ -484,11 +484,11 @@ Komut: `/learning map <node-id> L1|L2|L3|L4`.
 
 | Komut | Davranış |
 |---|---|
-| `/learning map` | Root map. Stale ise önce view regeneration. |
-| `/learning map <node-id>` | Recursive local zoom |
-| `/learning map <node-id> L1`…`L4` | Depth view |
-| `/learning map debt` | `DEBT` node listesi: name, debt_id, parent |
-| `/learning map sync` | `COMPLETE` pass'lerde `PENDING` / `BLOCKED` event'leri sync et |
+| `/stay-in-the-loop map` | Root map. Stale ise önce view regeneration. |
+| `/stay-in-the-loop map <node-id>` | Recursive local zoom |
+| `/stay-in-the-loop map <node-id> L1`…`L4` | Depth view |
+| `/stay-in-the-loop map debt` | `DEBT` node listesi: name, debt_id, parent |
+| `/stay-in-the-loop map sync` | `COMPLETE` pass'lerde `PENDING` / `BLOCKED` event'leri sync et |
 
 - Map komutları coverage, discovery veya ULA çalıştırmaz.
 - Yalnız `map sync` graph yazar. Diğerleri yalnız stale view'ı yeniden üretebilir.

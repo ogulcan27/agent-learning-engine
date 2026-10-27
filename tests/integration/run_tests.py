@@ -187,7 +187,7 @@ pc.full_until_review("LP-20261027-01", ec)
 meta_c = pc.pass_file("LP-20261027-01")["meta"]
 check("C WAITING_USER at review", (meta_c["pass_status"], meta_c["current_stage"]), ("WAITING_USER", "FULL_ULA_REVIEW"))
 lp_c = pc.passes["LP-20261027-01"]
-check("C new /learning asks resume/new/abandon", um.startup([lp_c])[0], "ASK")
+check("C new /stay-in-the-loop asks resume/new/abandon", um.startup([lp_c])[0], "ASK")
 check("C resume keeps pass id and stage", um.resume(lp_c), ("LP-20261027-01", "FULL_ULA_REVIEW"))
 brief_before = pc.store.read(f"P:passes/LP-20261027-01/ula/{ec}/PROJECT_BRIEF.md")
 art_c = pc.full_after_review("LP-20261027-01", ec, FULL)

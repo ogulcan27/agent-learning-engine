@@ -1,6 +1,6 @@
 # Decision Record — <short title>
 
-> Template: `.claude/skills/learning/templates/DECISION_RECORD_TEMPLATE.md`
+> Template: `.claude/skills/stay-in-the-loop/templates/DECISION_RECORD_TEMPLATE.md`
 > Target: `docs/learning/experiences/<decision-id>.md`
 > Rules: `references/06_KNOWLEDGE_PERSISTENCE.md` §16
 > Role: Significant decision'ın reasoning'ini saklar. Her event için üretilmez.

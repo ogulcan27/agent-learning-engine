@@ -113,7 +113,7 @@ Bu bölüm ULA content audit yapmaz. Content audit `ula/LEARNING_AUDITOR.md` rol
 Ne zaman çalışır:
 
 - Map sync sırasında, aday graph üzerinde, write'tan önce (`05_MINDMAP_PROTOCOL.md` §8–§9).
-- `/learning map` komutlarında, mevcut graph ve view üzerinde (M-12, M-15, M-16).
+- `/stay-in-the-loop map` komutlarında, mevcut graph ve view üzerinde (M-12, M-15, M-16).
 
 | ID | Kontrol | Sonuç | Aksiyon |
 |---|---|---|---|
@@ -190,7 +190,7 @@ FAIL olduğunda hiçbir persistence dosyası yazılmaz. Event persistence `BLOCK
 
 ## L. Learning State / Cross-Layer Integrity
 
-Final Integrity bu bölümdür. Run loop'un son adımıdır (`01` §1 adım 15). `/learning integrity` aynı işi yapar (§L.6).
+Final Integrity bu bölümdür. Run loop'un son adımıdır (`01` §1 adım 15). `/stay-in-the-loop integrity` aynı işi yapar (§L.6).
 
 §C, §E, §U, §M, §P kurallarını tekrar etmez. Yalnız layer'lar arası invariant'ları kontrol eder. Bir L check bir alt check ile aynı sonucu veriyorsa satırda kaynak check yazılır.
 
@@ -248,7 +248,7 @@ RESULT      CHECK 2 sonucu (§L.2)
 ```
 
 - FAIL varken derived repair yapılmaz. Bozuk authoritative kaynaktan derived üretilmez.
-- Run loop adım 15 derived repair'ı onaysız yapar. `/learning integrity` önce listeyi gösterir ve onay ister.
+- Run loop adım 15 derived repair'ı onaysız yapar. `/stay-in-the-loop integrity` önce listeyi gösterir ve onay ister.
 
 ### L.4 Coverage independence
 
@@ -294,7 +294,7 @@ Kapsam: Personal library yalnız configured ise ve check gerektiriyorsa yükleni
 
 ### L.6 Command
 
-`/learning integrity`:
+`/stay-in-the-loop integrity`:
 
 - Yeni Learning Pass başlatmaz.
 - Coverage, ledger, pass, graph ve Concept Home yazmaz.

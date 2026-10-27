@@ -1,6 +1,6 @@
 <#
 .SYNOPSIS
-    Verify an installed Agent Learning Engine learning skill against the distribution manifest.
+    Verify an installed Stay in the Loop skill (stay-in-the-loop) against the distribution manifest.
 
 .DESCRIPTION
     Calls install.ps1 in verify mode. Writes nothing.

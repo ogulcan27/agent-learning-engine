@@ -4,7 +4,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 REPO = ROOT.parent
-DEFAULT_SKILL = REPO / ".claude" / "skills" / "learning"
+DEFAULT_SKILL = REPO / ".claude" / "skills" / "stay-in-the-loop"
 
 
 def use(*dirs):

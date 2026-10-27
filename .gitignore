@@ -6,5 +6,5 @@ temp/
 dist/
 
 # Installer working directories (removed on success; may remain after a crash).
-.claude/.learning-install-*/
-.claude/.learning-uninstall-*/
+.claude/.stay-in-the-loop-install-*/
+.claude/.stay-in-the-loop-uninstall-*/

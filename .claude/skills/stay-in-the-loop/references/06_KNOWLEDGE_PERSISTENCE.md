@@ -24,7 +24,7 @@ ONE CONCEPT        →  ONE HOME
 - Experience Note, Decision Record, System Design ve DSA Experience Map.
 - Knowledge Debt `RESOLVED` lifecycle.
 - Graph `home_ref` ataması.
-- `/learning concept`, `/learning library`, `/learning experiences`, `/learning debt` komutları.
+- `/stay-in-the-loop concept`, `/stay-in-the-loop library`, `/stay-in-the-loop experiences`, `/stay-in-the-loop debt` komutları.
 
 ## Must Not
 
@@ -43,7 +43,7 @@ ONE CONCEPT        →  ONE HOME
 
 | Katman | Konum | İçerik |
 |---|---|---|
-| UNIVERSAL SKILL LOGIC | `.claude/skills/learning/` | Kurallar, template'ler, universal DSA pattern vocabulary (§17.3). Runtime'da read-only. |
+| UNIVERSAL SKILL LOGIC | `.claude/skills/stay-in-the-loop/` | Kurallar, template'ler, universal DSA pattern vocabulary (§17.3). Runtime'da read-only. |
 | PROJECT-SPECIFIC STATE | `docs/learning/` | Pass, graph, Experience Note, Decision Record, concept pointer, state. |
 | PERSONAL CROSS-PROJECT STATE | `LEARNING_CONFIG.personal_library_path` | Concept Home, Concept Registry, Library Index, Experience Maps. |
 
@@ -403,7 +403,7 @@ Template: `templates/CONCEPT_POINTER_TEMPLATE.md`. Konum: `docs/learning/concept
 
 ### 13.2 Promotion
 
-Tetik: `personal_library_path` yapılandırıldı ve project'te `LOCAL_TEMPORARY` Home var. Persistence adımı veya `/learning library` promotion önerir. Kullanıcı onayı gerekir.
+Tetik: `personal_library_path` yapılandırıldı ve project'te `LOCAL_TEMPORARY` Home var. Persistence adımı veya `/stay-in-the-loop library` promotion önerir. Kullanıcı onayı gerekir.
 
 ```text
 1. Registry'de resolution (§7) — aynı concept başka ID ile var mı?
@@ -791,14 +791,14 @@ Her katman yalnız ID / pointer taşır. Full content tek yerdedir.
 
 ## 24. Commands
 
-Tek entry point: `/learning`. Ayrı skill yok. Bu komutlar coverage, Human Sync veya ULA çalıştırmaz. Read-only'dir; promotion yalnız kullanıcı onayı ile write yapar.
+Tek entry point: `/stay-in-the-loop`. Ayrı skill yok. Bu komutlar coverage, Human Sync veya ULA çalıştırmaz. Read-only'dir; promotion yalnız kullanıcı onayı ile write yapar.
 
 | Komut | Davranış |
 |---|---|
-| `/learning concept <concept-id>` | Project pointer'ı ve Home'u gösterir. `LOCAL_TEMPORARY` ise local Home. Yalnız bu Home yüklenir. |
-| `/learning library` | Config durumu, Library Index özeti, `LOCAL_TEMPORARY` concept sayısı. Varsa promotion önerir (§13.2). |
-| `/learning experiences` | Project Experience Note listesi: ID, concept, category, map status. Personal map istenirse yalnız ilgili map. |
-| `/learning debt` | Queue §B içindeki `OPEN` debt: debt_id, concept, priority, originating event. |
+| `/stay-in-the-loop concept <concept-id>` | Project pointer'ı ve Home'u gösterir. `LOCAL_TEMPORARY` ise local Home. Yalnız bu Home yüklenir. |
+| `/stay-in-the-loop library` | Config durumu, Library Index özeti, `LOCAL_TEMPORARY` concept sayısı. Varsa promotion önerir (§13.2). |
+| `/stay-in-the-loop experiences` | Project Experience Note listesi: ID, concept, category, map status. Personal map istenirse yalnız ilgili map. |
+| `/stay-in-the-loop debt` | Queue §B içindeki `OPEN` debt: debt_id, concept, priority, originating event. |
 
 ---
 
@@ -808,10 +808,10 @@ Tek entry point: `/learning`. Ayrı skill yok. Bu komutlar coverage, Human Sync 
 |---|---|---|
 | Normal project work | Hiçbiri | Personal library |
 | Persistence | Bu dosya + pass + registry + yalnız candidate Home + yalnız ilgili Experience Map + gerekli template | Diğer Home'lar, Library Index, diğer map |
-| `/learning concept <id>` | Bu dosya §24 + pointer + o Home | Registry dışındaki Home'lar |
-| `/learning library` | Config + `LIBRARY_INDEX.md` | Home'lar |
-| `/learning experiences` | Project `experiences/` Identity blokları | Personal library |
-| `/learning debt` | Queue §B | Graph, personal library |
+| `/stay-in-the-loop concept <id>` | Bu dosya §24 + pointer + o Home | Registry dışındaki Home'lar |
+| `/stay-in-the-loop library` | Config + `LIBRARY_INDEX.md` | Home'lar |
+| `/stay-in-the-loop experiences` | Project `experiences/` Identity blokları | Personal library |
+| `/stay-in-the-loop debt` | Queue §B | Graph, personal library |
 
 `00_MASTER_SYSTEM_SPEC.md`, `ula/` rol dosyaları ve `ula/examples/` yüklenmez. ULA artifact yalnız Home candidate kurulurken ve yalnız ilgili section'lar okunur.
 

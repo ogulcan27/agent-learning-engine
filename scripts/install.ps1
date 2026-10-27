@@ -1,21 +1,21 @@
 <#
 .SYNOPSIS
-    Install, update or verify the Agent Learning Engine learning skill.
+    Install, update or verify the Stay in the Loop skill (stay-in-the-loop).
 
 .DESCRIPTION
     Quick install (asks for the scope):
-      irm https://raw.githubusercontent.com/ogulcan27/agent-learning-engine/v1.0.0/scripts/install.ps1 | iex
+      irm https://raw.githubusercontent.com/ogulcan27/stay-in-the-loop/v1.0.0/scripts/install.ps1 | iex
 
     Target (the only path this script owns):
-      -Scope Project   <ProjectPath>/.claude/skills/learning/   (default: current directory)
-      -Scope Personal  <home>/.claude/skills/learning/
+      -Scope Project   <ProjectPath>/.claude/skills/stay-in-the-loop/   (default: current directory)
+      -Scope Personal  <home>/.claude/skills/stay-in-the-loop/
       No -Scope        interactive menu: [1] Project, [2] Personal. Nothing is written before the choice.
 
     Source modes:
       ARCHIVE  -Archive <release zip>
       REMOTE   -Repository <owner/repo> and/or -Ref <tag-or-commit> (GitHub source archive)
       LOCAL    script run from a development repository (distribution/manifest.json next to scripts/)
-      REMOTE   otherwise, with defaults Repository = ogulcan27/agent-learning-engine, Ref = v1.0.0
+      REMOTE   otherwise, with defaults Repository = ogulcan27/stay-in-the-loop, Ref = v1.0.0
 
     Flow: SOURCE -> MANIFEST/HASH VERIFY -> TARGET CHECK -> STAGE -> VERIFY
           -> OLD TARGET TO BACKUP -> STAGE TO TARGET -> VERIFY TARGET -> DELETE BACKUP.
@@ -43,15 +43,15 @@ param(
     $ProgressPreference = 'SilentlyContinue'
     Add-Type -AssemblyName System.IO.Compression.FileSystem
 
-    $SkillRel = '.claude/skills/learning'
-    $DefaultRepository = 'ogulcan27/agent-learning-engine'
+    $SkillRel = '.claude/skills/stay-in-the-loop'
+    $DefaultRepository = 'ogulcan27/stay-in-the-loop'
     $DefaultRef = 'v1.0.0'
     if (-not $BaseUrl) { $BaseUrl = if ($env:LEARNING_SKILL_TEST_BASE_URL) { $env:LEARNING_SKILL_TEST_BASE_URL } else { 'https://github.com' } }
 
     function Read-Scope {
         <# Ask for the install scope until the answer is valid. Ctrl+C or end of input stops before any write. #>
         Write-Host ''
-        Write-Host 'Agent Learning Engine - choose where to install the learning skill:'
+        Write-Host 'Stay in the Loop - choose where to install the stay-in-the-loop skill:'
         Write-Host ''
         Write-Host '  [1] Project'
         Write-Host "      Current project only: $((Get-Location).Path)"
@@ -81,7 +81,7 @@ param(
     }
 
     function Expand-ToRoot([string]$Zip, [string]$Dest) {
-        <# Extract a zip. Return the directory that holds .claude/skills/learning. #>
+        <# Extract a zip. Return the directory that holds .claude/skills/stay-in-the-loop. #>
         [IO.Compression.ZipFile]::ExtractToDirectory($Zip, $Dest)
         if (Test-Path -LiteralPath (Join-Path $Dest $SkillRel)) { return $Dest }
         $dirs = @(Get-ChildItem -LiteralPath $Dest -Directory)
@@ -112,7 +112,7 @@ param(
         $path = Join-Path $Root 'distribution/manifest.json'
         if (-not (Test-Path -LiteralPath $path)) { throw "Manifest not found: $path" }
         $m = Get-Content -Raw -LiteralPath $path | ConvertFrom-Json
-        if ($m.skill_name -ne 'learning' -or -not $m.entry_point -or -not $m.files) { throw "Invalid manifest: $path" }
+        if ($m.skill_name -ne 'stay-in-the-loop' -or -not $m.entry_point -or -not $m.files) { throw "Invalid manifest: $path" }
         $m
     }
 
@@ -145,7 +145,7 @@ param(
 
     function Install-Atomic([string]$SourceSkill, [string]$Target, $Manifest) {
         $claudeDir = Split-Path -Parent (Split-Path -Parent $Target)
-        $work = Join-Path $claudeDir ".learning-install-$([guid]::NewGuid().ToString('N').Substring(0, 8))"
+        $work = Join-Path $claudeDir ".stay-in-the-loop-install-$([guid]::NewGuid().ToString('N').Substring(0, 8))"
         $stage = Join-Path $work 'stage'
         $backup = Join-Path $work 'backup'
         New-Item -ItemType Directory -Force -Path $work, (Split-Path -Parent $Target) | Out-Null
@@ -183,7 +183,7 @@ param(
     if (-not $Scope) { $Scope = Read-Scope }
     if ($Scope -notin 'Project', 'Personal') { throw "Invalid -Scope '$Scope'. Use Project or Personal." }
 
-    $tmp = Join-Path ([IO.Path]::GetTempPath()) "learning-skill-$([guid]::NewGuid().ToString('N').Substring(0, 8))"
+    $tmp = Join-Path ([IO.Path]::GetTempPath()) "stay-in-the-loop-$([guid]::NewGuid().ToString('N').Substring(0, 8))"
     New-Item -ItemType Directory -Path $tmp | Out-Null
     try {
         $root = Get-SourceRoot $tmp
@@ -191,7 +191,7 @@ param(
         $sourceSkill = (Resolve-Path -LiteralPath (Join-Path $root $SkillRel)).Path
         $problems = @(Test-Package $sourceSkill $manifest)
         if ($problems.Count) { throw "Source package verify failed. Nothing written.`n  $($problems -join "`n  ")" }
-        Write-Output "Package: learning $($manifest.version) ($($manifest.files.Count) files) verified."
+        Write-Output "Package: stay-in-the-loop $($manifest.version) ($($manifest.files.Count) files) verified."
 
         $target = Join-Path (Get-TargetBase) $SkillRel
         $exists = Test-Path -LiteralPath $target
@@ -204,20 +204,20 @@ param(
             if (-not $exists) { throw "FAIL: not installed at $target" }
             $p = @(Test-Package $target $manifest)
             if ($p.Count) { throw "FAIL: $target`n  $($p -join "`n  ")" }
-            Write-Output "PASS: $target matches learning $($manifest.version)."
+            Write-Output "PASS: $target matches stay-in-the-loop $($manifest.version)."
             return
         }
         if ($Update -and -not $exists) { throw "Update needs an existing install. Not found: $target" }
         if ($same) {
-            Write-Output "ALREADY INSTALLED: learning $($manifest.version) at $target"
+            Write-Output "ALREADY INSTALLED: stay-in-the-loop $($manifest.version) at $target"
             return
         }
         if ($exists -and -not ($Update -or $Force)) {
-            throw "A different learning skill exists at $target. Nothing written. Run update.ps1 (or install.ps1 -Force) to replace it."
+            throw "A different stay-in-the-loop skill exists at $target. Nothing written. Run update.ps1 (or install.ps1 -Force) to replace it."
         }
         Install-Atomic $sourceSkill $target $manifest
         $verb = if ($exists) { 'UPDATED' } else { 'INSTALLED' }
-        Write-Output "${verb}: learning $($manifest.version) at $target"
+        Write-Output "${verb}: stay-in-the-loop $($manifest.version) at $target"
         Write-Output 'Learning state (docs/learning/) and Personal Technical Library not touched.'
     }
     finally {

@@ -139,7 +139,7 @@ check("I Builder blocked until approval", refused(build, P, lp, eid), True)
 
 # Test J - resume
 lp, eid = full_pass("LP-20261027-09")
-check("J new /learning asks resume/new/abandon", startup([lp])[:2], ("ASK", ["resume", "new", "abandon"]))
+check("J new /stay-in-the-loop asks resume/new/abandon", startup([lp])[:2], ("ASK", ["resume", "new", "abandon"]))
 check("J explicit arg -> no question", startup([lp], "resume"), "RESUME")
 arch_writes = lp.art[eid]["ARCHITECTURE"]["writes"]
 check("J resume keeps pass id and stage", resume(lp), ("LP-20261027-09", "FULL_ULA_REVIEW"))

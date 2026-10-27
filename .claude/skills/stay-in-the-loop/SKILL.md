@@ -1,14 +1,14 @@
 ---
-name: learning
+name: stay-in-the-loop
 description: Run the project's manual System Design + Problem-Pattern DSA + ULA learning workflow and maintain project learning coverage.
 disable-model-invocation: true
 user-invocable: true
 argument-hint: "[latest | pending | catch-up | show skipped | resume | new | abandon <pass-id> | map [<node-id> [L1-L4] | debt | sync] | concept <concept-id> | library | experiences | debt | integrity | <work-unit-id>]"
 ---
 
-# /learning — Entry Router
+# /stay-in-the-loop — Entry Router
 
-Bu dosya `/learning` için tek giriş noktasıdır.
+Bu dosya `/stay-in-the-loop` için tek giriş noktasıdır.
 Ayrıntılı kurallar burada değildir. Her adım ilgili reference dosyasına route edilir.
 
 Argüman: `$ARGUMENTS`
@@ -19,13 +19,13 @@ Argüman: `$ARGUMENTS`
 
 ```text
 Normal project work → Learning OFF
-/learning           → Learning ON
+/stay-in-the-loop   → Learning ON
 ```
 
-- Bu skill yalnız kullanıcı `/learning` yazdığında çalışır.
+- Bu skill yalnız kullanıcı `/stay-in-the-loop` yazdığında çalışır.
 - Model bu skill'i kendisi çağıramaz (`disable-model-invocation: true`).
 - Learning OFF iken passive tracking yoktur. Learning event, queue, coverage ledger, Human Synchronization, ULA ve checkpoint sorusu yoktur.
-- Work unit history `/learning` anında project evidence üzerinden reconstruct edilir.
+- Work unit history `/stay-in-the-loop` anında project evidence üzerinden reconstruct edilir.
 
 ## 2. Primary learning axis
 
@@ -69,7 +69,7 @@ Outside knowledge: `ALLOWED WITH LABELS`. Project facts için project sources au
 | Katman | Konum | Yazma |
 |---|---|---|
 | UNIVERSAL SKILL LOGIC | Bu skill klasörü | Runtime'da read-only kabul edilir. Buraya state yazma. |
-| PROJECT-SPECIFIC STATE | `docs/learning/` (project root'a göre) | `/learning` yazar |
+| PROJECT-SPECIFIC STATE | `docs/learning/` (project root'a göre) | `/stay-in-the-loop` yazar |
 | PERSONAL CROSS-PROJECT STATE | `LEARNING_CONFIG.md → personal_library_path` | Yalnız yapılandırılmışsa |
 
 `personal_library_path` hard-code edilmez. Yapılandırılmadıysa hata verme. Kullanıcıya sor: yapılandır / `LOCAL_TEMPORARY` / ertele (`references/06_KNOWLEDGE_PERSISTENCE.md` §2.2).

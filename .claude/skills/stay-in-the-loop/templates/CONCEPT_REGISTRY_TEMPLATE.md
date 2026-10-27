@@ -1,6 +1,6 @@
 # Concept Registry
 
-> Template: `.claude/skills/learning/templates/CONCEPT_REGISTRY_TEMPLATE.md`
+> Template: `.claude/skills/stay-in-the-loop/templates/CONCEPT_REGISTRY_TEMPLATE.md`
 > Target: `<personal_library_path>/registry/CONCEPT_REGISTRY.md`
 > Rules: `references/06_KNOWLEDGE_PERSISTENCE.md` §7, §18.1
 > Role: **AUTHORITATIVE** identity registry. Teori taşımaz. Satır silinmez.

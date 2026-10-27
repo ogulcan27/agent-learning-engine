@@ -1,12 +1,12 @@
 {
     "version":  "1.0.0",
-    "skill_name":  "learning",
+    "skill_name":  "stay-in-the-loop",
     "entry_point":  "SKILL.md",
-    "package_root":  ".claude/skills/learning",
+    "package_root":  ".claude/skills/stay-in-the-loop",
     "files":  [
                   {
                       "path":  "SKILL.md",
-                      "sha256":  "0f9b44bfc248aedabc7778c5e0231800796ceabcb6f016bf2b68b13feea0f4e7"
+                      "sha256":  "9a4a023ba51370df9bb30536bb6a2bd67959ef3cee43c71081a53c6d3aa7f031"
                   },
                   {
                       "path":  "references/00_MASTER_SYSTEM_SPEC.md",
@@ -14,11 +14,11 @@
                   },
                   {
                       "path":  "references/01_OPERATIONAL_CORE.md",
-                      "sha256":  "ffeae60c43b9420089ceb099d659a8e63c4653eb86b6440a15a019a17e119c46"
+                      "sha256":  "788bf2c6e0d0f34a95ca0f668bdfcf5e0fc127d45d243ae7370f0524a980292a"
                   },
                   {
                       "path":  "references/02_COVERAGE_PROTOCOL.md",
-                      "sha256":  "dd854d222e1cac334c4fcaa02f54148543779891f158184f400cfc4acbc2c636"
+                      "sha256":  "cb0ca1fb19fd086d0f0fe3f99907a5898f9c9ebf93d2bb1c20f333d655a8923b"
                   },
                   {
                       "path":  "references/03_HUMAN_SYNC_PROTOCOL.md",
@@ -26,87 +26,87 @@
                   },
                   {
                       "path":  "references/04_ULA_PROTOCOL.md",
-                      "sha256":  "943be457445832ef7c4af1547e8127d7daf2a920ca278c8a150b9b2f9a3b255e"
+                      "sha256":  "b4298a2ba1c0c73ea130fd493b5a7470c0923cfaa9e78df1b241ebf17a96af85"
                   },
                   {
                       "path":  "references/05_MINDMAP_PROTOCOL.md",
-                      "sha256":  "33584ebf0d5e6db72192e5b7cec80d37ba30669d7a56a9014027b02d8a166026"
+                      "sha256":  "3298de70e80c5f0af71452f0d5df8481b530da3c71d7e6054901672c4113ad1c"
                   },
                   {
                       "path":  "references/06_KNOWLEDGE_PERSISTENCE.md",
-                      "sha256":  "ea2ae34883c1b6af33b9f22eb8f31ace322347b4491a1e34e46c31b9b277cfcc"
+                      "sha256":  "7166da3a92013d4e45aace0a7d5d9141d17e7e9be757b101e81c53016126c2cd"
                   },
                   {
                       "path":  "references/07_INTEGRITY_CHECKS.md",
-                      "sha256":  "8265888ee53ec7c280f5f0812bb71a56832f94d303af58e66657460a2042f75a"
+                      "sha256":  "a6b6be756ae3deae45c0da286635594fa395c7bfeb052778b73914c0f5e2e053"
                   },
                   {
                       "path":  "templates/CONCEPT_HOME_TEMPLATE.md",
-                      "sha256":  "71b0160ae702fa4f5367752025ee23dfa50983217ddd5363c7b0d6557f3adb3d"
+                      "sha256":  "e083ea89aae7fe11b21bb5f35267db3880d9637962511d4c705c1247482cb70a"
                   },
                   {
                       "path":  "templates/CONCEPT_POINTER_TEMPLATE.md",
-                      "sha256":  "6f68fff719a1bb0d155627392bf3596b66cabe149aaea3b34b730f3c26ef080d"
+                      "sha256":  "87cd4aea62a087afbe09e774230e8f581e7c3dd413432e5c43e827412d33b2af"
                   },
                   {
                       "path":  "templates/CONCEPT_REGISTRY_TEMPLATE.md",
-                      "sha256":  "580d6adfa0f02e4cf7987fd6347da8cd8f4aa51c1c796155f760721d1da8c56c"
+                      "sha256":  "edfd6be5b33ec4519040902fe3939d7aface5818f746c409cbcdd68033d09702"
                   },
                   {
                       "path":  "templates/COVERAGE_LEDGER_TEMPLATE.md",
-                      "sha256":  "f7c38a5370d63a0b295196fcb03072f912fccd7064ca9ce8b73650cc533d2e34"
+                      "sha256":  "913a45c2492cbdb070664ad660ba3c9d754a3889aff69cdce7f9c551fee09578"
                   },
                   {
                       "path":  "templates/DECISION_RECORD_TEMPLATE.md",
-                      "sha256":  "cdbc0262291d37b77e0e208de79f634d5df3315bc0721fdb27986aaa9c208588"
+                      "sha256":  "4f104ca385eed8c7229c038883656623798d0c58e87b3d6a57254501688f838e"
                   },
                   {
                       "path":  "templates/DSA_EXPERIENCE_MAP_TEMPLATE.md",
-                      "sha256":  "37202e96a6f92066e9d6e03bcb3f6bf8205a2155c69e47fe167862e6251d2c07"
+                      "sha256":  "bab6ec54793bcdc1415363cdf9e38419ea9f47942429161f21eea97e29f9e467"
                   },
                   {
                       "path":  "templates/EXPERIENCE_NOTE_TEMPLATE.md",
-                      "sha256":  "de1f64528b9349b49f59279b275b5e6aa93aaac8f3c733d271b34cf09b834619"
+                      "sha256":  "829dba08a6ae72af69188df0a9773f7ac04e5114bccdb27279eb2122ab13b686"
                   },
                   {
                       "path":  "templates/HUMAN_SYNC_TEMPLATE.md",
-                      "sha256":  "481fd57dd5f6ca99755a2dd88daa0411c5f79122785f769d59f3c2ff21c69191"
+                      "sha256":  "b977145d17571065127c2340271b076eaaa36c7fdc5a1a804ab89377f0297c9b"
                   },
                   {
                       "path":  "templates/KNOWLEDGE_MAP_TEMPLATE.md",
-                      "sha256":  "3d2ab731f5943fce0555dfec7d08cf7dc1ec16f33aaee3b96f60fd3f070a6696"
+                      "sha256":  "ab98dd56c613cbbd85de04b6ca82af00344ff0faf3cc7d41ccad5dc25702067b"
                   },
                   {
                       "path":  "templates/LEARNING_CONFIG_TEMPLATE.md",
-                      "sha256":  "9243f9c85baf29089f19e42a430bbd68910a2745ac438c7d08a46cf99d19bfe4"
+                      "sha256":  "1fb3faa4e841a6704bdce5e4208594655d40a4a99acff185c7e099e38987a942"
                   },
                   {
                       "path":  "templates/LEARNING_PASS_TEMPLATE.md",
-                      "sha256":  "00e0fb3003043df13825d1019c22d4d372630e55353097334688817d9330920e"
+                      "sha256":  "31749ad34e7d46edacd5c4c0827b3a939721ad6b2d90d899edd2fe7cd1a78190"
                   },
                   {
                       "path":  "templates/LEARNING_QUEUE_TEMPLATE.md",
-                      "sha256":  "3259e57db876368dfd3134ee31d2237634c67d30f5182696eceaeced90d2a3f8"
+                      "sha256":  "1b093846738361942cd2aeb8f29d82c911615c4bbd823960c3733a8d722fc6d1"
                   },
                   {
                       "path":  "templates/LEARNING_STATE_TEMPLATE.md",
-                      "sha256":  "f0009b57f48f80661d75b25725ae35734e43fea6568fb0c61db9adb909e144e8"
+                      "sha256":  "3a02fd886432225f74fa9580fc0ed22dc6b765815c2bd95ba00a179a10499b5f"
                   },
                   {
                       "path":  "templates/LIGHT_ULA_TEMPLATE.md",
-                      "sha256":  "ae2205167d0733cd7f7d427c70a52a574f3ed69a23b444d2349e4e8c073e6d75"
+                      "sha256":  "813f480154b17f57a191d87231e60b9c6bd775a6398e1ca8e058808ef502566b"
                   },
                   {
                       "path":  "templates/PERSONAL_LIBRARY_INDEX_TEMPLATE.md",
-                      "sha256":  "a52adf714450ba42f029f8adbf1f08e2901d91ff84d7f00be6a94589d42c4755"
+                      "sha256":  "0c1e917e60c1c57fffc00d6647fafea5c6e83afe453ceb8f74e0970546923840"
                   },
                   {
                       "path":  "templates/SEMANTIC_GRAPH_TEMPLATE.md",
-                      "sha256":  "83071034154a8b3d1c85402b48b51077b7b92ba8c56d4dd8ae301dfda5f82f38"
+                      "sha256":  "c70adec5f58e3fd72e8eaaf05f32f69ce474b4004b49b143629dc207c4ce4080"
                   },
                   {
                       "path":  "templates/SYSTEM_DESIGN_EXPERIENCE_MAP_TEMPLATE.md",
-                      "sha256":  "f671197f9239d71c238c6215919b19a25e0f10fa04b419ff39653c5bceb39d42"
+                      "sha256":  "5e3daf294bed38eb205f7c2757735c5308dff915edd64393cc01e93ab3d3cdbc"
                   },
                   {
                       "path":  "ula/CONTENT_BUILDER.md",

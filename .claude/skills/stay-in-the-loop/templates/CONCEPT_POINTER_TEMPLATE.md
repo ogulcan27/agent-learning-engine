@@ -1,6 +1,6 @@
 # Concept Pointer — <Canonical Name>
 
-> Template: `.claude/skills/learning/templates/CONCEPT_POINTER_TEMPLATE.md`
+> Template: `.claude/skills/stay-in-the-loop/templates/CONCEPT_POINTER_TEMPLATE.md`
 > Target: `docs/learning/concepts/<concept-id>.md`
 > Rules: `references/06_KNOWLEDGE_PERSISTENCE.md` §12
 > Role: Project içinden Concept Home'a pointer. Full theory taşımaz. L0–L4 section yoktur.
