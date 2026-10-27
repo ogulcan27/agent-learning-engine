@@ -1,18 +1,20 @@
 # Learning Pass
 
 > Template: `.claude/skills/learning/templates/LEARNING_PASS_TEMPLATE.md`
-> Target: `docs/learning/passes/<learning-pass-id>.md`
-> Rules: `references/03_HUMAN_SYNC_PROTOCOL.md`
-> Role: Pipeline handoff artifact. Event kaydı burada tutulur. Disposition listeleri yalnız event ID verir.
+> Target: `docs/learning/passes/<learning-pass-id>/LEARNING_PASS.md`
+> Rules: `references/03_HUMAN_SYNC_PROTOCOL.md`, `references/04_ULA_PROTOCOL.md`
+> Role: Pipeline handoff ve resume artifact. Event kaydı burada tutulur. Disposition listeleri ve routing tablosu yalnız ID ve pointer verir.
 
 ## Metadata
 
 ```yaml
 learning_pass_id: LP-YYYYMMDD-NN
-date: YYYY-MM-DD
+pass_status: IN_PROGRESS        # IN_PROGRESS | WAITING_USER | BLOCKED | COMPLETE | ABANDONED
+current_stage: HUMAN_SYNC       # 04 §2.4
+created_at: YYYY-MM-DD
+updated_at: YYYY-MM-DD
 selected_scope: [<work_unit_id>, ...]
 coverage_source: <resolved work_unit_source>
-pass_status: IN_PROGRESS        # IN_PROGRESS | COMPLETE
 ```
 
 ## Human Synchronization
@@ -70,13 +72,20 @@ Open Question:          <opsiyonel>
 
 ## Coverage Outcome Proposal
 
-Ledger'a yazılmaz. Completion Commit bu öneriyi kullanır (03 §15).
+Handoff'ta yazılır. Ledger'a yazılmaz. Completion Commit güncel ULA status ile yeniden hesaplar (04 §11.4).
 
 | work_unit_id | proposed_status | open_items |
 |---|---|---|
 
+## ULA Routing
+
+Kurallar: 04 §4. Artifact içeriği buraya kopyalanmaz. `Artifact` = `ula/<event-id>/` altındaki dosya yolu.
+
+| Event ID | Mode | Reason | User Override | ULA Status | Artifact |
+|---|---|---|---|---|---|
+
 ## Pipeline Handoff
 
 ```text
-Next Stage: ULA ROUTING
+Next Stage: <ULA ROUTING | COMPLETION | MINDMAP / KNOWLEDGE PERSISTENCE>
 ```

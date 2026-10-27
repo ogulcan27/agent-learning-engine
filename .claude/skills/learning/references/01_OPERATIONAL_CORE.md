@@ -1,6 +1,6 @@
 # 01 — Operational Core
 
-**Status:** Startup → Handoff IMPLEMENTED (Phase 3 + Phase 4). ULA Routing ve sonrası NOT IMPLEMENTED YET.
+**Status:** Startup → Coverage Completion IMPLEMENTED (Phase 3–5). MindMap ve Knowledge Persistence NOT IMPLEMENTED YET.
 
 ## Purpose
 
@@ -13,7 +13,7 @@
 
 ---
 
-## 1. Implemented boundary (Phase 4)
+## 1. Implemented boundary (Phase 5)
 
 ```text
 /learning
@@ -21,31 +21,28 @@
 START
  1. STARTUP            config + state oku; yoksa initialization (02 §11)
  2. CONFIG CHECK       work_unit_source geçerli mi? (02 §3.3)
- 3. INTEGRITY          ledger (07 §C) + queue §B (07 §E)
-↓
+ 3. INTEGRITY          ledger (07 §C) + queue §B (07 §E) + active pass (07 §U)
+ 4. ACTIVE PASS CHECK  resume / new / abandon (04 §10)
+↓                      resume → pass'in current_stage noktasına git
 COVERAGE
- 4. DISCOVERY          current work units + Discovery Commit (02 §3–§6)
- 5. COVERAGE CHECK     OPEN COVERAGE hesapla (02 §6)
+ 5. DISCOVERY          current work units + Discovery Commit (02 §3–§6)
+ 6. COVERAGE CHECK     OPEN COVERAGE hesapla (02 §6)
+ 7. SCOPE RESOLUTION   argüman veya menü + Scope Commit (02 §8); active pass overlap → CONFLICT (04 §10.3)
 ↓
-SCOPE
- 6. SCOPE RESOLUTION   argüman veya menü + Scope Commit (02 §8)
+HUMAN SYNC
+ 8. PASS OPEN + EVIDENCE READ + scope-level çıktı (03 §3–§7)
 ↓
-HUMAN SYNCHRONIZATION
- 7. PASS OPEN + EVIDENCE READ + scope-level çıktı (03 §3–§7)
+EVENTS
+ 9. extraction + priority + disposition + handoff (03 §8–§17)
 ↓
-LEARNING EVENT EXTRACTION
- 8. filter + event model (03 §8–§10)
+ULA ROUTING
+10. early completion check (04 §3) → ULA yoksa 12'ye git
+11. mode routing (04 §4) → LIGHT (04 §6) / FULL (04 §7), event başına sırayla
 ↓
-KNOWLEDGE PRIORITY
- 9. priority + knowledge gap (03 §11–§12)
+COMPLETION
+12. unit bazında Completion Commit + pass sonucu (04 §11)
 ↓
-EVENT DISPOSITION
-10. disposition + user checkpoint (03 §13, §16)
-↓
-HANDOFF
-11. integrity (07 §E) + pass dosyası + queue §B (03 §14, §17)
-↓
-NEXT: ULA ROUTING      04_ULA_PROTOCOL.md — NOT IMPLEMENTED YET
+NEXT: MINDMAP / KNOWLEDGE PERSISTENCE — NOT IMPLEMENTED YET
 ```
 
 ## 2. Stop rules
@@ -57,26 +54,31 @@ NEXT: ULA ROUTING      04_ULA_PROTOCOL.md — NOT IMPLEMENTED YET
 | Coverage integrity FAIL | Dur. Hatayı göster. Ledger'a yazma. |
 | Source ambiguous | Kullanıcıya sor. Cevap yoksa dur. |
 | OPEN COVERAGE boş ve argüman yok | "Açık coverage yok." de. Dur. |
-| Event integrity (07 §E) FAIL | Pass dosyası ve queue §B yazma. Hatayı göster. Dur. |
-| Sonraki protocol `NOT IMPLEMENTED YET` | Handoff'u göster (pass ID, disposition özeti, Next Stage). Adımın henüz implement edilmediğini bildir. Dur. Completion Commit yapma. |
+| Active pass var ve kullanıcı seçim yapmadı | Resume / new / abandon sor. Cevap yoksa dur. |
+| Event integrity (07 §E) FAIL | Pass dosyası ve queue §B yazma. Dur. |
+| ULA / pass integrity (07 §U) FAIL | Stage geçişi ve Completion Commit yapma. Dur. |
+| `pass_status: WAITING_USER` | Kullanıcı kararını iste. Pass'i kaydet. Dur. |
+| `pass_status: BLOCKED` | Eksik evidence / artifact'i göster. Dur. |
+| Sonraki protocol `NOT IMPLEMENTED YET` | Pass sonucunu göster. Adımın henüz implement edilmediğini bildir. Dur. |
 
 ## 3. Write rules
 
 | Adım | Yazılan | Yazılmayan |
 |---|---|---|
 | Discovery / Scope | Ledger (Discovery Commit, Scope Commit) | — |
-| Handoff | `docs/learning/passes/<learning-pass-id>.md` (`IN_PROGRESS`), queue §B `OPEN` debt | Ledger |
-| Completion | Ledger `COVERED` / `PARTIAL` / `NOT_LEARNING_RELEVANT` | — |
+| Handoff | `passes/<learning-pass-id>/LEARNING_PASS.md`, queue §B `OPEN` debt | Ledger |
+| ULA | `passes/<learning-pass-id>/ula/<event-id>/`, pass routing tablosu ve metadata | Ledger |
+| Completion | Ledger `COVERED` / `PARTIAL` / `NOT_LEARNING_RELEVANT`; pass status | — |
+| Abandon | Pass `pass_status: ABANDONED` | Ledger, queue §B |
 
 - Ledger yalnız Discovery Commit, Scope Commit ve Completion Commit ile yazılır (02 §10).
-- Phase 4 sınırında Completion Commit erişilemez. Bu nedenle `COVERED`, `PARTIAL` ve `NOT_LEARNING_RELEVANT` yazılmaz. Pass dosyası yalnız öneri taşır (03 §15).
 - Her ledger commit sonrası state ve queue §A yeniden üretilir.
 
-## 4. Steps after handoff
+## 4. Steps after completion
 
 NOT IMPLEMENTED YET. Sıra `SKILL.md` Bölüm 7'dedir.
 
 ## Authoritative Source
 
-- Lifecycle: `00_MASTER_SYSTEM_SPEC.md` §3A, §16, §37, §41, §42, §48.
+- Lifecycle: `00_MASTER_SYSTEM_SPEC.md` §3A, §16, §36, §37, §41, §42, §48.
 - Manual timing: Phase 1 audit, Q4 ve Q10.

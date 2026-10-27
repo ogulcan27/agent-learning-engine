@@ -89,10 +89,11 @@ LP-YYYYMMDD-NN
 ```
 
 - `YYYYMMDD` = pass tarihi.
-- `NN` = aynı tarih için `docs/learning/passes/` içindeki en büyük `NN` + 1. İlk pass `01`.
+- `NN` = aynı tarih için `docs/learning/passes/` içindeki pass klasörlerinin en büyük `NN` + 1. İlk pass `01`.
 - ID pass açılınca bir kez atanır. Pass boyunca değişmez.
+- Pass klasörü: `docs/learning/passes/<learning-pass-id>/` (`04` §9).
 
-Selected scope'taki bir work unit `IN_PROGRESS` bir pass içinde zaten varsa yeni pass açma. Kullanıcıya göster. Sor: mevcut pass'a devam mı, yeni pass mı?
+Active pass kontrolü ve resume / new / abandon: `04_ULA_PROTOCOL.md` §10.
 
 ---
 
@@ -572,7 +573,7 @@ Phase 4 ledger'a yazmaz. Yalnız her selected work unit için Completion Commit'
 - Örnek: `LE-LP-20261027-01-02; LE-LP-20261027-01-04`.
 - Sonraki stage (ULA, Persistence) bir event'i kapatırsa ID listeden çıkar. Liste boşalırsa öneri `COVERED` olur.
 
-Gerçek status değişikliği yalnız Completion Commit ile olur (`02_COVERAGE_PROTOCOL.md` §10). Bütün required pipeline stage'leri tamamlanmadan Completion Commit yapılmaz.
+Gerçek status değişikliği yalnız Completion Commit ile olur (`02_COVERAGE_PROTOCOL.md` §10). Completion kuralları: `04_ULA_PROTOCOL.md` §11.
 
 ---
 
@@ -597,20 +598,20 @@ Sıra:
 ```text
 07 §E integrity
 ↓ PASS
-docs/learning/passes/<learning-pass-id>.md yaz (templates/LEARNING_PASS_TEMPLATE.md)
+docs/learning/passes/<learning-pass-id>/LEARNING_PASS.md yaz (templates/LEARNING_PASS_TEMPLATE.md)
 ↓
 KNOWLEDGE_DEBT event'leri için queue §B'ye OPEN kayıt ekle
 ↓
-Pipeline Handoff: Next Stage = ULA ROUTING
+Pipeline Handoff: Next Stage = 04 §3 early completion check
 ```
 
 Kurallar:
 
 - Integrity FAIL ise hiçbir dosya yazılmaz.
-- Pass dosyası `pass_status: IN_PROGRESS` ile yazılır. Pass, Completion Commit ile `COMPLETE` olur.
+- Pass dosyası `pass_status: IN_PROGRESS` ile yazılır. Pass lifecycle: `04` §2.3, §11.5.
 - Ledger yazılmaz.
 - Mevcut bir pass dosyası overwrite edilmez. Devam eden pass güncellenir.
-- `ULA_CANDIDATE` yoksa Next Stage yine sırayla bir sonraki implement edilmiş stage'dir. Stage'ler atlanmaz.
+- `ULA_CANDIDATE` ve `UNRESOLVED` yoksa ULA stage'e girilmez. Early completion: `04` §3.
 
 ---
 

@@ -3,7 +3,7 @@ name: learning
 description: Run the project's manual System Design + Problem-Pattern DSA + ULA learning workflow and maintain project learning coverage.
 disable-model-invocation: true
 user-invocable: true
-argument-hint: "[latest | pending | catch-up | show skipped | <work-unit-id>]"
+argument-hint: "[latest | pending | catch-up | show skipped | resume | new | abandon <pass-id> | <work-unit-id>]"
 ---
 
 # /learning — Entry Router
@@ -84,6 +84,9 @@ Outside knowledge: `ALLOWED WITH LABELS`. Project facts için project sources au
 | `catch-up` | Scope = bütün açık gap |
 | `show skipped` | SKIPPED_BY_USER birimlerini de göster |
 | `<work-unit-id>` | Scope = bu work unit (ör. issue key, commit, phase step) |
+| `resume` | Active pass'e devam et (`04` §10.2) |
+| `new` | Active pass varken yeni pass başlat; overlap → CONFLICT (`04` §10.3) |
+| `abandon <pass-id>` | Pass'i `ABANDONED` yap; ledger açık kalır (`04` §10.4) |
 
 Argüman belirsizse tahmin etme. Kullanıcıya sor.
 
@@ -98,12 +101,14 @@ Argüman belirsizse tahmin etme. Kullanıcıya sor.
 | 5 | HUMAN SYNCHRONIZATION | `references/03_HUMAN_SYNC_PROTOCOL.md` §3–§7 | IMPLEMENTED |
 | 6 | LEARNING EVENT EXTRACTION | `references/03_HUMAN_SYNC_PROTOCOL.md` §8–§10 | IMPLEMENTED |
 | 7 | KNOWLEDGE PRIORITY + EVENT DISPOSITION + HANDOFF | `references/03_HUMAN_SYNC_PROTOCOL.md` §11–§17 | IMPLEMENTED |
-| 8 | ULA ROUTING (LIGHT or FULL ULA) | `references/04_ULA_PROTOCOL.md` | NOT IMPLEMENTED YET |
-| 9 | MINDMAP / SEMANTIC GRAPH UPDATE | `references/05_MINDMAP_PROTOCOL.md` | NOT IMPLEMENTED YET |
-| 10 | KNOWLEDGE PERSISTENCE | `references/06_KNOWLEDGE_PERSISTENCE.md` | NOT IMPLEMENTED YET |
-| 11 | RETRIEVAL | `references/04_ULA_PROTOCOL.md` | NOT IMPLEMENTED YET |
-| 12 | COVERAGE UPDATE (Completion Commit) | `references/02_COVERAGE_PROTOCOL.md` §10 | IMPLEMENTED (yalnız pipeline başarılıysa) |
-| 13 | INTEGRITY CHECK | `references/07_INTEGRITY_CHECKS.md` | §C, §E IMPLEMENTED; §L NOT IMPLEMENTED YET |
+| 8 | ULA ROUTING + EARLY COMPLETION CHECK | `references/04_ULA_PROTOCOL.md` §3–§5 | IMPLEMENTED |
+| 9 | LIGHT ULA / FULL ULA (retrieval prompt dahil) | `references/04_ULA_PROTOCOL.md` §6–§8 | IMPLEMENTED |
+| 10 | COVERAGE COMPLETION COMMIT (unit bazında) | `references/04_ULA_PROTOCOL.md` §11 + `references/02_COVERAGE_PROTOCOL.md` §9–§10 | IMPLEMENTED |
+| 11 | MINDMAP / SEMANTIC GRAPH UPDATE | `references/05_MINDMAP_PROTOCOL.md` | NOT IMPLEMENTED YET |
+| 12 | KNOWLEDGE PERSISTENCE | `references/06_KNOWLEDGE_PERSISTENCE.md` | NOT IMPLEMENTED YET |
+| 13 | INTEGRITY CHECK | `references/07_INTEGRITY_CHECKS.md` | §C, §E, §U IMPLEMENTED; §L NOT IMPLEMENTED YET |
+
+Startup'ta active pass varsa önce resume / new / abandon sorulur (`references/04_ULA_PROTOCOL.md` §10). Resume, pass'in `current_stage` adımından devam eder.
 
 Genel akış ve dur kuralları: `references/01_OPERATIONAL_CORE.md`.
 
@@ -114,14 +119,17 @@ Genel akış ve dur kuralları: `references/01_OPERATIONAL_CORE.md`.
 3. Bu adımda ve sonraki adımlarda project state yazma. Completion Commit yapma.
 4. Dur.
 
-Adım 1–7 implement edilmiştir. Coverage adımları Discovery Commit ve Scope Commit yazabilir (`02_COVERAGE_PROTOCOL.md` §10). Adım 7 handoff'ta pass dosyasını (`IN_PROGRESS`) ve queue §B Knowledge Debt kaydını yazar. Ledger'a yazmaz. Bugünkü akış:
+Adım 1–10 implement edilmiştir. Ledger yalnız Discovery, Scope ve Completion Commit ile yazılır (`02_COVERAGE_PROTOCOL.md` §10). Retrieval yalnız ULA artifact içindeki prompt'tur; interactive retrieval session yoktur. Bugünkü akış:
 
 ```text
-Coverage                   → IMPLEMENTED
-Human Synchronization      → IMPLEMENTED
-Learning Event Extraction  → IMPLEMENTED
-Knowledge Priority         → IMPLEMENTED
-ULA (8)                    → NOT IMPLEMENTED YET → STOP
+Coverage              → IMPLEMENTED
+Human Sync            → IMPLEMENTED
+ULA Routing           → IMPLEMENTED
+Light ULA             → IMPLEMENTED
+Full ULA              → IMPLEMENTED
+Coverage Completion   → IMPLEMENTED
+MindMap (11)          → NOT IMPLEMENTED YET → STOP
+Knowledge Persistence → NOT IMPLEMENTED YET
 ```
 
 ## 8. Load map
@@ -133,8 +141,9 @@ Token kuralı: Yalnız aktif adımın dosyasını oku. Bir dosyayı aynı çağr
 | Startup | Bu dosya + `docs/learning/state/LEARNING_CONFIG.md` + `docs/learning/state/LEARNING_STATE.md` |
 | Coverage | `references/01_OPERATIONAL_CORE.md` + `references/02_COVERAGE_PROTOCOL.md` + `references/07_INTEGRITY_CHECKS.md` §C + `docs/learning/state/COVERAGE_LEDGER.md` |
 | Human Sync | `references/03_HUMAN_SYNC_PROTOCOL.md` + `templates/LEARNING_PASS_TEMPLATE.md` + `templates/HUMAN_SYNC_TEMPLATE.md` + `references/07_INTEGRITY_CHECKS.md` §E + `docs/learning/state/LEARNING_QUEUE.md` §B |
-| Light ULA | `references/04_ULA_PROTOCOL.md` (gerekirse `references/05_MINDMAP_PROTOCOL.md`) |
-| Full ULA | Sırayla, aynı anda değil: `ula/LEARNING_ARCHITECT.md` → user review → `ula/CONTENT_BUILDER.md` → `ula/LEARNING_AUDITOR.md` |
+| ULA Routing / Completion | `references/04_ULA_PROTOCOL.md` + pass `LEARNING_PASS.md` + `references/07_INTEGRITY_CHECKS.md` §U |
+| Light ULA | `references/04_ULA_PROTOCOL.md` + `templates/LIGHT_ULA_TEMPLATE.md` + gerekli project evidence |
+| Full ULA | Sırayla, aynı anda değil: `ula/LEARNING_ARCHITECT.md` → user review → `ula/CONTENT_BUILDER.md` → `ula/LEARNING_AUDITOR.md`. Stage başına dosyalar: `references/04_ULA_PROTOCOL.md` §12 |
 | Persistence | `references/06_KNOWLEDGE_PERSISTENCE.md` + gerekli `templates/` dosyası |
 | Integrity | `references/07_INTEGRITY_CHECKS.md` |
 
