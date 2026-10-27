@@ -7,11 +7,10 @@ Agent Learning Engine is a project-driven learning system for AI-assisted develo
 Agent Learning Engine is designed as a platform-neutral learning architecture. **Version 1.0.0 ships with a Claude Code skill integration**: you install the `learning` skill and start it with `/learning`.
 
 ```powershell
-# Install into the current project (works once v1.0.0 is published)
-& ([scriptblock]::Create((Invoke-RestMethod 'https://raw.githubusercontent.com/ogulcan27/agent-learning-engine/v1.0.0/scripts/install.ps1'))) -Scope Project -Repository ogulcan27/agent-learning-engine -Ref v1.0.0
+irm https://raw.githubusercontent.com/ogulcan27/agent-learning-engine/v1.0.0/scripts/install.ps1 | iex
 ```
 
-Then, in Claude Code: `/learning`
+The installer asks whether to install for the current project or for all your local Claude Code projects. Then, in Claude Code: `/learning`
 
 ## What It Does
 
@@ -111,21 +110,51 @@ This installs the skill into `~/.claude/skills/learning/` and makes it available
 
 ### Quick Install
 
-Running a remote script executes code from the referenced repository. For the most inspectable installation path, clone the repository, review `scripts/install.ps1`, and run it locally. Always pin `-Ref` to a tag or commit, not a branch.
-
-Project (installs into `<current-project>/.claude/skills/learning/`):
+Run this in PowerShell from your project directory:
 
 ```powershell
-& ([scriptblock]::Create((Invoke-RestMethod 'https://raw.githubusercontent.com/ogulcan27/agent-learning-engine/v1.0.0/scripts/install.ps1'))) -Scope Project -Repository ogulcan27/agent-learning-engine -Ref v1.0.0
+irm https://raw.githubusercontent.com/ogulcan27/agent-learning-engine/v1.0.0/scripts/install.ps1 | iex
 ```
 
-Personal (installs into `~/.claude/skills/learning/`):
+The installer asks for the scope:
+
+```text
+[1] Project    Current project only  → <current-project>/.claude/skills/learning/
+[2] Personal   All local Claude Code projects → ~/.claude/skills/learning/
+```
+
+It downloads the `v1.0.0` source archive from `ogulcan27/agent-learning-engine`, verifies every file against `distribution/manifest.json`, and only then installs. Nothing is written before you choose a scope; press Ctrl+C at the prompt to cancel.
+
+Running a remote script executes code from the referenced repository. For the most inspectable installation path, clone the repository, review `scripts/install.ps1`, and run it locally.
+
+### Inspect before running
+
+Download the script, read it, then run it:
 
 ```powershell
-& ([scriptblock]::Create((Invoke-RestMethod 'https://raw.githubusercontent.com/ogulcan27/agent-learning-engine/v1.0.0/scripts/install.ps1'))) -Scope Personal -Repository ogulcan27/agent-learning-engine -Ref v1.0.0
+irm https://raw.githubusercontent.com/ogulcan27/agent-learning-engine/v1.0.0/scripts/install.ps1 -OutFile install.ps1
+notepad install.ps1
+powershell -ExecutionPolicy Bypass -File .\install.ps1
 ```
 
-The installer downloads the source archive for the given ref, verifies every file against `distribution/manifest.json`, and only then installs.
+A standalone `install.ps1` uses the same defaults (`-Repository ogulcan27/agent-learning-engine -Ref v1.0.0`) and shows the same menu.
+
+### Non-interactive install
+
+Pass `-Scope` to skip the menu (for scripts and automation):
+
+```powershell
+.\scripts\install.ps1 -Scope Project
+.\scripts\install.ps1 -Scope Personal
+```
+
+From a cloned repository this installs the local copy. Elsewhere it downloads the default release. `-Repository <owner/repo>` and `-Ref <tag-or-commit>` override the defaults; always pin a tag or commit, not a branch. With `irm | iex` you cannot pass parameters; use the scriptblock form instead:
+
+```powershell
+& ([scriptblock]::Create((irm https://raw.githubusercontent.com/ogulcan27/agent-learning-engine/v1.0.0/scripts/install.ps1))) -Scope Personal
+```
+
+If your execution policy blocks `.\scripts\install.ps1`, run it as `powershell -ExecutionPolicy Bypass -File .\scripts\install.ps1 -Scope Project`.
 
 ### Release Package
 

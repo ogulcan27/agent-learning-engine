@@ -24,7 +24,7 @@ See the [README](../README.md#installation) for full instructions.
 |---|---|
 | Clone and install | `scripts\install.ps1 -Scope Project` or `-Scope Personal` |
 | Release package | `install.ps1 -Archive agent-learning-engine-v1.0.0.zip` |
-| Quick install | `install.ps1` from the raw URL with `-Repository ogulcan27/agent-learning-engine -Ref v1.0.0` |
+| Quick install | `irm https://raw.githubusercontent.com/ogulcan27/agent-learning-engine/v1.0.0/scripts/install.ps1 \| iex` (asks for Project or Personal scope) |
 
 Release assets: `agent-learning-engine-v1.0.0.zip` and `SHA256SUMS.txt`.
 

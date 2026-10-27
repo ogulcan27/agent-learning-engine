@@ -31,7 +31,7 @@ Kanıt: `docs/audit/PHASE_9_PACKAGING_REPORT.md`, `docs/audit/PHASE_9_DISTRIBUTI
 - [ ] push ready
 - [ ] GitHub Release asset ready (`dist/agent-learning-engine-v1.0.0.zip` + `dist/SHA256SUMS.txt`)
 - [ ] GitHub repository description ayarlandı: "Turn AI-assisted project work into structured, reusable knowledge through human synchronization, adaptive learning, semantic graphs, and persistent memory."
-- [ ] publish sonrası: gerçek GitHub URL ile one-line install bir temp project'te denendi
+- [ ] publish sonrası: `irm https://raw.githubusercontent.com/ogulcan27/agent-learning-engine/v1.0.0/scripts/install.ps1 | iex` bir temp project içinde denendi (1 = Project)
 
 ## Kural
 

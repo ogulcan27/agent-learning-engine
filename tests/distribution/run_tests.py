@@ -339,6 +339,73 @@ rc, log = one_liner(rt, "tampered")
 check("L tampered remote archive -> refused, nothing written", (rc != 0, "hash mismatch" in log, (rt / ".claude").exists()), (True, True, False))
 rc, log = one_liner(rt, "missing-ref")
 check("L download failure -> nothing written", (rc != 0, (rt / ".claude").exists()), (True, False))
+
+# Test M - interactive quick install (irm | iex) and Repository / Ref defaults
+(srv / "ogulcan27/agent-learning-engine/archive").mkdir(parents=True)
+shutil.copy(srv / "owner/repo/archive/v1.0.0.zip", srv / "ogulcan27/agent-learning-engine/archive/v1.0.0.zip")
+github_archive(SRC2, srv / "ogulcan27/agent-learning-engine/archive/v2-test.zip")
+MENU = "choose where to install the learning skill"  # Read-Host prompt text is not echoed when stdin is redirected
+
+
+def run_ps(args, answers="", cwd=None):
+    """Run powershell with typed answers on stdin and the test server as GitHub."""
+    env = dict(os.environ, USERPROFILE=str(FAKE_HOME), HOME=str(FAKE_HOME), LEARNING_SKILL_TEST_BASE_URL=base)
+    out = subprocess.run(["powershell", "-NoProfile", "-ExecutionPolicy", "Bypass", *args], input=answers,
+                         capture_output=True, text=True, env=env, cwd=cwd)
+    return out.returncode, out.stdout + out.stderr
+
+
+def irm_iex(answers, cwd):
+    """README quick install: irm <raw install.ps1> | iex. Prints the caller's ErrorActionPreference afterwards."""
+    return run_ps(["-Command", f"irm '{base}/raw/install.ps1' | iex; 'CALLER_EAP=' + $ErrorActionPreference"], answers, cwd)
+
+
+shutil.rmtree(FAKE_HOME / ".claude", ignore_errors=True)
+mp = project("proj_iex_project")
+before = outside_skill(mp)
+rc, log = irm_iex("1\n", mp)
+check("M irm|iex shows the scope menu", (MENU in log, "[1] Project" in log, "[2] Personal" in log), (True, True, True))
+check("M interactive 1 -> Project install in current directory", (rc, tree(mp / REL)), (0, V1))
+check("M interactive Project keeps state; personal untouched", (outside_skill(mp), (FAKE_HOME / REL).exists()), (before, False))
+check("M default Repository / Ref used", "/ogulcan27/agent-learning-engine/archive/v1.0.0.zip" in log, True)
+check("M caller session ErrorActionPreference unchanged", "CALLER_EAP=Continue" in log, True)
+mq = project("proj_iex_personal", state=False)
+rc, log = irm_iex("2\n", mq)
+check("M interactive 2 -> Personal install", (rc, tree(FAKE_HOME / REL)), (0, V1))
+check("M interactive Personal writes nothing into the project", (mq / ".claude").exists(), False)
+mr = project("proj_iex_retry", state=False)
+rc, log = irm_iex("9\nfoo\nProject\n", mr)
+check("M invalid choice -> asks again", log.count("Invalid choice"), 2)
+check("M retry then 'Project' -> installed", (rc, tree(mr / REL)), (0, V1))
+ms = project("proj_iex_personal_word", state=False)
+rc, log = irm_iex("personal\n", ms)
+check("M 'personal' word accepted (same personal target)", (rc, "ALREADY INSTALLED" in log, (ms / ".claude").exists()), (0, True, False))
+me = project("proj_iex_eof", state=False)
+rc, log = irm_iex("", me)
+check("M no answer (end of input) -> stops, nothing written", (rc != 0 or "No scope selected" in log, (me / ".claude").exists()), (True, False))
+mx = project("proj_explicit", state=False)
+rc, log = run_ps(["-File", str(SRC / "scripts/install.ps1"), "-Scope", "Project", "-ProjectPath", str(mx)], "2\n")
+check("M explicit -Scope -> no prompt, LOCAL source", (rc, MENU in log, "Download:" in log, tree(mx / REL) == V1), (0, False, False, True))
+my = project("proj_explicit_sb", state=False)
+rc, log = run_ps(["-Command", f"& ([scriptblock]::Create((irm '{base}/raw/install.ps1'))) -Scope Project"], "2\n", my)
+check("M scriptblock -Scope Project -> no prompt, default remote", (rc, MENU in log, tree(my / REL) == V1), (0, False, True))
+standalone = TMP / "standalone"
+standalone.mkdir()
+shutil.copy(SRC / "scripts/install.ps1", standalone / "install.ps1")
+mz = project("proj_standalone", state=False)
+rc, log = run_ps(["-File", str(standalone / "install.ps1"), "-Scope", "Project", "-ProjectPath", str(mz)])
+check("M downloaded install.ps1 (no repo) -> default Repository / Ref", (rc, "/ogulcan27/agent-learning-engine/archive/v1.0.0.zip" in log, tree(mz / REL) == V1), (0, True, True))
+mo = project("proj_override_repo", state=False)
+rc, log = run_ps(["-File", str(standalone / "install.ps1"), "-Scope", "Project", "-ProjectPath", str(mo), "-Repository", "owner/repo"])
+check("M explicit -Repository overrides default (Ref default kept)", (rc, "/owner/repo/archive/v1.0.0.zip" in log, tree(mo / REL) == V1), (0, True, True))
+mr2 = project("proj_override_ref", state=False)
+rc, log = run_ps(["-File", str(standalone / "install.ps1"), "-Scope", "Project", "-ProjectPath", str(mr2), "-Ref", "v2-test"])
+check("M explicit -Ref overrides default", (rc, "/ogulcan27/agent-learning-engine/archive/v2-test.zip" in log, tree(mr2 / REL) == V2), (0, True, True))
+rc, log = run_ps(["-File", str(standalone / "install.ps1"), "-Scope", "Project", "-ProjectPath", str(mr2)])
+check("M existing different install still refused without -Force", (rc != 0, "different learning skill" in log, tree(mr2 / REL) == V2), (True, True, True))
+check("M invalid explicit -Scope refused", run_ps(["-File", str(SRC / "scripts/install.ps1"), "-Scope", "Global"])[0] != 0, True)
+default_ref = next(l.split("'")[1] for l in (SRC / "scripts/install.ps1").read_text().splitlines() if "$DefaultRef =" in l)
+check("M default Ref = v<VERSION>", default_ref, "v" + MANIFEST["version"])
 httpd.shutdown()
 
 report(RESULTS)
