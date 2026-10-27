@@ -141,7 +141,7 @@ ID formatı: `<source_type>:<native-id>`
 
 | Source | Native ID | Örnek | `seq` kaynağı |
 |---|---|---|---|
-| `jira` | Issue key, büyük harf | `jira:INC-44` | Issue'nun ilk görüldüğü commit / doküman sırası |
+| `jira` | Issue key, büyük harf | `jira:ABC-44` | Issue'nun ilk görüldüğü commit / doküman sırası |
 | `phase-doc` | Doküman path + step ID (dokümanda yazıldığı gibi) | `phase-doc:PLAN.md#step-10` | Doküman içindeki sıra |
 | `git` | Commit hash'in ilk 12 karakteri, küçük harf | `git:3f2a9c1d0b7e` | Commit tarihi sırası (ancestry) |
 | `user` | Kullanıcının verdiği kısa slug | `user:cache-redesign` | Kayıt sırası |
@@ -200,7 +200,7 @@ DEFERRED ≠ SKIPPED_BY_USER
 - `DEFERRED` geri gelir. Karar scope seçiminden doğar.
 - `SKIPPED_BY_USER` geri gelmez. Karar kullanıcının açık ifadesinden doğar.
 
-`NOT_LEARNING_RELEVANT` Phase 4 Knowledge Priority tarafından üretilir. Phase 3 bu durumu otomatik atamaz.
+`NOT_LEARNING_RELEVANT` Knowledge Priority (`03` §11) sonucu ile Completion Commit (`04` §11) tarafından yazılır. Discovery bu durumu otomatik atamaz.
 
 ---
 

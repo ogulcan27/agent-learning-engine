@@ -1,6 +1,6 @@
 # 07 — Integrity Checks
 
-**Status:** §C Coverage Integrity IMPLEMENTED (Phase 3). §E Event Integrity IMPLEMENTED (Phase 4). §U ULA / Pass Integrity IMPLEMENTED (Phase 5). §M MindMap / Semantic Graph Integrity IMPLEMENTED (Phase 6). §P Knowledge Persistence Integrity IMPLEMENTED (Phase 7). §L NOT IMPLEMENTED YET.
+**Status:** §C, §E, §U, §M, §P, §L IMPLEMENTED (Phase 3–8). Final Integrity: §L.
 
 ## Purpose
 
@@ -67,7 +67,7 @@ Ne zaman çalışır:
 
 E-10 için çözüm: `event_id` içindeki `<learning-pass-id>` ile `docs/learning/passes/<learning-pass-id>/LEARNING_PASS.md` bulunur. Event o dosyada yoksa FAIL.
 
-FAIL olduğunda pass dosyası ve queue §B yazılmaz. Ledger zaten Phase 4'te yazılmaz.
+FAIL olduğunda pass dosyası ve queue §B yazılmaz. Ledger Human Sync sırasında zaten yazılmaz.
 
 Bu bölüm ULA content audit yapmaz.
 
@@ -188,9 +188,139 @@ FAIL olduğunda hiçbir persistence dosyası yazılmaz. Event persistence `BLOCK
 
 ---
 
-## L. Learning State Integrity (pointer, passes, maps)
+## L. Learning State / Cross-Layer Integrity
 
-NOT IMPLEMENTED YET.
+Final Integrity bu bölümdür. Run loop'un son adımıdır (`01` §1 adım 15). `/learning integrity` aynı işi yapar (§L.6).
+
+§C, §E, §U, §M, §P kurallarını tekrar etmez. Yalnız layer'lar arası invariant'ları kontrol eder. Bir L check bir alt check ile aynı sonucu veriyorsa satırda kaynak check yazılır.
+
+### L.1 Authority model
+
+| Artifact | Class | Konum | Kaynak | Auto repair |
+|---|---|---|---|---|
+| `LEARNING_CONFIG` | AUTHORITATIVE | `state/LEARNING_CONFIG.md` | kullanıcı | NO |
+| `COVERAGE_LEDGER` | AUTHORITATIVE | `state/COVERAGE_LEDGER.md` | Discovery / Scope / Completion Commit | NO |
+| `LEARNING_QUEUE §B` | AUTHORITATIVE | `state/LEARNING_QUEUE.md` §B | Handoff, persistence | NO |
+| `LEARNING_PASS` | AUTHORITATIVE | `passes/<learning-pass-id>/LEARNING_PASS.md` | Human Sync, ULA, completion, sync | NO |
+| `ULA_ARTIFACT` | AUTHORITATIVE | `passes/<learning-pass-id>/ula/<event-id>/` | ULA | NO |
+| `SEMANTIC_GRAPH` | AUTHORITATIVE | `maps/SEMANTIC_GRAPH.md` | map sync, persistence `home_ref` | NO |
+| `CONCEPT_REGISTRY` | AUTHORITATIVE | `<personal_library_path>/registry/CONCEPT_REGISTRY.md` | persistence | NO |
+| `CONCEPT_HOME` | AUTHORITATIVE | personal `concepts/` veya `LOCAL_TEMPORARY` project `concepts/` | persistence | NO |
+| `CONCEPT_POINTER` | AUTHORITATIVE | project `concepts/` | persistence | NO (yalnız label: P-24) |
+| `EXPERIENCE_NOTE` | AUTHORITATIVE | project `experiences/EX-*.md` | persistence | NO |
+| `DECISION_RECORD` | AUTHORITATIVE | project `experiences/DR-*.md` | persistence | NO |
+| `EXPERIENCE_MAP` | AUTHORITATIVE | personal `experience-maps/` | persistence | NO |
+| `LEARNING_STATE` | DERIVED | `state/LEARNING_STATE.md` | `COVERAGE_LEDGER` | YES |
+| `LEARNING_QUEUE §A` | DERIVED | `state/LEARNING_QUEUE.md` §A | `COVERAGE_LEDGER` | YES |
+| `HORIZONTAL_MAP` | DERIVED | `maps/HORIZONTAL_MAP.md` | `SEMANTIC_GRAPH` | YES |
+| `LIBRARY_INDEX` | DERIVED | `<personal_library_path>/LIBRARY_INDEX.md` | registry + Concept Home | YES |
+| `WRITE_LOCK` | LOCK | `<personal_library_path>/.learning-write-lock/` | persistence | NO (kullanıcı kararı, `06` §22.1) |
+
+- `DERIVED` artifact bozuksa kaynağından yeniden üretilir. Kaynak değişmez.
+- `AUTHORITATIVE` artifact için otomatik semantic repair yoktur. Sonuç FAIL. Kullanıcı review eder.
+- Tek istisna §P içinde zaten tanımlıdır: `CONCEPT_POINTER` label yeniden üretimi (P-24).
+
+### L.2 Final integrity result
+
+| Result | Şart | DONE |
+|---|---|---|
+| `PASS` | FAIL yok. WARNING yok. | YES |
+| `PASS_WITH_WARNINGS` | FAIL yok. En az bir WARNING var. | YES |
+| `FAIL` | En az bir FAIL var. | NO |
+
+- Sonuç derived repair sonrası ikinci çalıştırmadan alınır (L-20).
+- WARNING repair ile kapandıysa ve yeni WARNING yoksa sonuç `PASS` olur.
+
+### L.3 Procedure
+
+```text
+LOAD        §L.7 sırası; yalnız gereken artifact
+↓
+CHECK 1     §C + §E + §U + §M + §P (mevcut state) + §L checks
+↓
+FAIL var?   evet → sonuç FAIL. Repair yok. Kullanıcıya göster. Dur.
+↓
+REPAIR      yalnız DERIVED artifact; aksiyonu "rebuild" olan WARNING
+↓
+CHECK 2     bütün check'ler tekrar
+↓
+RESULT      CHECK 2 sonucu (§L.2)
+```
+
+- FAIL varken derived repair yapılmaz. Bozuk authoritative kaynaktan derived üretilmez.
+- Run loop adım 15 derived repair'ı onaysız yapar. `/learning integrity` önce listeyi gösterir ve onay ister.
+
+### L.4 Coverage independence
+
+Pass `COMPLETE` iken `Map Sync` veya `Experience Persistence` `BLOCKED` / `PENDING` olabilir. Bu bir post-completion enrichment açığıdır. FAIL değildir. Coverage yeniden açılmaz. Pass status değişmez (`05` §10.2, `06` §19.1).
+
+### L.5 Checks
+
+| ID | Kontrol | Sonuç | Aksiyon |
+|---|---|---|---|
+| L-01 | `LEARNING_STATE` sayıları ledger'dan farklı (kaynak: C-08) | WARNING | rebuild `LEARNING_STATE` |
+| L-02 | Queue §A ≠ ledger `DEFERRED ∪ PARTIAL` (kaynak: C-09) | WARNING | rebuild `LEARNING_QUEUE §A` |
+| L-03 | §B debt `originating_event_id` hiçbir pass dosyasındaki event'e çözülmüyor (kaynak: E-07) | FAIL | Dur. Kullanıcı review. |
+| L-04 | `RESOLVED` debt: `resolution_ref` event'inin persistence'ı `COMPLETE` değil, `concept_home` registry'de veya `LOCAL_TEMPORARY` Home'larda yok, `debt_id` taşıyan node `ACTIVE` değil, veya node `home_ref` ≠ `concept_home` | FAIL | Dur. Kullanıcı review. |
+| L-05 | Pass `selected_scope` içindeki `work_unit_id` ledger'da yok | FAIL | Dur. Kullanıcı review. |
+| L-06 | Event `Work Units` kendi pass `selected_scope` dışında (kaynak: E-02) | FAIL | Dur. Kullanıcı review. |
+| L-07 | Pass `COMPLETE` ve: scope unit ledger satırı `PARTIAL` veya `open_items` dolu, ULA event `COMPLETE` değil, veya `UNRESOLVED` event var (kaynak: U-11, U-12) | FAIL | Dur. Kullanıcı review. |
+| L-08 | Pass `COMPLETE` ve event `Map Sync` veya `Experience Persistence` `BLOCKED` / `PENDING` (§L.4) | WARNING | Bilgi ver. Coverage ve pass değişmez. |
+| L-09 | `Map Sync: COMPLETE` ve event ID graph'ta hiçbir node / edge `source_event_ids` içinde yok, veya pass `Node IDs` graph'ta yok (kaynak: M-18) | FAIL | Dur. Kullanıcı review. |
+| L-10 | `Experience Persistence: COMPLETE` ve routing'in istediği Concept Home / pointer / Experience Note yok; veya `NOT_APPLICABLE` ve routing artifact istiyor (kaynak: P-16) | FAIL | Dur. Kullanıcı review. |
+| L-11 | Graph `home_ref: CH-...` registry'de ve `LOCAL_TEMPORARY` Home'larda yok (kaynak: P-08) | FAIL | Dur. Kullanıcı review. |
+| L-12 | Pointer `personal:CH-...` registry'de yok veya registry satırı Home dosyasına çözülmüyor. Configured library erişilemiyorsa sonuç WARNING. | FAIL | Dur. Kullanıcı review. |
+| L-13 | Current project Experience Map satırı (`PRJ-x/EX-y`) project `experiences/` içinde dosyaya çözülmüyor (kaynak: P-20, P-21) | FAIL | Dur. Kullanıcı review. |
+| L-14 | Decision Record ↔ Experience Note çift yönlü değil: note `Decision Record` dosyası yok, veya DR `Experience ID` note'u bu DR'yi göstermiyor | FAIL | Dur. Kullanıcı review. |
+| L-15 | İki active pass (`IN_PROGRESS` / `WAITING_USER` / `BLOCKED`) aynı work unit'i içeriyor (kaynak: U-15) | FAIL | Dur. `CONFLICT`. |
+| L-16 | `ABANDONED` pass: ledger satırı bu pass ID ile `COVERED` / `NOT_LEARNING_RELEVANT`, veya ledger `open_items` bu pass'in event'ini gösteriyor ve event pass dosyasında yok | FAIL | Dur. Kullanıcı review. |
+| L-17 | Config `project_id` ile Experience Note, Decision Record, bu project'in note'una bağlı Home appearance veya map satırı farklı `project_id` taşıyor. Project rename `project_id` değiştirmez. | FAIL | Dur. Kullanıcı review. |
+| L-18 | `HORIZONTAL_MAP` `generated_from_graph_version` < `graph_version` (kaynak: M-16) | WARNING | rebuild `HORIZONTAL_MAP` |
+| L-19 | `LIBRARY_INDEX` registry + Home'lardan üretilen index ile aynı değil | WARNING | rebuild `LIBRARY_INDEX` |
+| L-20 | Derived repair yapıldı ve check'ler tekrar çalışmadı | FAIL | CHECK 2'yi çalıştır. |
+| L-21 | Bu session'ın `.learning-write-lock/` dizini persistence bittikten sonra hâlâ var (release başarısız) | WARNING | Lock bilgisini göster. Silme kararı kullanıcıdadır (`06` §22.1). |
+| L-22 | Experience Note `Concept ID` (`CH-...`) registry'de ve `LOCAL_TEMPORARY` Home'larda yok | FAIL | Dur. Kullanıcı review. |
+| L-23 | Experience Note `Event ID` pass dosyasında yok, veya pass `## Knowledge Persistence` satırı başka `Experience ID` gösteriyor | FAIL | Dur. Kullanıcı review. |
+
+Identity chain (golden path):
+
+```text
+WORK UNIT → LEARNING EVENT → ULA ARTIFACT → GRAPH NODE → CONCEPT HOME → EXPERIENCE NOTE → EXPERIENCE MAP
+```
+
+Her halka bir check ile çözülür: L-05 / L-06, U-16, L-09, L-11 / L-12, L-22 / L-23, L-13. Kırık halka FAIL verir.
+
+Kapsam: Personal library yalnız configured ise ve check gerektiriyorsa yüklenir. Map satırlarında yalnız current `project_id` satırları doğrulanır.
+
+### L.6 Command
+
+`/learning integrity`:
+
+- Yeni Learning Pass başlatmaz.
+- Coverage, ledger, pass, graph ve Concept Home yazmaz.
+- ULA çalıştırmaz.
+- §L.3 akışını çalıştırır. Derived repair listesini gösterir. Kullanıcı onayı ile yalnız `DERIVED` artifact yazar.
+- Sonuç: `PASS` / `PASS_WITH_WARNINGS` / `FAIL` ve check listesi.
+
+### L.7 Load order
+
+```text
+SKILL.md
+↓
+07_INTEGRITY_CHECKS.md
+↓
+LEARNING_CONFIG + LEARNING_STATE
+↓
+COVERAGE_LEDGER + LEARNING_QUEUE
+↓
+yalnız gereken pass, graph, view, concepts/, experiences/
+↓
+personal registry + ilgili Home + ilgili map + index  (yalnız configured ve gerekli ise)
+```
+
+Yüklenmez: `00_MASTER_SYSTEM_SPEC.md`, `ula/` rol dosyaları, `ula/examples/`, ULA artifact içeriği (yalnız varlık kontrolü), diğer project'lerin Experience Note'ları.
+
+---
 
 ## Authoritative Source
 
@@ -200,4 +330,5 @@ NOT IMPLEMENTED YET.
 - `references/04_ULA_PROTOCOL.md` §2, §5, §7, §9, §10, §11.
 - `references/05_MINDMAP_PROTOCOL.md` §3–§11.
 - `references/06_KNOWLEDGE_PERSISTENCE.md` §4–§22.
+- Cross-layer ve final integrity: Phase 8 audit.
 - Content audit: `ula/LEARNING_AUDITOR.md`.

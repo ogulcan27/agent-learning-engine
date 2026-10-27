@@ -200,9 +200,9 @@ Format: `<kind>:<pointer>`.
 
 | kind | Örnek |
 |---|---|
-| `work-unit` | `work-unit:jira:INC-44` |
+| `work-unit` | `work-unit:jira:ABC-44` |
 | `commit` | `commit:9f3a1c2b7d4e` |
-| `issue` | `issue:INC-44` |
+| `issue` | `issue:ABC-44` |
 | `doc` | `doc:docs/PLAN.md#step-10` |
 | `test` | `test:tests/test_worker.py` |
 | `diagnostic` | `diagnostic:logs/latency_report.md` |
@@ -544,11 +544,11 @@ Debt priority:
 | `USEFUL_TO_KNOW` + `GAP` | `LATER` |
 | Kullanıcı "isteğe bağlı" dedi | `OPTIONAL` |
 
-### 14.2 Lifecycle (Phase 4 sınırı)
+### 14.2 Lifecycle (Human Sync sınırı)
 
-- Phase 4 yalnız `OPEN` kayıt oluşturur.
+- Human Sync yalnız `OPEN` kayıt oluşturur.
 - `DISMISSED`: yalnız kullanıcının açık kararı ile.
-- `RESOLVED`: yalnız `06_KNOWLEDGE_PERSISTENCE.md` §20 guard'ı ile. Phase 4 yazmaz.
+- `RESOLVED`: yalnız `06_KNOWLEDGE_PERSISTENCE.md` §20 guard'ı ile. Human Sync yazmaz.
 - `concept_home`: Concept Home henüz yoksa `UNASSIGNED`.
 - Aynı `concept` için `OPEN` debt zaten varsa yeni kayıt açma. Mevcut kaydı kullanıcıya göster.
 
@@ -558,7 +558,7 @@ Queue §B bir generated view değildir. Knowledge Debt için authoritative kayı
 
 ## 15. Coverage outcome proposal
 
-Phase 4 ledger'a yazmaz. Yalnız her selected work unit için Completion Commit'in kullanacağı **önerilen** sonucu hazırlar. Değerlendirme unit bazındadır. Scope-level sonuç bütün unit'lere zorlanmaz.
+Human Sync ledger'a yazmaz. Yalnız her selected work unit için Completion Commit'in kullanacağı **önerilen** sonucu hazırlar. Değerlendirme unit bazındadır. Scope-level sonuç bütün unit'lere zorlanmaz.
 
 | Unit'in event'leri | Önerilen status | `open_items` |
 |---|---|---|

@@ -1,6 +1,6 @@
 # 06 — Knowledge Persistence
 
-**Status:** IMPLEMENTED (Phase 7)
+**Status:** IMPLEMENTED (Phase 7). §22.1 write lock: Phase 8.
 
 ## Purpose
 
@@ -103,8 +103,10 @@ Skill kendi başına path seçmez. Seçim yalnız bu run için geçerlidir; kal�
 ├── experience-maps/
 │   ├── SYSTEM_DESIGN_EXPERIENCE_MAP.md      cross-project index templates/SYSTEM_DESIGN_EXPERIENCE_MAP_TEMPLATE.md
 │   └── DSA_EXPERIENCE_MAP.md                cross-project index templates/DSA_EXPERIENCE_MAP_TEMPLATE.md
-└── registry/
-    └── CONCEPT_REGISTRY.md                  identity registry   templates/CONCEPT_REGISTRY_TEMPLATE.md
+├── registry/
+│   └── CONCEPT_REGISTRY.md                  identity registry   templates/CONCEPT_REGISTRY_TEMPLATE.md
+└── .learning-write-lock/                    yalnız write sırasında (§22.1)
+    └── LOCK.md
 ```
 
 Markdown canonical storage'dır. HTML, application veya database yoktur.
@@ -462,7 +464,7 @@ Experience Note concept'in bu projede nasıl ve neden kullanıldığını saklar
 
 ### 15.2 Evidence
 
-Phase 4 modeli korunur (`03` §7): `VERIFIED` · `INFERRED` · `ASSUMED` · `UNRESOLVED`.
+Human Sync evidence modeli korunur (`03` §7): `VERIFIED` · `INFERRED` · `ASSUMED` · `UNRESOLVED`.
 
 - Önemli project claim için `## Evidence` tablosu satırı yazılır.
 - `VERIFIED` evidence ref zorunlu.
@@ -676,6 +678,8 @@ Event başına transaction.
 Sıra:
 
 ```text
+LOCK        personal write varsa ACQUIRE (§22.1); alınamazsa BLOCKED
+↓
 READ        bütün hedef dosyaların pre-image'ı
 ↓
 BUILD       bütün candidate'ler bellekte
@@ -686,13 +690,80 @@ WRITE       1. Concept Home  2. Concept Registry  3. Experience Map row
             4. project pointer / temporary Home  5. Experience Note  6. Decision Record
             7. SEMANTIC_GRAPH home_ref  8. queue §B debt  9. pass tablosu
 ↓
-INDEX       LIBRARY_INDEX yeniden üretilir (rebuildable; hata → WARNING)
+INDEX       LIBRARY_INDEX ve graph değiştiyse HORIZONTAL_MAP yeniden üretilir (derived; hata → WARNING)
+↓
+VERIFY      07 §P yazılmış dosyalar üzerinde
+↓
+RELEASE     lock varsa sil (§22.1)
 ```
 
 - Integrity FAIL → hiçbir dosya yazılmaz. Event `BLOCKED`.
 - Write hatası → bu transaction'da yazılan dosyalar pre-image ile geri yüklenir. Event `BLOCKED`.
 - Concept Home yazılıp registry yazılmadan kalmaz.
 - Persistence `BLOCKED` coverage'ı değiştirmez (§19.1).
+
+### 22.1 Personal library write lock
+
+Amaç: İki project session aynı personal library'ye aynı anda yazarsa sessiz data corruption olmaz.
+
+Transaction en az bir `L:` (personal) dosya yazacaksa lock gerekir. Yalnız project dosyası yazan transaction lock almaz.
+
+| rule | value |
+|---|---|
+| lock_path | `<personal_library_path>/.learning-write-lock/` |
+| lock_file | `LOCK.md` |
+| acquire | EXCLUSIVE_CREATE |
+| on_existing | BLOCKED |
+| stale_lock | USER_DECISION |
+| release | AFTER_VERIFY_OR_ROLLBACK |
+| on_release_error | WARNING |
+
+`LOCK.md` alanları:
+
+```text
+lock_id:          LK-xxxxxxxx
+project_id:       PRJ-xxxxxxxx
+learning_pass_id: LP-YYYYMMDD-NN
+created_at:       YYYY-MM-DDTHH:MM
+operation:        PERSIST <event-id> | PROMOTE | RENAME <concept-id>
+```
+
+Akış:
+
+```text
+ACQUIRE   lock dizinini exclusive create ile oluştur (dizin varsa create başarısız olur)
+          → LOCK.md yaz
+↓
+READ → BUILD → INTEGRITY → WRITE → VERIFY    (§22)
+↓
+RELEASE   LOCK.md ve lock dizinini sil (rollback sonrası da)
+```
+
+Kurallar:
+
+- Dizin zaten varsa overwrite yapma. Lock alınmadı.
+- Lock alınamadı → persistence dosyası yazılmaz (personal ve project). Yalnız pass `Experience Persistence: BLOCKED` yazılır. Pass `COMPLETE` ve ledger değişmez (§19.1). Kısa lock bilgisini göster.
+- Lock yaşlı görünse bile otomatik silme. Kullanıcıya sor:
+
+```text
+Lock bulundu.
+Owner project: <project_id>
+Pass:          <learning_pass_id>
+Created:       <created_at>
+Operation:     <operation>
+
+1. Lock'u koru.
+2. Stale olduğunu onayla ve temizle.
+```
+
+| Seçim | Sonuç |
+|---|---|
+| 1 | Lock kalır. Event `BLOCKED`. Kullanıcı sonra tekrar dener. |
+| 2 | Kullanıcı onayı ile lock silinir. Sonra normal ACQUIRE. |
+| cevap yok | Seçim 1 |
+
+- Release başarısız → WARNING (07 L-21). Data write başarılı olabilir. Lock cleanup kullanıcı kararı ile yapılır.
+- Lock yalnız tek bir personal library transaction'ı korur. Distributed lock veya remote library desteği yoktur.
 
 ---
 

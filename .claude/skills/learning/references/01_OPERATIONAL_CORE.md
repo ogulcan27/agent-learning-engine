@@ -1,6 +1,6 @@
 # 01 — Operational Core
 
-**Status:** Startup → Final Integrity IMPLEMENTED (Phase 3–7).
+**Status:** Startup → Final Integrity → DONE IMPLEMENTED (Phase 3–8).
 
 ## Purpose
 
@@ -46,15 +46,16 @@ MAP SYNC
 13. eligibility + identity + delta + integrity (07 §M) + graph write + view (05 §6–§12)
 ↓                      post-completion enrichment; completion'ı geri alamaz
 KNOWLEDGE PERSISTENCE
-14. routing + resolution + delta + integrity (07 §P) + atomic write (06 §5–§22)
+14. routing + resolution + delta + integrity (07 §P) + lock + atomic write (06 §5–§22.1)
 ↓                      post-completion enrichment; completion'ı geri alamaz
 FINAL INTEGRITY
-15. 07 §C + §E + §U + §M + §P
-↓
+15. 07 §L.3: §C + §E + §U + §M + §P + §L → derived repair → tekrar check
+↓                      sonuç PASS / PASS_WITH_WARNINGS → DONE; FAIL → DONE yok
 DONE
 
 Map komutları (`/learning map ...`) bu akışı çalıştırmaz. Doğrudan 05 §15'e gider.
 Persistence komutları (`concept`, `library`, `experiences`, `debt`) bu akışı çalıştırmaz. Doğrudan 06 §24'e gider.
+`/learning integrity` bu akışı çalıştırmaz. Doğrudan 07 §L.6'ya gider.
 ```
 
 ## 2. Stop rules
@@ -74,7 +75,8 @@ Persistence komutları (`concept`, `library`, `experiences`, `debt`) bu akışı
 | Map integrity (07 §M) FAIL veya identity AMBIGUOUS | Graph yazma. Event `map_sync_status: BLOCKED`. Coverage ve pass değişmez. Dur. |
 | Persistence integrity (07 §P) FAIL, AMBIGUOUS veya CONFLICT | Write yok. Event persistence `BLOCKED`. Coverage, pass ve graph değişmez. Diğer event'lere devam et. |
 | Personal library `UNCONFIGURED` ve personal write gerekli | 06 §2.2 seçeneklerini sor. Cevap yoksa event `PENDING`. Dur. |
-| Final integrity FAIL | Hatayı göster. `DONE` deme. |
+| Personal library write lock alınamadı | Lock bilgisini göster (06 §22.1). Event persistence `BLOCKED`. Lock silme yalnız kullanıcı onayı ile. Diğer event'lere devam et. |
+| Final integrity `FAIL` | Hatayı göster. Repair yapma. `DONE` deme. Authoritative artifact'i kullanıcı review eder. |
 
 ## 3. Write rules
 
@@ -87,16 +89,24 @@ Persistence komutları (`concept`, `library`, `experiences`, `debt`) bu akışı
 | Map sync | `maps/SEMANTIC_GRAPH.md` (delta, atomic), `maps/HORIZONTAL_MAP.md` (view), pass `## Map Sync` tablosu | Ledger, pass status, `current_stage` |
 | Persistence | Personal: Concept Home, Registry, Experience Map, Index. Project: `concepts/`, `experiences/`, graph `home_ref`, queue §B debt status, pass `Experience Persistence` + `## Knowledge Persistence` | Ledger, pass status, `current_stage` |
 | Abandon | Pass `pass_status: ABANDONED` | Ledger, queue §B |
+| Final integrity / `/learning integrity` | Yalnız `DERIVED` artifact (07 §L.1): `LEARNING_STATE`, queue §A, `HORIZONTAL_MAP`, `LIBRARY_INDEX` | Bütün authoritative artifact |
 
 - Ledger yalnız Discovery Commit, Scope Commit ve Completion Commit ile yazılır (02 §10).
 - Her ledger commit sonrası state ve queue §A yeniden üretilir.
 
 ## 4. Steps after map sync
 
-1. Knowledge Persistence: `06`. Event başına atomic transaction.
-2. Final Integrity: `07` §C, §E, §U, §M, §P. FAIL yoksa run `DONE`.
+1. Knowledge Persistence: `06`. Event başına lock (personal write varsa) + atomic transaction.
+2. Final Integrity: `07` §L.3. Sonuç `PASS`, `PASS_WITH_WARNINGS` veya `FAIL` (07 §L.2).
 
-§L Learning State Integrity henüz implement edilmedi. Final integrity'yi durdurmaz.
+## 5. DONE
+
+`DONE` anlamı: Bu Learning Pass için required pipeline ve blocking integrity checks tamamlandı.
+
+- `DONE` yalnız final integrity `PASS` veya `PASS_WITH_WARNINGS` ise yazılır.
+- `DONE`, bütün Knowledge Debt'in kapandığı anlamına gelmez. `OPEN` debt kalabilir.
+- `DONE`, bütün post-completion enrichment'ın bittiği anlamına gelmez. `Map Sync` veya `Experience Persistence` `BLOCKED` / `PENDING` kalabilir (07 L-08, WARNING).
+- `DONE`, bir sonraki `/learning` çağrısında açık coverage olmadığı anlamına gelmez. `DEFERRED` / `PARTIAL` birimler görünür kalır.
 
 ## Authoritative Source
 

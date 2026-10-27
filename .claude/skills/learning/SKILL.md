@@ -3,7 +3,7 @@ name: learning
 description: Run the project's manual System Design + Problem-Pattern DSA + ULA learning workflow and maintain project learning coverage.
 disable-model-invocation: true
 user-invocable: true
-argument-hint: "[latest | pending | catch-up | show skipped | resume | new | abandon <pass-id> | map [<node-id> [L1-L4] | debt | sync] | concept <concept-id> | library | experiences | debt | <work-unit-id>]"
+argument-hint: "[latest | pending | catch-up | show skipped | resume | new | abandon <pass-id> | map [<node-id> [L1-L4] | debt | sync] | concept <concept-id> | library | experiences | debt | integrity | <work-unit-id>]"
 ---
 
 # /learning — Entry Router
@@ -96,6 +96,7 @@ Outside knowledge: `ALLOWED WITH LABELS`. Project facts için project sources au
 | `library` | Personal library status / index; promotion önerisi (`06` §24) |
 | `experiences` | Experience Note listesi (`06` §24) |
 | `debt` | `OPEN` Knowledge Debt (`06` §24) |
+| `integrity` | Final Integrity + derived repair önerisi. Pass, coverage, ULA yok (`07` §L.6) |
 
 Argüman belirsizse tahmin etme. Kullanıcıya sor.
 
@@ -114,34 +115,24 @@ Argüman belirsizse tahmin etme. Kullanıcıya sor.
 | 9 | LIGHT ULA / FULL ULA (retrieval prompt dahil) | `references/04_ULA_PROTOCOL.md` §6–§8 | IMPLEMENTED |
 | 10 | COVERAGE COMPLETION COMMIT (unit bazında) | `references/04_ULA_PROTOCOL.md` §11 + `references/02_COVERAGE_PROTOCOL.md` §9–§10 | IMPLEMENTED |
 | 11 | MAP SYNC: SEMANTIC GRAPH + HORIZONTAL MAP | `references/05_MINDMAP_PROTOCOL.md` §6–§12 | IMPLEMENTED (yalnız pass COMPLETE ise; completion'ı geri almaz) |
-| 12 | KNOWLEDGE PERSISTENCE | `references/06_KNOWLEDGE_PERSISTENCE.md` §5–§22 | IMPLEMENTED (post-completion; completion'ı geri almaz) |
-| 13 | FINAL INTEGRITY → DONE | `references/07_INTEGRITY_CHECKS.md` §C, §E, §U, §M, §P | IMPLEMENTED (§L henüz yok; guard değildir) |
+| 12 | KNOWLEDGE PERSISTENCE | `references/06_KNOWLEDGE_PERSISTENCE.md` §5–§22.1 | IMPLEMENTED (post-completion; completion'ı geri almaz) |
+| 13 | FINAL INTEGRITY → DONE | `references/07_INTEGRITY_CHECKS.md` §L (§C, §E, §U, §M, §P dahil) | IMPLEMENTED |
 
 Startup'ta active pass varsa önce resume / new / abandon sorulur (`references/04_ULA_PROTOCOL.md` §10). Resume, pass'in `current_stage` adımından devam eder.
 
 `map ...` argümanları run loop'u çalıştırmaz. Doğrudan `references/05_MINDMAP_PROTOCOL.md` §15'e gider.
 `concept`, `library`, `experiences`, `debt` argümanları run loop'u çalıştırmaz. Doğrudan `references/06_KNOWLEDGE_PERSISTENCE.md` §24'e gider.
+`integrity` argümanı run loop'u çalıştırmaz. Doğrudan `references/07_INTEGRITY_CHECKS.md` §L.6'ya gider.
 
 Genel akış ve dur kuralları: `references/01_OPERATIONAL_CORE.md`.
 
-**Skeleton kuralı:** Bir adımın reference dosyası o adım için `NOT IMPLEMENTED YET` diyorsa:
-
-1. O adımın davranışını uydurma.
-2. Selected scope'u göster. Kullanıcıya hangi adımın henüz implement edilmediğini bildir.
-3. Bu adımda ve sonraki adımlarda project state yazma. Completion Commit yapma.
-4. Dur.
-
-Adım 1–13 implement edilmiştir. Skeleton kuralı bugün run loop'ta hiçbir adımda tetiklenmez. Ledger yalnız Discovery, Scope ve Completion Commit ile yazılır (`02_COVERAGE_PROTOCOL.md` §10). Retrieval yalnız ULA artifact içindeki prompt'tur; interactive retrieval session yoktur. Bugünkü akış:
+Ledger yalnız Discovery, Scope ve Completion Commit ile yazılır (`02_COVERAGE_PROTOCOL.md` §10). Retrieval yalnız ULA artifact içindeki prompt'tur; interactive retrieval session yoktur.
 
 ```text
-Coverage              → IMPLEMENTED
-Human Sync            → IMPLEMENTED
-ULA                   → IMPLEMENTED
-Completion            → IMPLEMENTED
-MindMap               → IMPLEMENTED
-Knowledge Persistence → IMPLEMENTED
-FINAL INTEGRITY       → DONE
+START → COVERAGE → HUMAN SYNC → ULA → COMPLETION → MAP SYNC → KNOWLEDGE PERSISTENCE → FINAL INTEGRITY → DONE
 ```
+
+`DONE` tanımı: `references/01_OPERATIONAL_CORE.md` §5. Final integrity `FAIL` ise `DONE` yoktur.
 
 ## 8. Load map
 
@@ -158,7 +149,7 @@ Token kuralı: Yalnız aktif adımın dosyasını oku. Bir dosyayı aynı çağr
 | Map sync / `map ...` | `references/05_MINDMAP_PROTOCOL.md` + `docs/learning/maps/SEMANTIC_GRAPH.md` (+ `HORIZONTAL_MAP.md`) + `references/07_INTEGRITY_CHECKS.md` §M. Depth view: yalnız ilgili artifact bölümü. |
 | Persistence | `references/06_KNOWLEDGE_PERSISTENCE.md` + `references/07_INTEGRITY_CHECKS.md` §P + registry + yalnız candidate Concept Home + yalnız ilgili Experience Map + gerekli `templates/` dosyası (`06` §25) |
 | `concept` / `library` / `experiences` / `debt` | `06` §24–§25 içindeki dosyalar. Bütün personal library yüklenmez. |
-| Integrity | `references/07_INTEGRITY_CHECKS.md` |
+| Final integrity / `integrity` | `references/07_INTEGRITY_CHECKS.md` + `07` §L.7 sırası. Personal library yalnız configured ve gerekli ise. |
 
 **Default olarak ASLA otomatik yükleme:**
 
