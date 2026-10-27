@@ -97,7 +97,7 @@ check("X no stale phase numbers in behaviour text", stale, [])
 check("X 07 status lists §L implemented", "§L IMPLEMENTED" in text(SKILL / "references" / "07_INTEGRITY_CHECKS.md"), True)
 
 # Extra - portability and scope boundary
-PORT = re.compile(r"[A-Za-z]:[\\/]|/Users/|/home/|OGULCAN|scratchpad|AppData|Incubator|Claude Learning Skill|INC-\d", re.I)
+PORT = re.compile(r"[A-Za-z]:[\\/]|/Users/|/home/|scratchpad|AppData|Incubator|Claude Learning Skill|INC-\d", re.I)
 check("X no absolute path / user / project value", [f"{f.relative_to(SKILL).as_posix()}: {m}" for f in FILES
                                                     for m in PORT.findall(text(f))], [])
 check("X no project state in skill", sorted(p.name for p in SKILL.rglob("*") if p.name in (

@@ -1,0 +1,160 @@
+{
+    "version":  "1.0.0",
+    "skill_name":  "learning",
+    "entry_point":  "SKILL.md",
+    "package_root":  ".claude/skills/learning",
+    "files":  [
+                  {
+                      "path":  "SKILL.md",
+                      "sha256":  "0f9b44bfc248aedabc7778c5e0231800796ceabcb6f016bf2b68b13feea0f4e7"
+                  },
+                  {
+                      "path":  "references/00_MASTER_SYSTEM_SPEC.md",
+                      "sha256":  "d222e5e0b8a0b5e486c0da1cf26294ea043d54f0586776c4d53ad03c060a50ec"
+                  },
+                  {
+                      "path":  "references/01_OPERATIONAL_CORE.md",
+                      "sha256":  "ffeae60c43b9420089ceb099d659a8e63c4653eb86b6440a15a019a17e119c46"
+                  },
+                  {
+                      "path":  "references/02_COVERAGE_PROTOCOL.md",
+                      "sha256":  "dd854d222e1cac334c4fcaa02f54148543779891f158184f400cfc4acbc2c636"
+                  },
+                  {
+                      "path":  "references/03_HUMAN_SYNC_PROTOCOL.md",
+                      "sha256":  "e8925185545acbd07dbe4eea4e9714214cab281e8fe83bff42791df101eaddf0"
+                  },
+                  {
+                      "path":  "references/04_ULA_PROTOCOL.md",
+                      "sha256":  "943be457445832ef7c4af1547e8127d7daf2a920ca278c8a150b9b2f9a3b255e"
+                  },
+                  {
+                      "path":  "references/05_MINDMAP_PROTOCOL.md",
+                      "sha256":  "33584ebf0d5e6db72192e5b7cec80d37ba30669d7a56a9014027b02d8a166026"
+                  },
+                  {
+                      "path":  "references/06_KNOWLEDGE_PERSISTENCE.md",
+                      "sha256":  "ea2ae34883c1b6af33b9f22eb8f31ace322347b4491a1e34e46c31b9b277cfcc"
+                  },
+                  {
+                      "path":  "references/07_INTEGRITY_CHECKS.md",
+                      "sha256":  "8265888ee53ec7c280f5f0812bb71a56832f94d303af58e66657460a2042f75a"
+                  },
+                  {
+                      "path":  "templates/CONCEPT_HOME_TEMPLATE.md",
+                      "sha256":  "71b0160ae702fa4f5367752025ee23dfa50983217ddd5363c7b0d6557f3adb3d"
+                  },
+                  {
+                      "path":  "templates/CONCEPT_POINTER_TEMPLATE.md",
+                      "sha256":  "6f68fff719a1bb0d155627392bf3596b66cabe149aaea3b34b730f3c26ef080d"
+                  },
+                  {
+                      "path":  "templates/CONCEPT_REGISTRY_TEMPLATE.md",
+                      "sha256":  "580d6adfa0f02e4cf7987fd6347da8cd8f4aa51c1c796155f760721d1da8c56c"
+                  },
+                  {
+                      "path":  "templates/COVERAGE_LEDGER_TEMPLATE.md",
+                      "sha256":  "f7c38a5370d63a0b295196fcb03072f912fccd7064ca9ce8b73650cc533d2e34"
+                  },
+                  {
+                      "path":  "templates/DECISION_RECORD_TEMPLATE.md",
+                      "sha256":  "cdbc0262291d37b77e0e208de79f634d5df3315bc0721fdb27986aaa9c208588"
+                  },
+                  {
+                      "path":  "templates/DSA_EXPERIENCE_MAP_TEMPLATE.md",
+                      "sha256":  "37202e96a6f92066e9d6e03bcb3f6bf8205a2155c69e47fe167862e6251d2c07"
+                  },
+                  {
+                      "path":  "templates/EXPERIENCE_NOTE_TEMPLATE.md",
+                      "sha256":  "de1f64528b9349b49f59279b275b5e6aa93aaac8f3c733d271b34cf09b834619"
+                  },
+                  {
+                      "path":  "templates/HUMAN_SYNC_TEMPLATE.md",
+                      "sha256":  "481fd57dd5f6ca99755a2dd88daa0411c5f79122785f769d59f3c2ff21c69191"
+                  },
+                  {
+                      "path":  "templates/KNOWLEDGE_MAP_TEMPLATE.md",
+                      "sha256":  "3d2ab731f5943fce0555dfec7d08cf7dc1ec16f33aaee3b96f60fd3f070a6696"
+                  },
+                  {
+                      "path":  "templates/LEARNING_CONFIG_TEMPLATE.md",
+                      "sha256":  "9243f9c85baf29089f19e42a430bbd68910a2745ac438c7d08a46cf99d19bfe4"
+                  },
+                  {
+                      "path":  "templates/LEARNING_PASS_TEMPLATE.md",
+                      "sha256":  "00e0fb3003043df13825d1019c22d4d372630e55353097334688817d9330920e"
+                  },
+                  {
+                      "path":  "templates/LEARNING_QUEUE_TEMPLATE.md",
+                      "sha256":  "3259e57db876368dfd3134ee31d2237634c67d30f5182696eceaeced90d2a3f8"
+                  },
+                  {
+                      "path":  "templates/LEARNING_STATE_TEMPLATE.md",
+                      "sha256":  "f0009b57f48f80661d75b25725ae35734e43fea6568fb0c61db9adb909e144e8"
+                  },
+                  {
+                      "path":  "templates/LIGHT_ULA_TEMPLATE.md",
+                      "sha256":  "ae2205167d0733cd7f7d427c70a52a574f3ed69a23b444d2349e4e8c073e6d75"
+                  },
+                  {
+                      "path":  "templates/PERSONAL_LIBRARY_INDEX_TEMPLATE.md",
+                      "sha256":  "a52adf714450ba42f029f8adbf1f08e2901d91ff84d7f00be6a94589d42c4755"
+                  },
+                  {
+                      "path":  "templates/SEMANTIC_GRAPH_TEMPLATE.md",
+                      "sha256":  "83071034154a8b3d1c85402b48b51077b7b92ba8c56d4dd8ae301dfda5f82f38"
+                  },
+                  {
+                      "path":  "templates/SYSTEM_DESIGN_EXPERIENCE_MAP_TEMPLATE.md",
+                      "sha256":  "f671197f9239d71c238c6215919b19a25e0f10fa04b419ff39653c5bceb39d42"
+                  },
+                  {
+                      "path":  "ula/CONTENT_BUILDER.md",
+                      "sha256":  "79e3e318dac9d8089bac47b9d0d3176895ae3353fbc48998faf841805f2bfeb4"
+                  },
+                  {
+                      "path":  "ula/LEARNING_ARCHITECT.md",
+                      "sha256":  "f495d1c6f2869a6734d5ecf35c3fe36c4d9724c8007401e95a6999750e89d35a"
+                  },
+                  {
+                      "path":  "ula/LEARNING_AUDITOR.md",
+                      "sha256":  "b92748227e28a2af1b90b625a961238ad759b1cd468b1538a2808cfc8e750c4d"
+                  },
+                  {
+                      "path":  "ula/ULA_SPECIFICATION.md",
+                      "sha256":  "5215279b7dca4e874151f8202e60d08ae3b49ece77c29c30cfbfb0311e6a0f3c"
+                  },
+                  {
+                      "path":  "ula/examples/HSMM_PILOT/01_ARCHITECTURE_EXAMPLE.md",
+                      "sha256":  "d1d19a3e05363ac9562ba02209a9718321b9280f1049cd45ce0932cb119a83de"
+                  },
+                  {
+                      "path":  "ula/examples/HSMM_PILOT/02_CONTENT_EXAMPLE.md",
+                      "sha256":  "f60dba2b6855419752175509a10c9d567dbe79882fa77b0bada60abd5a5860a9"
+                  },
+                  {
+                      "path":  "ula/examples/HSMM_PILOT/03_AUDIT_EXAMPLE.md",
+                      "sha256":  "3bc803bca84565fc357b370075674d551e725c6c032ccb308fb0d7ec94f03de6"
+                  },
+                  {
+                      "path":  "ula/examples/HSMM_PILOT/README.md",
+                      "sha256":  "7bd0ef801b4a59d9adaf5209d1f310243c7baf2b4295ff7ce39f62df02a3738d"
+                  },
+                  {
+                      "path":  "ula/templates/ARCHITECTURE_OUTPUT_TEMPLATE.md",
+                      "sha256":  "20384cdfe0072c586027ecd9d1f54d3a86c018fcde2260a7d0b565e9e835a571"
+                  },
+                  {
+                      "path":  "ula/templates/AUDIT_REPORT_TEMPLATE.md",
+                      "sha256":  "52fda87f692531db5456ec8c57c9fe1c1bcb84ec284777bc8d86cd5f03b09d37"
+                  },
+                  {
+                      "path":  "ula/templates/CONTENT_BUILD_TEMPLATE.md",
+                      "sha256":  "86fe7496fd67e8f5283ebd3dc8075d93642ee0a0dd6a20cf101105d1836a54a6"
+                  },
+                  {
+                      "path":  "ula/templates/PROJECT_BRIEF_TEMPLATE.md",
+                      "sha256":  "16b83593a4816f175811b56a0515f13271ccf882d02633f12bfb1ab5076314cc"
+                  }
+              ]
+}

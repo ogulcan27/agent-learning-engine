@@ -1,9 +1,10 @@
-"""Run the permanent regression suite: Phase 3-7 subsystem suites, Phase 8 E2E suite, mutation checks.
+"""Run the permanent regression suite: Phase 3-7 subsystem suites, Phase 8 E2E suite, Phase 9 distribution suite, mutation checks.
 
 Usage:
     uv run --no-project python tests/run_all.py [<skill_dir>] [--no-mutations]
 
 Standard library only. Every suite reads its rules from the skill files under test.
+The distribution suite needs Windows PowerShell 5.1+ and runs once (not inside mutation checks).
 """
 import os
 import re
@@ -13,6 +14,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent
 SUITES = ["phase3", "phase4", "phase5", "phase6", "phase7", "integration", "static"]
+DISTRIBUTION = ["distribution"]
 
 
 def run_suite(name, skill):
@@ -32,7 +34,7 @@ def main():
     skill = Path(args[0]) if args else ROOT.parent / ".claude" / "skills" / "learning"
     ok = True
     print(f"Skill under test: {skill}\n")
-    for name in SUITES:
+    for name in SUITES + DISTRIBUTION:
         passed, total, failing = run_suite(name, skill)
         ok &= passed == total and total > 0
         print(f"{name:<12} {passed}/{total} {'PASS' if passed == total and total else 'FAIL'}")

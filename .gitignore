@@ -1,1 +1,10 @@
 __pycache__/
+*.pyc
+temp/
+
+# Release package: built by scripts/build-release.ps1, published as a GitHub Release asset, not tracked.
+dist/
+
+# Installer working directories (removed on success; may remain after a crash).
+.claude/.learning-install-*/
+.claude/.learning-uninstall-*/
