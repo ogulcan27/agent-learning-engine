@@ -1,16 +1,17 @@
 # Changelog
 
-Format: [Semantic Versioning](https://semver.org/) `MAJOR.MINOR.PATCH`.
+All notable changes to Agent Learning Engine are documented here. The project follows [Semantic Versioning](https://semver.org/).
 
 ## 1.0.0
 
-İlk stable sürüm.
+First stable release. Current integration: Claude Code (runtime skill `learning`).
 
-- Manual `/learning`: yalnız kullanıcı çağırır. Normal çalışma sırasında Learning OFF.
-- Coverage Engine: work unit discovery, gap detection, scope, unit bazında coverage ledger.
-- Human Synchronization: AI ile yapılan değişikliğin kısa insan özeti. Learning Event ve Knowledge Debt.
-- Light / Full ULA: yalnız MUST UNDERSTAND + knowledge gap için öğretim içeriği.
-- Semantic Graph / Horizontal Map: project içi kavram graph'ı ve `map` görünümleri.
-- Concept Home / Experience Persistence: One Concept — One Home, Personal Technical Library, write lock.
-- Final Integrity: cross-layer check, `PASS` / `PASS_WITH_WARNINGS` / `FAIL`, derived repair.
-- Project / Personal installer: install, update, uninstall, verify; manifest + SHA256; atomic install ve rollback.
+- Manual, project-driven learning workflow started with `/learning`.
+- Coverage Engine: work unit discovery, gap detection, and per-unit coverage ledger.
+- Human Synchronization: short summaries of what AI-assisted work changed and why.
+- Light / Full ULA: targeted learning content only for concepts that matter.
+- Semantic Graph and knowledge map views.
+- Concept Home and experience persistence, including the Personal Technical Library.
+- Cross-layer integrity checks with derived-file repair.
+- Project and Personal installation.
+- Atomic update and rollback, uninstall, and install verification.

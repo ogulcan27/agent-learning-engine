@@ -1,223 +1,212 @@
-# Claude Learning Skill
+# Agent Learning Engine
 
-Version: see [`VERSION`](VERSION) · Changelog: [`CHANGELOG.md`](CHANGELOG.md) · Release notes: [`docs/RELEASE_NOTES_v1.0.0.md`](docs/RELEASE_NOTES_v1.0.0.md)
+Turn AI-assisted project work into knowledge you can understand, retain, and reuse.
 
-## What is Claude Learning Skill?
+Agent Learning Engine is a project-driven learning system for AI-assisted development. It converts completed project work into structured understanding, targeted learning, semantic knowledge, and reusable technical experience.
 
-Claude Learning Skill, Claude Code için manual bir learning workflow'dur (`/learning`).
+Agent Learning Engine is designed as a platform-neutral learning architecture. **Version 1.0.0 ships with a Claude Code skill integration**: you install the `learning` skill and start it with `/learning`.
 
-AI ile bir project üzerinde çalışırsınız. Kod hızlı değişir. Siz her değişikliği anlamayabilirsiniz.
-`/learning` bu açığı kapatır:
+```powershell
+# Install into the current project (works once v1.0.0 is published)
+& ([scriptblock]::Create((Invoke-RestMethod 'https://raw.githubusercontent.com/ogulcan27/agent-learning-engine/v1.0.0/scripts/install.ps1'))) -Scope Project -Repository ogulcan27/agent-learning-engine -Ref v1.0.0
+```
 
-- Project evidence üzerinden ne değiştiğini bulur (git commit, plan / phase doc, issue key).
-- Değişikliği size kısa ve anlaşılır biçimde özetler.
-- Yalnız gerçekten anlamanız gereken konu için öğretim içeriği üretir.
-- Öğrendiğiniz kavramı project'ler arasında yeniden kullanılabilir biçimde saklar.
+Then, in Claude Code: `/learning`
 
-Ana öğrenme ekseni System Design'dır. DSA yalnız hesaplama açısından ilgili olduğunda girer.
-Kullanıcı içeriği Türkçedir. Technical term İngilizce canonical biçimde kalır.
+## What It Does
 
-## Core Architecture
+When an AI agent writes much of your code, the project moves faster than your understanding of it. Agent Learning Engine closes that gap on demand:
+
+- It finds the project work you have not reviewed yet, using persistent evidence such as git commits, plan or phase documents, and issue keys.
+- It summarizes what changed and why, in a short, human-readable form.
+- It teaches only the concepts you actually need, and only to the depth you need.
+- It stores what you learned as reusable knowledge that carries across projects.
+
+System Design is the primary learning axis. Data structures and algorithms appear only when they are computationally relevant to the work.
+
+## How It Works
+
+```text
+Project Work
+    ↓
+/learning
+    ↓
+Coverage                         which work units have not been learned yet?
+    ↓
+Human Synchronization            what changed, and why?
+    ↓
+Learning Events                  which changes are worth learning?
+    ↓
+Light / Full ULA when needed     targeted teaching material
+    ↓
+Semantic Graph                   concepts and their relationships
+    ↓
+Concept Home / Experience Notes  reusable knowledge
+    ↓
+Final Integrity                  PASS / PASS_WITH_WARNINGS / FAIL
+```
+
+Routine changes are marked as not learning-relevant. Nothing is taught just because it changed.
+
+## Core Learning Model
 
 ```text
 Human Synchronization
-→ understand what happened
+→ Understand what the AI-assisted project work actually changed and why.
 
 Light / Full ULA (Universal Learning Architecture)
-→ learn what matters
+→ Learn only the concepts that matter and only to the depth required.
 
 Semantic Graph + Persistence
-→ organize and retain reusable knowledge
+→ Connect reusable concepts, decisions, and project experience into persistent knowledge.
 ```
+
+Light ULA produces a short learning note. Full ULA is a three-stage process (Architect, Builder, Auditor) and asks for your approval of the learning architecture before building content.
 
 ## Requirements
 
-| Gerekli | Ne için | Not |
-|---|---|---|
-| Claude Code | Skill'i çalıştırmak | Project / personal skills desteği. Claude Code 2.1.311 ile test edildi. |
-| Windows PowerShell 5.1+ | Installer script'leri | Windows PowerShell 5.1 ile test edildi. PowerShell 7 test edilmedi. |
-| Git | Opsiyonel | Install için gerekmez. Skill, varsa git history'yi evidence olarak okur. |
-| Python 3 | Yalnız development testleri | Standard library. **Python is not required to use the skill.** |
+| Component | Requirement |
+|---|---|
+| Runtime | Claude Code with project / personal skills (tested with Claude Code 2.1.311) |
+| Installer | Windows PowerShell 5.1+ (tested on 5.1; PowerShell 7, macOS and Linux are untested) |
+| Git | Optional. Not needed to install. When present, git history is used as project evidence. |
+| Development tests | Python 3, standard library only |
 
-Runtime skill yalnız Markdown dosyalarından oluşur. Binary, dependency veya network çağrısı yoktur.
+Python is not required to use the learning skill itself. The skill consists only of Markdown files: no binaries, no dependencies, no network calls.
 
 ## Installation
 
-İki canonical install scope vardır:
+There are two installation scopes:
 
-| Scope | Target | Kapsam |
+| Scope | Location | Available in |
 |---|---|---|
-| Project | `<project>/.claude/skills/learning/` | Yalnız bu repository |
-| Personal | `~/.claude/skills/learning/` | Bu makinedeki bütün local Claude Code project'leri |
+| Project | `<project>/.claude/skills/learning/` | That repository only |
+| Personal | `~/.claude/skills/learning/` | All local Claude Code projects on this machine |
 
-Üç kurulum yöntemi vardır. En denetlenebilir yöntem A'dır.
+The remote commands below work only after the `v1.0.0` tag and release have been published.
 
-### A. Clone + install (recommended)
+### Project Installation
+
+The most inspectable path is to clone the repository, review `scripts/install.ps1`, and run it locally:
 
 ```powershell
-git clone https://github.com/<OWNER>/<REPO>.git
-cd <REPO>
+git clone https://github.com/ogulcan27/agent-learning-engine.git
+cd agent-learning-engine
 git checkout v1.0.0
-# Review scripts\install.ps1 first.
 
-# Project
 powershell -ExecutionPolicy Bypass -File scripts\install.ps1 -Scope Project -ProjectPath C:\path\to\your-project
+```
 
-# Personal
+If `-ProjectPath` is omitted, the current directory is used. `-ExecutionPolicy Bypass` applies only to that single PowerShell process.
+
+### Personal Installation
+
+From the cloned repository:
+
+```powershell
 powershell -ExecutionPolicy Bypass -File scripts\install.ps1 -Scope Personal
 ```
 
-- `-ProjectPath` verilmezse current directory kullanılır.
-- `-ExecutionPolicy Bypass` yalnız bu process için geçerlidir. Sistem policy'sini değiştirmez.
+This installs the skill into `~/.claude/skills/learning/` and makes it available to all local Claude Code projects.
 
-### B. Release package
+### Quick Install
 
-1. GitHub Release sayfasından `claude-learning-skill-v1.0.0.zip`, `SHA256SUMS.txt` ve aynı tag'deki `scripts/install.ps1` dosyasını indirin.
-2. Hash'i kontrol edin:
+Running a remote script executes code from the referenced repository. For the most inspectable installation path, clone the repository, review `scripts/install.ps1`, and run it locally. Always pin `-Ref` to a tag or commit, not a branch.
 
-   ```powershell
-   (Get-FileHash .\claude-learning-skill-v1.0.0.zip -Algorithm SHA256).Hash.ToLower()
-   Get-Content .\SHA256SUMS.txt
-   ```
-
-3. Script'i inceleyin. Sonra çalıştırın:
-
-   ```powershell
-   powershell -ExecutionPolicy Bypass -File .\install.ps1 -Scope Project -ProjectPath C:\path\to\your-project -Archive .\claude-learning-skill-v1.0.0.zip
-   ```
-
-ZIP içeriği yalnız `.claude/skills/learning/` ve `distribution/manifest.json` dosyasıdır.
-
-### C. Quick Install (one-line PowerShell)
-
-> Remote script çalıştırmadan önce kaynağı incelemek daha güvenlidir. Bu yöntem kolaylık içindir. İnceleme için A veya B yöntemini kullanın.
-
-Safer: önce indirin, inceleyin, sonra çalıştırın:
+Project (installs into `<current-project>/.claude/skills/learning/`):
 
 ```powershell
-Invoke-WebRequest https://raw.githubusercontent.com/<OWNER>/<REPO>/v1.0.0/scripts/install.ps1 -OutFile install.ps1
-notepad install.ps1
-powershell -ExecutionPolicy Bypass -File .\install.ps1 -Scope Project -Repository <OWNER>/<REPO> -Ref v1.0.0
+& ([scriptblock]::Create((Invoke-RestMethod 'https://raw.githubusercontent.com/ogulcan27/agent-learning-engine/v1.0.0/scripts/install.ps1'))) -Scope Project -Repository ogulcan27/agent-learning-engine -Ref v1.0.0
 ```
 
-One-line, Project (current directory):
+Personal (installs into `~/.claude/skills/learning/`):
 
 ```powershell
-& ([scriptblock]::Create((Invoke-RestMethod 'https://raw.githubusercontent.com/<OWNER>/<REPO>/v1.0.0/scripts/install.ps1'))) -Scope Project -Repository <OWNER>/<REPO> -Ref v1.0.0
+& ([scriptblock]::Create((Invoke-RestMethod 'https://raw.githubusercontent.com/ogulcan27/agent-learning-engine/v1.0.0/scripts/install.ps1'))) -Scope Personal -Repository ogulcan27/agent-learning-engine -Ref v1.0.0
 ```
 
-One-line, Personal:
+The installer downloads the source archive for the given ref, verifies every file against `distribution/manifest.json`, and only then installs.
+
+### Release Package
+
+Each GitHub Release provides `agent-learning-engine-v1.0.0.zip` and `SHA256SUMS.txt`. Check the hash, then install with the `install.ps1` from the same tag:
 
 ```powershell
-& ([scriptblock]::Create((Invoke-RestMethod 'https://raw.githubusercontent.com/<OWNER>/<REPO>/v1.0.0/scripts/install.ps1'))) -Scope Personal -Repository <OWNER>/<REPO> -Ref v1.0.0
+(Get-FileHash .\agent-learning-engine-v1.0.0.zip -Algorithm SHA256).Hash.ToLower()
+Get-Content .\SHA256SUMS.txt
+
+powershell -ExecutionPolicy Bypass -File .\install.ps1 -Scope Project -ProjectPath C:\path\to\your-project -Archive .\agent-learning-engine-v1.0.0.zip
 ```
 
-- `-Ref` bir tag veya commit olmalıdır. Branch adı kullanmayın; içerik değişebilir.
-- Installer `https://github.com/<OWNER>/<REPO>/archive/<Ref>.zip` arşivini indirir.
-- Bu syntax Windows PowerShell 5.1 ile test edildi (test HTTP server ile).
+### Installer behavior
 
-### Installer güvenlik kuralları
+- If hash verification fails, nothing is written.
+- If the same package is already installed, the installer reports `ALREADY INSTALLED`.
+- If a different version is installed, the installer stops. Use `update.ps1` (or `install.ps1 -Force`) to replace it.
+- Installation is staged and verified first. On failure the previous install is restored; no partial skill is left behind.
+- The installer only owns `.claude/skills/learning/`. It never touches `docs/learning/`, the Personal Technical Library, `CLAUDE.md`, your source code, git history, other skills, or other `.claude` settings.
 
-```text
-DOWNLOAD → TEMP STAGING → MANIFEST / HASH VERIFY → TARGET CHECK → ATOMIC INSTALL
-```
+### Project and Personal at the same time
 
-- Hash doğrulaması geçmezse target'a hiçbir şey yazılmaz.
-- Aynı package zaten kuruluysa: `ALREADY INSTALLED`.
-- Farklı bir skill kuruluysa: installer durur. Değiştirmek için `update.ps1` veya `install.ps1 -Force` kullanın.
-- Hata olursa eski install geri yüklenir (rollback). Yarım skill kalmaz.
-- Installer yalnız `.claude/skills/learning/` dizininin sahibidir. `docs/learning/`, Personal Technical Library, `CLAUDE.md`, application source, git history, başka skill ve başka `.claude` ayarına dokunmaz.
+Claude Code resolves skills with the same name as **enterprise > personal > project**. If `learning` exists in both scopes, Claude Code uses the Personal one.
+
+Use one installation scope for `learning` unless you intentionally manage version precedence.
+
+### Other platforms
+
+The installer is tested only on Windows PowerShell. On macOS or Linux you can copy `.claude/skills/learning/` from a release manually; this path is untested.
 
 ## Usage
 
-Normal çalışma sırasında skill kapalıdır. Passive tracking yoktur.
+The learning workflow runs only when you explicitly invoke `/learning`. Normal project work never starts it, and there is no passive tracking. This is an intentional design property: the skill sets `disable-model-invocation: true`, so the agent cannot start it on its own.
 
-```text
-Normal project work → Learning OFF
-/learning           → Learning ON
-```
+On the first `/learning` run in a project, the skill detects that no learning state exists and asks for your approval before creating `docs/learning/`. The installer never creates this directory.
 
-Claude bu skill'i kendisi çağıramaz (`disable-model-invocation: true`). Yalnız siz `/learning` yazınca çalışır.
+## Commands
 
-İlk `/learning` çağrısında skill project state'in olmadığını görür. Onayınızı ister. Onay verirseniz `docs/learning/` oluşturulur. Installer bu dizini oluşturmaz.
-
-## Main Commands
-
-| Komut | Ne yapar |
+| Command | Description |
 |---|---|
-| `/learning` | Tam akış. Açık work unit varsa scope sorar. |
-| `/learning latest` | Yalnız son work unit. |
-| `/learning pending` | Ertelenmiş (`DEFERRED`) veya yarım (`PARTIAL`) work unit'ler. |
-| `/learning catch-up` | Bütün açık gap'ler. |
-| `/learning resume` | Yarım kalan Learning Pass'e devam eder. |
-| `/learning map` | Root Knowledge Map. |
-| `/learning map <node-id>` | Bir node'a zoom. `L1`–`L4` ile depth view. |
-| `/learning concept <concept-id>` | Concept Home ve project pointer. |
-| `/learning library` | Personal Technical Library durumu ve index. |
-| `/learning experiences` | Project Experience Note listesi. |
-| `/learning debt` | Açık Knowledge Debt listesi. |
-| `/learning integrity` | Final Integrity check. Yalnız derived artifact onarımı önerir. |
+| `/learning` | Run the full workflow; asks for scope if several work units are open. |
+| `/learning latest` | Learn from the most recent work unit only. |
+| `/learning pending` | Return to deferred or partially learned work units. |
+| `/learning catch-up` | Work through all open learning gaps. |
+| `/learning resume` | Continue an unfinished learning pass. |
+| `/learning map` | Show the root knowledge map. |
+| `/learning map <node-id>` | Zoom into one node of the map (add `L1`–`L4` for a depth view). |
+| `/learning concept <concept-id>` | Show a concept's home page and its project pointer. |
+| `/learning library` | Show Personal Technical Library status and index. |
+| `/learning experiences` | List project experience notes. |
+| `/learning debt` | List open knowledge debt. |
+| `/learning integrity` | Run the final integrity check and suggest repairs for derived files. |
 
-Diğer argümanlar: `show skipped`, `new`, `abandon <pass-id>`, `map debt`, `map sync`, `<work-unit-id>`. Tam liste: `.claude/skills/learning/SKILL.md` §6.
+Further arguments (`show skipped`, `new`, `abandon <pass-id>`, `map debt`, `map sync`, `<work-unit-id>`) are listed in `.claude/skills/learning/SKILL.md`.
 
-## How /learning Works
+## Skill State vs Project State
 
-```text
-/learning
-↓
-Coverage            → hangi work unit öğrenilmedi?
-↓
-Human Sync          → ne değişti, neden?
-↓
-Learning Event      → öğrenmeye değer olan değişiklik
-↓
-Light / Full ULA    → yalnız MUST UNDERSTAND + knowledge gap varsa
-↓
-Semantic Graph      → kavramlar ve ilişkiler
-↓
-Concept Home / Experience → yeniden kullanılabilir bilgi
-↓
-Integrity           → PASS / PASS_WITH_WARNINGS / FAIL
-```
-
-- Coverage, work unit history'yi `/learning` anında project evidence üzerinden yeniden kurar.
-- Light ULA kısa bir öğretim notudur. Full ULA üç aşamalıdır (Architect → Builder → Auditor) ve mimari için onayınızı ister.
-- Gereksiz öğretim yoktur. Rutin değişiklik `NOT_LEARNING_RELEVANT` olur.
-
-## State vs Skill
-
-```text
-SKILL INSTALL / UPDATE ≠ LEARNING STATE RESET
-```
-
-| Katman | Konum | Yazan |
+| Layer | Location | Written by |
 |---|---|---|
-| Skill (engine) | `.claude/skills/learning/` | Installer. Runtime'da read-only. |
-| Project state | `<project>/docs/learning/` | `/learning` |
-| Personal state | `personal_library_path` (project config içinde) | `/learning`, yalnız yapılandırılmışsa |
+| Skill engine | `.claude/skills/learning/` | Installer only; read-only at runtime |
+| Project learning state | `docs/learning/` in your project | `/learning` |
+| Personal Technical Library | Configured separately through `personal_library_path` | `/learning`, only when configured |
 
-Update yalnız skill engine'i değiştirir. Project state ve personal library korunur.
-`docs/learning/` dizinini kendi project repository'nizde commit etmek sizin kararınızdır.
+Updating or uninstalling the skill does not delete project learning state or the Personal Technical Library. Whether you commit `docs/learning/` to your own repository is your choice.
 
 ## Personal Technical Library
 
-- Project'ler arasında paylaşılan kavram deposudur: One Concept — One Home.
-- Konumu `docs/learning/state/LEARNING_CONFIG.md` içindeki `personal_library_path` değeridir. Hard-coded değildir.
-- Yapılandırılmadıysa skill sorar: yapılandır, `LOCAL_TEMPORARY` (yalnız bu project) veya ertele.
-- Yazma işlemi tek makine write lock ve all-or-nothing transaction ile yapılır.
-- Installer ve uninstaller bu dizine hiçbir zaman dokunmaz.
+The Personal Technical Library is a cross-project knowledge store built on the principle *One Concept, One Home*: each concept has one canonical page, and projects link to it.
+
+- Its location is the `personal_library_path` value in `docs/learning/state/LEARNING_CONFIG.md`. Nothing is hard-coded.
+- If it is not configured, the skill asks you to configure it, keep knowledge local to the project (`LOCAL_TEMPORARY`), or defer the decision.
+- Writes use a single-machine write lock and an all-or-nothing transaction.
 
 ## Updating
 
 ```powershell
 powershell -ExecutionPolicy Bypass -File scripts\update.ps1 -Scope Project -ProjectPath C:\path\to\your-project
-powershell -ExecutionPolicy Bypass -File scripts\update.ps1 -Scope Personal -Repository <OWNER>/<REPO> -Ref v1.0.1
+powershell -ExecutionPolicy Bypass -File scripts\update.ps1 -Scope Personal -Repository ogulcan27/agent-learning-engine -Ref <tag>
 ```
 
-- Mevcut install gerekir.
-- Akış: stage → verify → eski skill backup → yeni skill → verify → backup sil. Hata olursa rollback.
-- 1.0.0 için state migration yoktur. Gelecekte breaking state değişikliği MAJOR version ile gelir ve release notes içinde belirtilir.
-- Update sonrası açık Claude Code session'ını yeniden başlatın.
+An update requires an existing install and replaces only the skill engine, atomically and with rollback. Version 1.0.0 has no state migration. Restart any open Claude Code session after updating.
 
 ## Uninstalling
 
@@ -226,96 +215,88 @@ powershell -ExecutionPolicy Bypass -File scripts\uninstall.ps1 -Scope Project -P
 powershell -ExecutionPolicy Bypass -File scripts\uninstall.ps1 -Scope Personal
 ```
 
-Yalnız skill dizini silinir. Çıktı:
+Only the skill directory is removed. The script confirms:
 
 ```text
 Learning state retained.
 Personal Technical Library retained.
 ```
 
-Learning state'i silmek isterseniz `docs/learning/` dizinini kendiniz silin.
+To discard project learning state, delete `docs/learning/` yourself.
 
-## Verifying an install
+## Verification
 
 ```powershell
 powershell -ExecutionPolicy Bypass -File scripts\verify-install.ps1 -Scope Project -ProjectPath C:\path\to\your-project
 ```
 
-Kontrol: target var, `SKILL.md` var, file set manifest ile aynı, her dosyanın SHA256 değeri aynı, skill içinde project state yok. Sonuç: `PASS` veya `FAIL`.
+The check confirms that the skill exists, `SKILL.md` is present, the file set matches the manifest, every SHA256 matches, and no project state has been written inside the skill directory. The result is `PASS` or `FAIL`.
 
-### Project ve Personal aynı anda
+## Development and Testing
 
-Claude Code resmi kuralı: aynı isimde skill birden çok seviyede varsa **personal, project'ten önce gelir** (enterprise > personal > project). Yani personal `learning` kuruluysa, project-local `learning` kullanılmaz.
-
-V1 önerisi:
-
-- Bir scope seçin. Aynı makinede project ve personal install'ı birlikte kullanmayın.
-- Project'e özel version gerekiyorsa personal install'ı kaldırın.
-- İkisini birlikte kullanıyorsanız ikisinin de aynı version olduğunu `verify-install.ps1` ile kontrol edin.
-
-## Testing
-
-Development repository için. Runtime skill'in parçası değildir.
+The test suite lives in the development repository and is not part of the installed skill.
 
 ```text
 uv run --no-project python tests/run_all.py
 ```
 
-`uv` yoksa (Python 3 PATH'te ise):
+Without `uv`, with Python 3 on your `PATH`:
 
 ```text
 python tests/run_all.py
 ```
 
-- Yalnız Python standard library. Dependency yok.
-- Suite'ler: subsystem modelleri (phase3–phase7), end-to-end integration, static audit, distribution (installer), mutation check.
-- Distribution suite Windows PowerShell gerektirir. Gerçek user home veya gerçek project'e yazmaz.
-- Release package üretmek: `powershell -ExecutionPolicy Bypass -File scripts\build-release.ps1`
+- Standard library only; no dependencies.
+- Suites: subsystem models, end-to-end integration, static audit, distribution (installer), and mutation checks.
+- The distribution suite requires Windows PowerShell and never writes to your real home directory or projects.
+- Build the release package with `powershell -ExecutionPolicy Bypass -File scripts\build-release.ps1`.
+
+## Current Limitations
+
+- **Language.** Version 1.0.0 currently uses Turkish for the learning workflow and generated learning explanations. Technical terms stay in canonical English. Language configuration is not yet part of V1.
+- **Platform.** Claude Code is the only supported integration. Other agents (for example Codex, Gemini CLI, or Cursor) are not supported; they are possible future adapters, not current features.
+- **Manual only.** There is no automatic or background learning.
+- **Installer.** Tested only on Windows PowerShell 5.1.
+- **Single machine.** The Personal Technical Library write lock is local; there is no remote or multi-user library.
+- **No global graph.** The semantic graph is per project. There is no cross-project graph or HTML view.
+- **Judgment.** Some decisions, such as whether two concepts are equivalent, rely on the agent's judgment. When unsure, the skill asks you.
+- **Cost.** Full ULA uses significant tokens; it runs only for concepts that need it.
+
+## Security
+
+- The skill is Markdown instructions only. It runs no code of its own and makes no network requests.
+- Remote installation downloads and runs a PowerShell script. Review it first and pin a tag or commit.
+- SHA256 verification against the manifest protects package integrity: it detects corrupted, incomplete, or modified files. It is not a cryptographic publisher-authentication system, because the manifest comes from the same source. Trust in the repository itself is still required.
+- For release archives, compare the ZIP hash with `SHA256SUMS.txt`.
 
 ## Versioning
 
-Semantic Versioning: `MAJOR.MINOR.PATCH`.
+Agent Learning Engine follows Semantic Versioning (`MAJOR.MINOR.PATCH`):
 
 ```text
-MAJOR → breaking state / protocol compatibility change
+MAJOR → breaking state or protocol compatibility change
 MINOR → backward-compatible capability
 PATCH → compatible fix
 ```
 
-## Limitations
-
-- Manual only. Otomatik veya arka planda öğrenme yoktur.
-- Installer Windows PowerShell için yazıldı ve test edildi. macOS / Linux için `.claude/skills/learning/` dizinini elle kopyalayın.
-- Personal library write lock tek makine içindir. Remote / multi-user library yoktur.
-- Global cross-project Semantic Graph ve HTML görünüm yoktur.
-- Kavram eşdeğerliği gibi bazı kararlar Claude judgment'ıdır. Belirsiz durumda skill size sorar.
-- Full ULA token açısından maliyetlidir. Yalnız gerekli konular için çalışır.
-
-## Security
-
-- Skill yalnız Markdown talimatıdır. Kendi başına kod çalıştırmaz ve network'e erişmez.
-- Remote install bir PowerShell script'i indirir ve çalıştırır. Önce kaynağı inceleyin. Sabit bir tag veya commit kullanın.
-- Installer her dosyanın SHA256 değerini manifest ile doğrular. Bu kontrol bozuk veya eksik package'i yakalar. Manifest aynı kaynaktan gelir; bu yüzden kaynağın kendisine güvenmeniz gerekir.
-- Release ZIP için `SHA256SUMS.txt` ile karşılaştırın.
-
-## License
-
-LICENSE: NOT SELECTED. Lisans seçilmeden public repository içeriğini başkalarının yeniden kullanma hakları belirsizdir.
+See [`CHANGELOG.md`](CHANGELOG.md) and [`docs/RELEASE_NOTES_v1.0.0.md`](docs/RELEASE_NOTES_v1.0.0.md).
 
 ## Repository Structure
 
 ```text
-.claude/skills/learning/   RUNTIME PACKAGE (dağıtılan tek ürün)
-  SKILL.md                 entry point (/learning router)
-  references/              protocol 00–07
-  templates/               state ve artifact template'leri
-  ula/                     Universal Learning Architecture rolleri
-scripts/                   install, update, uninstall, verify, build-release
-distribution/manifest.json runtime file listesi + SHA256
-tests/                     regression + distribution suite (development)
-docs/                      release notes, release checklist
-docs/audit/                phase audit raporları (development)
+.claude/skills/learning/     Runtime package (the only thing that gets installed)
+  SKILL.md                   Entry point and /learning router
+  references/                Protocol files
+  templates/                 State and artifact templates
+  ula/                       Universal Learning Architecture roles
+scripts/                     install, update, uninstall, verify, build-release
+distribution/manifest.json   Runtime file list with SHA256 hashes
+tests/                       Regression and distribution test suites
+docs/                        Release notes and release checklist
+docs/audit/                  Development audit records
 VERSION, CHANGELOG.md
 ```
 
-Development repository source of truth'tur. Installer yalnız runtime package'i target'a kopyalar.
+## License
+
+No license has been selected yet. Until a license is added, no reuse rights are granted beyond what GitHub's terms allow.

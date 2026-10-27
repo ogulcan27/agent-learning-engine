@@ -1,48 +1,54 @@
-# Claude Learning Skill v1.0.0 — Release Notes
+# Agent Learning Engine v1.0.0
+
+Turn AI-assisted project work into knowledge you can understand, retain, and reuse.
+
+- **Current integration:** Claude Code
+- **Runtime skill:** `learning` (invoked with `/learning`)
 
 ## Highlights
 
-- `/learning`: AI ile yapılan project çalışmasını anlamak için manual learning workflow.
-- Coverage: hangi work unit'in öğrenilmediğini project evidence üzerinden bulur.
-- Human Synchronization: ne değişti ve neden, kısa özet.
-- Light / Full ULA: yalnız gerçekten gerekli konu için öğretim içeriği.
-- Semantic Graph ve Knowledge Map: kavramlar ve ilişkiler.
-- Personal Technical Library: kavram project'ler arasında tek bir Home'da saklanır.
-- Final Integrity: her Learning Pass sonunda bütün state tutarlılık kontrolü.
-- Installer: Project ve Personal scope, hash doğrulama, atomic install, rollback.
+- **Manual learning workflow.** Run `/learning` when you want to catch up on what your AI-assisted work changed. Nothing runs in the background.
+- **Coverage.** Finds unlearned work units from persistent project evidence such as git commits, plan documents, and issue keys.
+- **Human Synchronization.** Short summaries of what changed and why.
+- **Light / Full ULA.** Teaching material only for concepts you need, at the depth you need.
+- **Semantic Graph.** A per-project concept graph with knowledge map views.
+- **Personal Technical Library.** Each concept lives in one canonical home that is reused across projects.
+- **Final Integrity.** Every learning pass ends with a cross-layer consistency check.
+- **Installer.** Project and Personal scopes, SHA256 verification, atomic install and update, rollback on failure.
 
 ## Installation
 
-Ayrıntı: `README.md` → Installation.
+See the [README](../README.md#installation) for full instructions.
 
-| Yöntem | Komut özeti |
+| Method | Summary |
 |---|---|
-| Clone + install | `scripts\install.ps1 -Scope Project` veya `-Scope Personal` |
-| Release package | `install.ps1 -Archive claude-learning-skill-v1.0.0.zip` |
-| One-line | `install.ps1` raw URL + `-Repository <OWNER>/<REPO> -Ref v1.0.0` |
+| Clone and install | `scripts\install.ps1 -Scope Project` or `-Scope Personal` |
+| Release package | `install.ps1 -Archive agent-learning-engine-v1.0.0.zip` |
+| Quick install | `install.ps1` from the raw URL with `-Repository ogulcan27/agent-learning-engine -Ref v1.0.0` |
 
-Release asset hash: `SHA256SUMS.txt`.
+Release assets: `agent-learning-engine-v1.0.0.zip` and `SHA256SUMS.txt`.
 
 ## Compatibility
 
-- Claude Code: project ve personal skills desteği. Claude Code 2.1.311 ile test edildi.
-- Installer: Windows PowerShell 5.1 ile test edildi.
-- Skill çalışması için Python, Git veya başka dependency gerekmez.
-- Aynı isimde personal ve project skill varsa Claude Code personal olanı kullanır.
+- Claude Code with project / personal skills support (tested with 2.1.311). No other agent platform is supported in this release.
+- Installer tested on Windows PowerShell 5.1.
+- Using the skill requires no Python, Git, or other dependency.
+- If `learning` is installed in both Personal and Project scope, Claude Code uses the Personal one.
 
 ## Known Limitations
 
-- Manual only. Passive tracking yoktur.
-- Installer yalnız Windows PowerShell üzerinde test edildi. Diğer platformlarda skill dizinini elle kopyalayın.
-- Personal library write lock tek makine içindir.
-- Global cross-project Semantic Graph, HTML görünüm ve remote library yoktur.
-- Kavram eşdeğerliği gibi kararlar Claude judgment'ıdır. Belirsiz durumda kullanıcıya sorulur.
+- The learning workflow and generated explanations are in Turkish. Language configuration is not yet available.
+- Manual only; there is no passive tracking.
+- The installer is untested on PowerShell 7, macOS, and Linux. On those systems, copy the skill directory manually.
+- The Personal Technical Library write lock is single-machine.
+- No global cross-project graph, HTML view, or remote library.
+- Some decisions, such as concept equivalence, rely on the agent's judgment; the skill asks you when unsure.
 
 ## Upgrade Notes
 
-- İlk sürüm. Önceki sürümden geçiş yoktur.
-- Sonraki sürümlerde `scripts\update.ps1` yalnız skill engine'i değiştirir. `docs/learning/` ve Personal Technical Library korunur.
-- Update sonrası açık Claude Code session'ını yeniden başlatın.
+- This is the first release; there is nothing to migrate.
+- Future updates via `scripts\update.ps1` replace only the skill engine. `docs/learning/` and the Personal Technical Library are preserved.
+- Restart any open Claude Code session after updating.
 
 ## Verification
 
@@ -50,4 +56,4 @@ Release asset hash: `SHA256SUMS.txt`.
 powershell -ExecutionPolicy Bypass -File scripts\verify-install.ps1 -Scope Project -ProjectPath C:\path\to\your-project
 ```
 
-Beklenen: `PASS`. Kontrol: file set ve her dosyanın SHA256 değeri `distribution/manifest.json` ile aynıdır.
+Expected result: `PASS`. The file set and the SHA256 of every file match `distribution/manifest.json`.

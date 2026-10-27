@@ -1,6 +1,6 @@
 <#
 .SYNOPSIS
-    Remove the Claude Learning Skill from one scope.
+    Remove the Agent Learning Engine learning skill from one scope.
 
 .DESCRIPTION
     Removes only <base>/.claude/skills/learning/.

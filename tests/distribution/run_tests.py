@@ -76,7 +76,7 @@ def build(src, out=None):
 
 def zip_of(src):
     v = (src / "VERSION").read_text(encoding="utf-8").strip()
-    return src / "dist" / f"claude-learning-skill-v{v}.zip"
+    return src / "dist" / f"agent-learning-engine-v{v}.zip"
 
 
 def project(name, state=True):

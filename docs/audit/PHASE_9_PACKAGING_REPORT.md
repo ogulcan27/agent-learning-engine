@@ -12,7 +12,7 @@
 - Installer, updater, uninstaller, verifier, release build eklendi.
 - Kalıcı distribution suite: 80/80 PASS. Full regression 557/557 PASS, mutation 18/18 CAUGHT.
 - Gerçek Claude Code smoke PASS (OI-01 kapandı, smoke sınırında).
-- GitHub remote yok: `GITHUB_REMOTE_NOT_CONFIGURED`. README `<OWNER>/<REPO>` placeholder kullanır.
+- GitHub remote yok: `GITHUB_REMOTE_NOT_CONFIGURED`. README `<OWNER>/<REPO>` placeholder kullanır. (Branding sonrası: `origin` yapılandırıldı, README gerçek repository kullanır; bkz. Branding alignment.)
 - Commit, push, tag, GitHub Release yapılmadı.
 
 ## 2. V1 Package
@@ -20,7 +20,7 @@
 | Alan | Değer |
 |---|---|
 | Runtime package | `.claude/skills/learning/` (38 dosya, yalnız `.md`) |
-| Release ZIP | `dist/claude-learning-skill-v1.0.0.zip` |
+| Release ZIP | `dist/agent-learning-engine-v1.0.0.zip` |
 | ZIP SHA256 | `e9f968189405f293b6f17b470f9e3fc77fc180578f79316656000db1166ab1cf` |
 | ZIP içeriği | `.claude/skills/learning/**` (38) + `distribution/manifest.json` |
 | Build | `scripts/build-release.ps1`. Ordinal sıra, sabit timestamp, `/` separator → deterministic. İki build aynı hash. |
@@ -205,6 +205,13 @@ Karar: `StudySystem_WithAI.txt` ve `Universal_Learning_Architecture/` working tr
 | §26 gerçek precedence testi | Docs ile doğrulandı; ampirik test yapılmadı | Ampirik test gerçek `~/.claude/skills/` içine yazmayı gerektirir. Yasak. |
 | §23 `python tests/run_all.py` | Doğrudan CPython yorumlayıcısı ile çalıştırıldı | Bu makinede `python` PATH'te yok. |
 
+### Branding alignment (Phase 9 sonrası)
+
+- Public product adı: **Agent Learning Engine**. Repository adı önerisi: `agent-learning-engine`.
+- Release asset: `agent-learning-engine-v1.0.0.zip`. Eski `claude-learning-skill-v1.0.0.zip` kullanılmaz.
+- Runtime identity değişmedi: `.claude/skills/learning/`, `/learning`, manifest `skill_name = learning`.
+- V1 platform: yalnız Claude Code. Başka platform desteği iddia edilmez.
+
 ## 21. Open Issues
 
 | ID | Konu | Sınıf |
@@ -234,34 +241,22 @@ Karar: `StudySystem_WithAI.txt` ve `Universal_Learning_Architecture/` working tr
 
 ## 23. Exact Publish Steps
 
-Kullanıcı tarafından çalıştırılır. `<OWNER>/<REPO>` gerçek değerlerle değiştirilir.
+Kullanıcı tarafından çalıştırılır.
+
+Branding sonrası güncel: `origin` = `https://github.com/ogulcan27/agent-learning-engine.git` (yapılandırıldı, push yok). `main` Step 1'de; fast-forward mümkün.
 
 ```powershell
-# 0. Placeholder'ları değiştir (README.md, docs/RELEASE_NOTES_v1.0.0.md içinde <OWNER>/<REPO>)
-# 1. Son kontrol
 uv run --no-project python tests/run_all.py
-powershell -ExecutionPolicy Bypass -File scripts\build-release.ps1
-git status
-
-# 2. Commit (branch: Step9_Packaging_Installation_Distribution_ReleaseReadiness)
+powershell -ExecutionPolicy Bypass -File scriptsuild-release.ps1
 git add -A
-git commit -m "Step9 was completed: packaging, installer, release 1.0.0"
-
-# 3. main'e merge (mevcut akışa göre)
+git commit -m "Release 1.0.0: Agent Learning Engine"
 git checkout main
-git merge --no-ff Step9_Packaging_Installation_Distribution_ReleaseReadiness
-
-# 4. Remote + push
-git remote add origin https://github.com/<OWNER>/<REPO>.git
+git merge --ff-only Step9_Packaging_Installation_Distribution_ReleaseReadiness
 git push -u origin main
-
-# 5. Tag
-git tag -a v1.0.0 -m "Claude Learning Skill 1.0.0"
+git tag -a v1.0.0 -m "Agent Learning Engine 1.0.0"
 git push origin v1.0.0
+gh release create v1.0.0 dist/agent-learning-engine-v1.0.0.zip dist/SHA256SUMS.txt --repo ogulcan27/agent-learning-engine --title "Agent Learning Engine v1.0.0" --notes-file docs/RELEASE_NOTES_v1.0.0.md
 
-# 6. GitHub Release (gh CLI)
-gh release create v1.0.0 dist/claude-learning-skill-v1.0.0.zip dist/SHA256SUMS.txt --title "v1.0.0" --notes-file docs/RELEASE_NOTES_v1.0.0.md
-
-# 7. Publish sonrası doğrulama (temp project içinde)
-& ([scriptblock]::Create((Invoke-RestMethod 'https://raw.githubusercontent.com/<OWNER>/<REPO>/v1.0.0/scripts/install.ps1'))) -Scope Project -Repository <OWNER>/<REPO> -Ref v1.0.0
+# Publish sonrası, temp project içinde:
+& ([scriptblock]::Create((Invoke-RestMethod 'https://raw.githubusercontent.com/ogulcan27/agent-learning-engine/v1.0.0/scripts/install.ps1'))) -Scope Project -Repository ogulcan27/agent-learning-engine -Ref v1.0.0
 ```

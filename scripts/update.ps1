@@ -1,6 +1,6 @@
 <#
 .SYNOPSIS
-    Update an existing Claude Learning Skill install.
+    Update an existing Agent Learning Engine learning skill install.
 
 .DESCRIPTION
     Calls install.ps1 in update mode. Same parameters and source modes as install.ps1.

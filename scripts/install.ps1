@@ -1,6 +1,6 @@
 <#
 .SYNOPSIS
-    Install, update or verify the Claude Learning Skill.
+    Install, update or verify the Agent Learning Engine learning skill.
 
 .DESCRIPTION
     Target (the only path this script owns):

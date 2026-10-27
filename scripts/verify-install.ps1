@@ -1,6 +1,6 @@
 <#
 .SYNOPSIS
-    Verify an installed Claude Learning Skill against the distribution manifest.
+    Verify an installed Agent Learning Engine learning skill against the distribution manifest.
 
 .DESCRIPTION
     Calls install.ps1 in verify mode. Writes nothing.

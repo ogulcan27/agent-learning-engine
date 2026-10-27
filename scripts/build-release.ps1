@@ -6,7 +6,7 @@
     Development repository script. Reads VERSION and .claude/skills/learning/.
     Writes:
       distribution/manifest.json
-      dist/claude-learning-skill-v<VERSION>.zip
+      dist/agent-learning-engine-v<VERSION>.zip
       dist/SHA256SUMS.txt
     The ZIP holds only .claude/skills/learning/ and distribution/manifest.json.
     Entry order and timestamps are fixed, so the ZIP is deterministic.
@@ -54,7 +54,7 @@ $json = ($manifest | ConvertTo-Json -Depth 5) -replace "`r`n", "`n"
 [IO.File]::WriteAllText($manifestPath, $json + "`n", (New-Object Text.UTF8Encoding $false))
 
 New-Item -ItemType Directory -Force -Path $OutDir | Out-Null
-$zipName = "claude-learning-skill-v$version.zip"
+$zipName = "agent-learning-engine-v$version.zip"
 $zipPath = Join-Path $OutDir $zipName
 if (Test-Path -LiteralPath $zipPath) { Remove-Item -LiteralPath $zipPath -Force }
 
