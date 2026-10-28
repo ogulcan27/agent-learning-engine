@@ -18,3 +18,4 @@ First stable release. Current integration: Claude Code (runtime skill `stay-in-t
 - Project isolation: learning state is read and written only under the active project root.
 - Project and Personal installation.
 - Atomic update and rollback, uninstall, and install verification.
+- Quick install runs the downloaded installer as a script block. Windows Defender blocks the previous piped form.

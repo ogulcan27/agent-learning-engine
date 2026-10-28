@@ -27,7 +27,7 @@ See the [README](../README.md#installation) for full instructions.
 |---|---|
 | Clone and install | `scripts\install.ps1 -Scope Project` or `-Scope Personal` |
 | Release package | `install.ps1 -Archive stay-in-the-loop-v1.0.0.zip` |
-| Quick install | `irm https://raw.githubusercontent.com/ogulcan27/stay-in-the-loop/v1.0.0/scripts/install.ps1 \| iex` (asks for Project or Personal scope) |
+| Quick install | `& ([scriptblock]::Create((irm https://raw.githubusercontent.com/ogulcan27/stay-in-the-loop/v1.0.0/scripts/install.ps1)))` (asks for Project or Personal scope) |
 
 Release assets: `stay-in-the-loop-v1.0.0.zip` and `SHA256SUMS.txt`.
 

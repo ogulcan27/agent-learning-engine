@@ -48,7 +48,7 @@ gh release create v1.0.0 dist/stay-in-the-loop-v1.0.0.zip dist/SHA256SUMS.txt --
 After release, in a temp project:
 
 ```powershell
-irm https://raw.githubusercontent.com/ogulcan27/stay-in-the-loop/v1.0.0/scripts/install.ps1 | iex
+& ([scriptblock]::Create((irm https://raw.githubusercontent.com/ogulcan27/stay-in-the-loop/v1.0.0/scripts/install.ps1)))
 ```
 
 ## Rules

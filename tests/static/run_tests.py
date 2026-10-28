@@ -8,7 +8,7 @@ import sys
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "common"))
-from harness import report, skill_dir  # noqa: E402
+from harness import REPO, report, skill_dir  # noqa: E402
 
 SKILL = skill_dir()
 RESULTS = []
@@ -131,5 +131,17 @@ long_ = [f"{f.name}: {s[:50]}" for f in (SKILL / "references" / "07_INTEGRITY_CH
          for s in re.split(r"(?<=[.!?])\s", re.sub(r"\|.*\||```.*?```", "", text(f), flags=re.S)) if len(s.split()) > 30]
 check("X ASD-STE100 sentence length <= 30 words (01, 07)", long_, [])
 check("X canonical ULA copies untranslated (English)", all(re.search(r"\b(the|and)\b", text(f)) for f in (SKILL / "ula").glob("*.md")), True)
+
+# Extra - public installer bootstrap. docs/audit/ is historical evidence and is not scanned.
+IEX = re.compile(r"\|\s*iex\b|\biex\s|Invoke-Expression", re.I)
+PUBLIC = [REPO / "README.md", REPO / "CHANGELOG.md", *sorted((REPO / "docs").glob("*.md")), *sorted((REPO / "scripts").glob("*.ps1"))]
+
+
+def iex_lines(files):
+    return [f"{f.relative_to(REPO).as_posix()}:{i}" for f in files for i, l in enumerate(text(f).splitlines(), 1) if IEX.search(l)]
+
+
+check("X guard flags the old irm | iex bootstrap", bool(IEX.search("irm https://x/install.ps1 | iex")), True)
+check("X no Invoke-Expression bootstrap in public docs or scripts", iex_lines(PUBLIC), [])
 
 report(RESULTS)

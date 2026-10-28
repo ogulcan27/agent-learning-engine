@@ -4,7 +4,7 @@
 
 .DESCRIPTION
     Quick install (asks for the scope):
-      irm https://raw.githubusercontent.com/ogulcan27/stay-in-the-loop/v1.0.0/scripts/install.ps1 | iex
+      & ([scriptblock]::Create((irm https://raw.githubusercontent.com/ogulcan27/stay-in-the-loop/v1.0.0/scripts/install.ps1)))
 
     Target (the only path this script owns):
       -Scope Project   <ProjectPath>/.claude/skills/stay-in-the-loop/   (default: current directory)
@@ -22,7 +22,7 @@
     Any failure after the backup step restores the old target.
     The script never writes docs/learning/, the personal library, CLAUDE.md or other skills.
 
-    The body runs in a child scope, so 'irm | iex' does not change the caller's session settings.
+    The body runs in a child scope, so the quick install does not change the caller's session settings.
     Test-only hooks: $env:LEARNING_SKILL_TEST_FAULT = stage | replace | verify;
                      $env:LEARNING_SKILL_TEST_BASE_URL replaces https://github.com.
 #>

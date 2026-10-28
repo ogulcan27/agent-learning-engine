@@ -22,7 +22,7 @@
 Run in PowerShell from your project directory:
 
 ```powershell
-irm https://raw.githubusercontent.com/ogulcan27/stay-in-the-loop/v1.0.0/scripts/install.ps1 | iex
+& ([scriptblock]::Create((irm https://raw.githubusercontent.com/ogulcan27/stay-in-the-loop/v1.0.0/scripts/install.ps1)))
 ```
 
 The installer asks where to install:
@@ -41,15 +41,15 @@ Then start the workflow in Claude Code:
 /stay-in-the-loop
 ```
 
-**Inspect first?** Download the script, read it, then run it:
+The command downloads the installer script from this repository and runs it. To read it before it runs, inspect first:
 
 ```powershell
 irm https://raw.githubusercontent.com/ogulcan27/stay-in-the-loop/v1.0.0/scripts/install.ps1 -OutFile install.ps1
 notepad install.ps1
-.\install.ps1
+& ([scriptblock]::Create((Get-Content .\install.ps1 -Raw)))
 ```
 
-If your execution policy blocks local scripts, run `powershell -ExecutionPolicy Bypass -File .\install.ps1` instead.
+Neither form changes your execution policy or security settings.
 
 ## Why Stay in the Loop?
 
@@ -163,7 +163,7 @@ powershell -ExecutionPolicy Bypass -File scripts\install.ps1 -Scope Project -Pro
 powershell -ExecutionPolicy Bypass -File scripts\install.ps1 -Scope Personal
 ```
 
-**Non-interactive.** Pass `-Scope Project` or `-Scope Personal` to skip the menu. `-Repository <owner/repo>` and `-Ref <tag-or-commit>` override the defaults (`ogulcan27/stay-in-the-loop`, `v1.0.0`). With `irm | iex` you cannot pass parameters, so use the scriptblock form:
+**Non-interactive.** Pass `-Scope Project` or `-Scope Personal` to skip the menu. `-Repository <owner/repo>` and `-Ref <tag-or-commit>` override the defaults (`ogulcan27/stay-in-the-loop`, `v1.0.0`). Parameters go after the quick-install command:
 
 ```powershell
 & ([scriptblock]::Create((irm https://raw.githubusercontent.com/ogulcan27/stay-in-the-loop/v1.0.0/scripts/install.ps1))) -Scope Personal

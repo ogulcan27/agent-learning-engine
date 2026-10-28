@@ -344,7 +344,7 @@ check("L tampered remote archive -> refused, nothing written", (rc != 0, "hash m
 rc, log = one_liner(rt, "missing-ref")
 check("L download failure -> nothing written", (rc != 0, (rt / ".claude").exists()), (True, False))
 
-# Test M - interactive quick install (irm | iex) and Repository / Ref defaults
+# Test M - interactive quick install (README command) and Repository / Ref defaults
 (srv / "ogulcan27/stay-in-the-loop/archive").mkdir(parents=True)
 shutil.copy(srv / "owner/repo/archive/v1.0.0.zip", srv / "ogulcan27/stay-in-the-loop/archive/v1.0.0.zip")
 github_archive(SRC2, srv / "ogulcan27/stay-in-the-loop/archive/v2-test.zip")
@@ -359,36 +359,64 @@ def run_ps(args, answers="", cwd=None):
     return out.returncode, out.stdout + out.stderr
 
 
-def irm_iex(answers, cwd):
-    """README quick install: irm <raw install.ps1> | iex. Prints the caller's ErrorActionPreference afterwards."""
-    return run_ps(["-Command", f"irm '{base}/raw/install.ps1' | iex; 'CALLER_EAP=' + $ErrorActionPreference"], answers, cwd)
+RAW_URL = "https://raw.githubusercontent.com/ogulcan27/stay-in-the-loop/v1.0.0/scripts/install.ps1"
 
 
+def readme_block(marker):
+    """Lines of the first powershell block after marker in README.md, with the test server as GitHub raw."""
+    text = (REPO / "README.md").read_text(encoding="utf-8")
+    block = text[text.index(marker):].split("```powershell\n", 1)[1].split("```", 1)[0]
+    return [l for l in block.replace(RAW_URL, f"{base}/raw/install.ps1").splitlines() if l]
+
+
+QUICK = readme_block("## ⚡ Quick Install")
+INSPECT = readme_block("inspect first:")
+
+
+def run_readme(lines, answers, cwd):
+    """Run README lines as typed, under the Windows client default policy (Restricted). No policy override."""
+    env = dict(os.environ, USERPROFILE=str(FAKE_HOME), HOME=str(FAKE_HOME), LEARNING_SKILL_TEST_BASE_URL=base)
+    out = subprocess.run(["powershell", "-NoProfile", "-ExecutionPolicy", "Restricted", "-Command", "; ".join(lines)],
+                         input=answers, capture_output=True, text=True, env=env, cwd=cwd)
+    return out.returncode, out.stdout + out.stderr
+
+
+def quick_install(answers, cwd):
+    """README quick install. Prints the caller's ErrorActionPreference afterwards."""
+    return run_readme(QUICK + ["'CALLER_EAP=' + $ErrorActionPreference"], answers, cwd)
+
+
+check("M README quick install is one line without Invoke-Expression", (len(QUICK), "iex" in QUICK[0].lower()), (1, False))
 shutil.rmtree(FAKE_HOME / ".claude", ignore_errors=True)
 mp = project("proj_iex_project")
 before = outside_skill(mp)
-rc, log = irm_iex("1\n", mp)
-check("M irm|iex shows the scope menu", (MENU in log, "[1] Project" in log, "[2] Personal" in log), (True, True, True))
+rc, log = quick_install("1\n", mp)
+check("M quick install shows the scope menu", (MENU in log, "[1] Project" in log, "[2] Personal" in log), (True, True, True))
 check("M interactive 1 -> Project install in current directory", (rc, tree(mp / REL)), (0, V1))
 check("M interactive Project -> no old learning directory", (mp / OLD_REL).exists(), False)
 check("M interactive Project keeps state; personal untouched", (outside_skill(mp), (FAKE_HOME / REL).exists()), (before, False))
 check("M default Repository / Ref used", "/ogulcan27/stay-in-the-loop/archive/v1.0.0.zip" in log, True)
 check("M caller session ErrorActionPreference unchanged", "CALLER_EAP=Continue" in log, True)
 mq = project("proj_iex_personal", state=False)
-rc, log = irm_iex("2\n", mq)
+rc, log = quick_install("2\n", mq)
 check("M interactive 2 -> Personal install", (rc, tree(FAKE_HOME / REL)), (0, V1))
 check("M interactive Personal -> no old learning directory", (FAKE_HOME / OLD_REL).exists(), False)
 check("M interactive Personal writes nothing into the project", (mq / ".claude").exists(), False)
 mr = project("proj_iex_retry", state=False)
-rc, log = irm_iex("9\nfoo\nProject\n", mr)
+rc, log = quick_install("9\nfoo\nProject\n", mr)
 check("M invalid choice -> asks again", log.count("Invalid choice"), 2)
 check("M retry then 'Project' -> installed", (rc, tree(mr / REL)), (0, V1))
 ms = project("proj_iex_personal_word", state=False)
-rc, log = irm_iex("personal\n", ms)
+rc, log = quick_install("personal\n", ms)
 check("M 'personal' word accepted (same personal target)", (rc, "ALREADY INSTALLED" in log, (ms / ".claude").exists()), (0, True, False))
 me = project("proj_iex_eof", state=False)
-rc, log = irm_iex("", me)
+rc, log = quick_install("", me)
 check("M no answer (end of input) -> stops, nothing written", (rc != 0 or "No scope selected" in log, (me / ".claude").exists()), (True, False))
+mi = project("proj_inspect_first", state=False)
+check("M README inspect-first = download, notepad, run", (len(INSPECT), INSPECT[1].startswith("notepad ")), (3, True))
+rc, log = run_readme([INSPECT[0], INSPECT[2]], "1\n", mi)
+check("M inspect-first -> downloaded script is the served installer", (mi / "install.ps1").read_bytes(), (srv / "raw/install.ps1").read_bytes())
+check("M inspect-first 1 -> Project install", (rc, MENU in log, tree(mi / REL)), (0, True, V1))
 mx = project("proj_explicit", state=False)
 rc, log = run_ps(["-File", str(SRC / "scripts/install.ps1"), "-Scope", "Project", "-ProjectPath", str(mx)], "2\n")
 check("M explicit -Scope -> no prompt, LOCAL source", (rc, MENU in log, "Download:" in log, tree(mx / REL) == V1), (0, False, False, True))
