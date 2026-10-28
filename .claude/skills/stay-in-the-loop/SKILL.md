@@ -119,7 +119,7 @@ Argüman belirsizse tahmin etme. Kullanıcıya sor.
 | 10 | COVERAGE COMPLETION COMMIT (unit bazında) | `references/04_ULA_PROTOCOL.md` §11 + `references/02_COVERAGE_PROTOCOL.md` §9–§10 | IMPLEMENTED |
 | 11 | MAP SYNC: SEMANTIC GRAPH + HORIZONTAL MAP | `references/05_MINDMAP_PROTOCOL.md` §6–§12 | IMPLEMENTED (yalnız pass COMPLETE ise; completion'ı geri almaz) |
 | 12 | KNOWLEDGE PERSISTENCE | `references/06_KNOWLEDGE_PERSISTENCE.md` §5–§22.1 | IMPLEMENTED (post-completion; completion'ı geri almaz) |
-| 13 | FINAL INTEGRITY → DONE | `references/07_INTEGRITY_CHECKS.md` §L (§C, §E, §U, §M, §P dahil) | IMPLEMENTED |
+| 13 | FINAL INTEGRITY → DONE | `references/07_INTEGRITY_CHECKS.md` §L (§C, §E, §U, §M, §P, §V dahil) | IMPLEMENTED |
 
 Startup'ta active pass varsa önce resume / new / abandon sorulur (`references/04_ULA_PROTOCOL.md` §10). Resume, pass'in `current_stage` adımından devam eder.
 
@@ -129,6 +129,8 @@ Startup'ta active pass varsa önce resume / new / abandon sorulur (`references/0
 `sync ...` argümanları run loop'u çalıştırmaz. Doğrudan `references/08_HUMAN_SYNC_STATE.md` §11'e gider. Human Sync persist edilir, sonra STOP.
 
 Genel akış ve dur kuralları: `references/01_OPERATIONAL_CORE.md`.
+
+Human-facing knowledge tek dosyadır: `docs/learning/STAY_IN_THE_LOOP.md` (`references/09_KNOWLEDGE_VIEW.md`). Derived'dir. Adım 7, 11, 12 ve 13 yalnız ilgili section'ı yazar.
 
 Ledger yalnız Discovery, Scope ve Completion Commit ile yazılır (`02_COVERAGE_PROTOCOL.md` §10). Retrieval yalnız ULA artifact içindeki prompt'tur; interactive retrieval session yoktur.
 
@@ -155,6 +157,7 @@ Token kuralı: Yalnız aktif adımın dosyasını oku. Bir dosyayı aynı çağr
 | Persistence | `references/06_KNOWLEDGE_PERSISTENCE.md` + `references/07_INTEGRITY_CHECKS.md` §P + registry + yalnız candidate Concept Home + yalnız ilgili Experience Map + gerekli `templates/` dosyası (`06` §25) |
 | `concept` / `library` / `experiences` / `debt` | `06` §24–§25 içindeki dosyalar. Bütün personal library yüklenmez. |
 | Final integrity / `integrity` | `references/07_INTEGRITY_CHECKS.md` + `07` §L.7 sırası. Personal library yalnız configured ve gerekli ise. |
+| Knowledge view read / write | `references/09_KNOWLEDGE_VIEW.md` + `STAY_IN_THE_LOOP.md` marker satırları + yalnız hedef section (`09` §9). Bütün dosya okunmaz. |
 
 **Default olarak ASLA otomatik yükleme:**
 
@@ -185,7 +188,8 @@ docs/learning/
 ├── concepts/
 ├── maps/
 ├── audits/
-└── sync/                      ← yalnız gerektiğinde (`references/08_HUMAN_SYNC_STATE.md` §3)
+├── sync/                      ← yalnız gerektiğinde (`references/08_HUMAN_SYNC_STATE.md` §3)
+└── STAY_IN_THE_LOOP.md        ← yalnız içerik oluşunca (`references/09_KNOWLEDGE_VIEW.md` §2)
 ```
 
 Config default değerleri:
@@ -210,3 +214,4 @@ Development repository kuralı: Bu skill'in kendi geliştirme repository'sinde p
 - Tek bir `last covered boundary` değerini coverage gerçeği kabul etme.
 - Her teknik ayrıntıyı öğretme. Yalnız MUST UNDERSTAND + knowledge gap olan event ULA adayı olur.
 - Kullanıcı istemeden HTML üretme.
+- Per-level, per-concept veya per-sync ayrı user-facing dosya üretme (`09` §11).

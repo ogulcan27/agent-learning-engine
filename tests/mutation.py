@@ -13,6 +13,7 @@ import run_all
 R01, R08 = "references/01_OPERATIONAL_CORE.md", "references/08_HUMAN_SYNC_STATE.md"
 R03, R04, R05 ="references/03_HUMAN_SYNC_PROTOCOL.md", "references/04_ULA_PROTOCOL.md", "references/05_MINDMAP_PROTOCOL.md"
 R06, R07 = "references/06_KNOWLEDGE_PERSISTENCE.md", "references/07_INTEGRITY_CHECKS.md"
+R09 = "references/09_KNOWLEDGE_VIEW.md"
 
 # (id, description, [(file, regex, replacement)], expected failing suites)
 MUTATIONS = [
@@ -83,6 +84,25 @@ MUTATIONS = [
      [(R08, r"^\| transitive \| ON_MATERIAL_IMPACT \|$", "| transitive | ALWAYS |")], ["sync"]),
     ("DEP-M5", "08 §6.1 dependent raw evidence read to decide impact",
      [(R08, r"^\| evidence \| RECORDS_FIRST \|$", "| evidence | RAW_FIRST |")], ["sync"]),
+    ("VIEW-M1", "09 §1 local map for every concept (no branching threshold)",
+     [(R09, r"^\| local_map_min_children \| 3 \|$", "| local_map_min_children | 1 |")], ["view"]),
+    ("VIEW-M2", "09 §9 concept retrieval reads the whole document",
+     [(R09, r"^(\| `KN` \|) `MARKERS`, `INDEX`, `TARGET`, `DEP_SECTIONS` \| `WHOLE_VIEW`, `OTHER_SECTIONS` \|$",
+       r"\1 `WHOLE_VIEW` | `OTHER_SECTIONS` |")], ["view"]),
+    ("VIEW-M3", "09 §1 section patch replaced by full regeneration",
+     [(R09, r"^\| write_mode \| SECTION_PATCH \|$", "| write_mode | FULL_REWRITE |")], ["view"]),
+    ("VIEW-M4", "09 §1 global map dumps the whole hierarchy",
+     [(R09, r"^\| global_map_depth \| 2 \|$", "| global_map_depth | 9 |")], ["view"]),
+    ("VIEW-M5", "09 §5 STALE record presented as Current",
+     [(R09, r"^\| `STALE` \| `Needs refresh` \|$", "| `STALE` | `Current` |")], ["view"]),
+    ("VIEW-M6", "07 V-05 removed (Human Sync section from another project accepted)", [(R07, r"^\| V-05 \|.*\n", "")], ["view"]),
+    ("VIEW-M7", "07 V-03 removed (broken section markers accepted)", [(R07, r"^\| V-03 \|.*\n", "")], ["view"]),
+    ("VIEW-M8", "08 §11 sync-only may write every view section",
+     [(R08, r"^\| `STAY_IN_THE_LOOP.md` \| .* \|$", "| `STAY_IN_THE_LOOP.md` | YES |")], ["view"]),
+    ("VIEW-M9", "09 §1 L1 / L2 hidden behind collapsible blocks",
+     [(R09, r"^\| collapsed \| L3; L4; Reference \|$", "| collapsed | L1; L2; L3; L4; Reference |")], ["view"]),
+    ("VIEW-M10", "07 §L.1 knowledge view becomes authoritative",
+     [(R07, r"^(\| `KNOWLEDGE_VIEW` \|) DERIVED \|", r"\1 AUTHORITATIVE |")], ["integration", "view"]),
 ]
 
 

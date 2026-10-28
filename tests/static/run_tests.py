@@ -15,7 +15,7 @@ RESULTS = []
 FILES = sorted(SKILL.rglob("*.md"))
 OPERATIONAL = [f for f in FILES if "ula" not in f.relative_to(SKILL).parts and f.name != "00_MASTER_SYSTEM_SPEC.md"]
 HEAD = re.compile(r"^#{1,4} ([0-9]+[A-Z]?(?:\.[0-9]+)*|[A-Z](?:\.[0-9]+)?)[.\s]", re.M)
-PREFIX = r"`?((?:references/)?0[0-8](?:_[A-Z_]+\.md)?|ula/[A-Z_]+\.md)`?"
+PREFIX = r"`?((?:references/)?0[0-9](?:_[A-Z_]+\.md)?|ula/[A-Z_]+\.md)`?"
 REF = re.compile(PREFIX + r" (§[0-9A-Z][0-9A-Z.]*(?:(?:–| / |, )§[0-9A-Z][0-9A-Z.]*)*)")
 
 

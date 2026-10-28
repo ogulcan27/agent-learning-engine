@@ -607,6 +607,8 @@ KNOWLEDGE_DEBT event'leri için queue §B'ye OPEN kayıt ekle
 ↓
 Üretilen / refresh edilen unit record'ları yaz (08 §12)
 ↓
+Knowledge view: HS + DEBT section'ları (09 §8; derived)
+↓
 Pipeline Handoff: Next Stage = 04 §3 early completion check
 ```
 

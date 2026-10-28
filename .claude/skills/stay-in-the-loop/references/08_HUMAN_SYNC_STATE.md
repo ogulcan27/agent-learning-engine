@@ -330,6 +330,7 @@ STOP
 | Artifact | Sync-only write |
 |---|---|
 | `docs/learning/sync/` | YES |
+| `STAY_IN_THE_LOOP.md` | Yalnız HS, MODEL, INDEX section'ları (`09` §8) |
 | `LEARNING_CONFIG.md` | Yalnız `project_id` (`06` §2.1 onayı) |
 | `COVERAGE_LEDGER.md` | NO |
 | `LEARNING_STATE.md` | NO |
@@ -361,12 +362,16 @@ INTEGRITY   07 §S candidate set üzerinde
 WRITE       1. records/  2. PROJECT_SYNC_CONTEXT.md  3. HUMAN_SYNC_STATE.md
 ↓
 VERIFY      07 §S yazılmış dosyalar üzerinde
+↓
+VIEW        09 §10: yalnız değişen HS section'ları + MODEL + INDEX (derived)
 ```
 
 - Integrity FAIL → write yok. Unit önceki status'unda kalır.
 - Write hatası → pre-image'lar geri yüklenir. Unit `SYNCED` yazılmaz.
 - State en son yazılır. Unit yalnız state yazılınca `SYNCED` olur.
 - Mevcut bir record yeniden üretilmez. Pre-image varsa yeni `record_version` = pre-image + 1 (`07` S-16).
+- VIEW adımı state commit'inden sonradır. View hatası WARNING'dir. Unit `SYNCED` kalır. Önceki HS section'ları değişmez.
+- Hedef boş ama staleness state'e yazıldıysa VIEW yalnız etkilenen HS status satırını, MODEL ve INDEX'i yazar.
 
 ---
 
@@ -410,3 +415,4 @@ Learning Coverage: UNCHANGED
 - `02_COVERAGE_PROTOCOL.md` §3, §4, §8.1 (discovery, ID, scope dili).
 - `06_KNOWLEDGE_PERSISTENCE.md` §2.1, §22 (project_id, atomic write).
 - `01_OPERATIONAL_CORE.md` §0 (project root).
+- `09_KNOWLEDGE_VIEW.md` §5, §8 (human-facing HS section).

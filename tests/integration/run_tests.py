@@ -550,7 +550,7 @@ check("X leftover own lock -> L-21 WARNING, DONE allowed", (("L-21", "WARNING") 
 
 # Extra - protocol vocabulary
 check("X authority DERIVED set", sorted(a for a, c in ENV.L.authority.items() if c == "DERIVED"),
-      ["HORIZONTAL_MAP", "LEARNING_QUEUE §A", "LEARNING_STATE", "LIBRARY_INDEX"])
+      ["HORIZONTAL_MAP", "KNOWLEDGE_VIEW", "LEARNING_QUEUE §A", "LEARNING_STATE", "LIBRARY_INDEX"])
 check("X required AUTHORITATIVE present", {"LEARNING_CONFIG", "COVERAGE_LEDGER", "LEARNING_QUEUE §B", "LEARNING_PASS", "SEMANTIC_GRAPH",
                                            "CONCEPT_REGISTRY", "CONCEPT_HOME", "EXPERIENCE_NOTE", "DECISION_RECORD"}
       <= {a for a, c in ENV.L.authority.items() if c == "AUTHORITATIVE"}, True)

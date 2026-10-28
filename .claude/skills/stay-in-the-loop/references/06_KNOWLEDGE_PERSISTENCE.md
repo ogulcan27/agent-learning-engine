@@ -700,7 +700,7 @@ WRITE       1. Concept Home  2. Concept Registry  3. Experience Map row
             4. project pointer / temporary Home  5. Experience Note  6. Decision Record
             7. SEMANTIC_GRAPH home_ref  8. queue §B debt  9. pass tablosu
 ↓
-INDEX       LIBRARY_INDEX ve graph değiştiyse HORIZONTAL_MAP yeniden üretilir (derived; hata → WARNING)
+INDEX       LIBRARY_INDEX ve graph değiştiyse HORIZONTAL_MAP yeniden üretilir; debt değiştiyse 09 DEBT section'ı (derived; hata → WARNING)
 ↓
 VERIFY      07 §P yazılmış dosyalar üzerinde
 ↓

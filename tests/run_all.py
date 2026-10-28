@@ -1,4 +1,4 @@
-"""Run the permanent regression suite: Phase 3-7 subsystem suites, Phase 8 E2E suite, static, cross-project isolation and Human Sync suites,
+"""Run the permanent regression suite: Phase 3-7 subsystem suites, Phase 8 E2E suite, static, cross-project isolation, Human Sync and Knowledge View suites,
 Phase 9 distribution suite, mutation checks.
 
 Usage:
@@ -14,7 +14,7 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent
-SUITES = ["phase3", "phase4", "phase5", "phase6", "phase7", "integration", "static", "isolation", "sync"]
+SUITES = ["phase3", "phase4", "phase5", "phase6", "phase7", "integration", "static", "isolation", "sync", "view"]
 DISTRIBUTION = ["distribution"]
 
 

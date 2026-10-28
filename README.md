@@ -57,26 +57,60 @@ AI coding agents can move through a project faster than you can understand every
 
 Stay in the Loop closes that comprehension gap. When you choose to, it reviews the work that has been done, explains what changed and why, teaches the concepts you actually need, and keeps that knowledge for your next project.
 
-## How It Works
+## How Stay in the Loop Works
 
-```text
-AI-assisted project work
-          ↓
-  /stay-in-the-loop
-          ↓
-      Understand
-          ↓
-   Learn if needed
-          ↓
-       Connect
-          ↓
-        Retain
+```mermaid
+flowchart TD
+    A["Project Work"] --> B["Human Sync"]
+    B --> C{"What do you need?"}
+    C -->|"Understand only"| D["/stay-in-the-loop sync"]
+    D --> E["Persist Human Sync"]
+    E --> F["STOP"]
+    C -->|"Understand + learn"| G["/stay-in-the-loop"]
+    G --> H["Learning Events"]
+    H --> I["Light / Full ULA"]
+    I --> J["Learning Completion"]
+    J --> K["Semantic Graph + Persistence"]
 ```
 
 - **Understand.** It finds project work you have not caught up on, using persistent evidence such as git commits, plan documents, and issue keys, and summarizes it for you.
 - **Learn if needed.** Only changes you must understand, and do not yet, become learning material. Routine changes are skipped.
 - **Connect.** Concepts are linked into a per-project knowledge map.
 - **Retain.** Reusable concepts and project experience are stored so they carry across projects.
+
+Human Sync is project comprehension. Learning is technical learning. A work unit can be synchronized without its concepts being learned.
+
+| Mode | Purpose | Human Sync | ULA | Learning Coverage |
+|---|---|---:|---:|---:|
+| `/stay-in-the-loop sync` | Understand project work | Yes | No | Unchanged |
+| `/stay-in-the-loop` | Understand and learn | Yes / reused | When needed | Normal workflow |
+
+### Incremental Human Sync
+
+```mermaid
+flowchart LR
+    A["New / Changed Work"] --> D["Minimum Required Context"]
+    B["Human Sync State"] --> D
+    C["Rolling Project Context"] --> D
+    E["Relevant Previous Sync"] --> D
+    D --> F["Human Sync"]
+    F --> G["Updated Sync State"]
+    F --> H["Updated Project Context"]
+```
+
+Previously synchronized work is reused. Only new, stale, or dependency-affected work is processed by default.
+
+### One Knowledge File
+
+All human-facing project understanding and learning material is consolidated in:
+
+```text
+docs/learning/STAY_IN_THE_LOOP.md
+```
+
+It starts with a Quick Index, then the project mental model, one Human Sync section per work unit, one Learning section per concept (only the L0–L4 levels the learning pass produced), a Mermaid knowledge map with local zoom maps, and open learning debt. It renders in GitHub preview; there is no HTML viewer.
+
+Internal state files under `docs/learning/` still exist for incremental sync, checkpoints, integrity, coverage, and resume. You normally do not need to read them. The knowledge file is rebuilt from that state if needed, is created only once there is something to show, and is updated section by section, so a large file is never read or rewritten as a whole.
 
 Stay in the Loop is manual by design. It runs only when you type `/stay-in-the-loop`. Normal project work never starts it, and there is no background tracking.
 
@@ -108,8 +142,6 @@ ULA (Universal Learning Architecture) has two depths. Light ULA produces a short
 | `/stay-in-the-loop experiences` | List project experience notes. |
 | `/stay-in-the-loop debt` | List open knowledge debt: gaps left for later. |
 | `/stay-in-the-loop integrity` | Check stored knowledge and suggest safe repairs. |
-
-Human Sync is persistent and incremental. Previously synchronized work is reused; by default only new or materially changed work is synchronized. Sync state lives in `docs/learning/sync/`.
 
 More arguments (`show skipped`, `new`, `abandon <pass-id>`, `map debt`, `map sync`, `<work-unit-id>`) are listed in [`SKILL.md`](.claude/skills/stay-in-the-loop/SKILL.md).
 

@@ -6,7 +6,7 @@
     "files":  [
                   {
                       "path":  "SKILL.md",
-                      "sha256":  "1ea5df5157bf81eba75098af2be7fc77a2f37b48fd96a3561d5778981dcb1486"
+                      "sha256":  "ad4ebee82c7dbeb8abe6ca79da60d7ac6eeae7fece89f560abd50553e0f9763e"
                   },
                   {
                       "path":  "references/00_MASTER_SYSTEM_SPEC.md",
@@ -14,7 +14,7 @@
                   },
                   {
                       "path":  "references/01_OPERATIONAL_CORE.md",
-                      "sha256":  "98d5290d465a4d6b6a06b1f91088d2c7d411bb99fc57cbcb4bce35f1dbeb4786"
+                      "sha256":  "7e6b85596cb4f5a564cf9786ed5f8854c6acddfb3c10f4dbf68dcc0f5ac1bf2b"
                   },
                   {
                       "path":  "references/02_COVERAGE_PROTOCOL.md",
@@ -22,27 +22,31 @@
                   },
                   {
                       "path":  "references/03_HUMAN_SYNC_PROTOCOL.md",
-                      "sha256":  "e2902ee020777821a7c48c0d9f4e17776791cc564ac47e9512bd3605b6f1b62b"
+                      "sha256":  "5f4db9e5f2b9184b13cc36123e8da464f3b7b9fe52b67c5061aa13f49f06395d"
                   },
                   {
                       "path":  "references/04_ULA_PROTOCOL.md",
-                      "sha256":  "a4386a5409ecd551099dcd5505ec7ef7e4be5189c4c2616d2f97df51c4ba30e8"
+                      "sha256":  "4754aa6a2aadb0daac95a842bd6fced20a7f535f311fad3b665e855e62cb1aa4"
                   },
                   {
                       "path":  "references/05_MINDMAP_PROTOCOL.md",
-                      "sha256":  "1c0d9f294e1f7f4ae309afb5707a1ca32b98960a0ae3617a23b6c90b321828cc"
+                      "sha256":  "b5a07c2a9f942f5ce5448715cb00df3ddb41eabea84c84505f88d3383f8a536d"
                   },
                   {
                       "path":  "references/06_KNOWLEDGE_PERSISTENCE.md",
-                      "sha256":  "1a80c8565f1e794a06fccf1784670a473184665f6449c6dfcc50980e86de090c"
+                      "sha256":  "9ca18e9bd99979f10cb3082bae62a2b0aab3d79f9b7c7f6e9a1b23bbaf41f704"
                   },
                   {
                       "path":  "references/07_INTEGRITY_CHECKS.md",
-                      "sha256":  "3432f3f7f36715553d036a3199ec4205b121aa67459e7864e49b932fc8cacc57"
+                      "sha256":  "0b49c66e899c4cd375dcaeb5603be22156a41a56c0824e3ab3cc82d50057ec88"
                   },
                   {
                       "path":  "references/08_HUMAN_SYNC_STATE.md",
-                      "sha256":  "0eb16b8e7e50fcf677cf74a77a4dacbe0d79494c5bef990f860371c8ebb84f47"
+                      "sha256":  "be52adc26d84717051faee39cbcf61629b4b7f004fc54a6c431273402d68557d"
+                  },
+                  {
+                      "path":  "references/09_KNOWLEDGE_VIEW.md",
+                      "sha256":  "d539404b813671ebecba58e79378c371fc65aabaab0c6dbe7d3c64426f3223b6"
                   },
                   {
                       "path":  "templates/CONCEPT_HOME_TEMPLATE.md",
@@ -87,6 +91,10 @@
                   {
                       "path":  "templates/KNOWLEDGE_MAP_TEMPLATE.md",
                       "sha256":  "ab98dd56c613cbbd85de04b6ca82af00344ff0faf3cc7d41ccad5dc25702067b"
+                  },
+                  {
+                      "path":  "templates/KNOWLEDGE_VIEW_TEMPLATE.md",
+                      "sha256":  "fa6ee8c8ab212c8e3576eb5365ff47a535c0b745337f2fe41621faa6076fea09"
                   },
                   {
                       "path":  "templates/LEARNING_CONFIG_TEMPLATE.md",

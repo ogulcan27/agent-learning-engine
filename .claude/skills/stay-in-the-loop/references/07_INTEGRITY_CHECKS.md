@@ -1,6 +1,6 @@
 # 07 — Integrity Checks
 
-**Status:** §C, §E, §U, §M, §P, §S, §L IMPLEMENTED (Phase 3–8). Final Integrity: §L.
+**Status:** §C, §E, §U, §M, §P, §S, §V, §L IMPLEMENTED (Phase 3–8). Final Integrity: §L.
 
 ## Purpose
 
@@ -221,11 +221,43 @@ FAIL olduğunda sync dosyası yazılmaz. Unit önceki status'unda kalır. Eksik 
 
 ---
 
+## V. Knowledge View Integrity
+
+Ne zaman çalışır:
+
+- Her view write'tan önce candidate üzerinde ve write'tan sonra (`09_KNOWLEDGE_VIEW.md` §10).
+- Final Integrity içinde (§L.3) ve `/stay-in-the-loop integrity` ile.
+
+Kapsam: Yalnız active project root altındaki `docs/learning/STAY_IN_THE_LOOP.md`. Kaynak olarak config, sync state, graph ve queue §B okunur. Ders içeriği okunmaz.
+
+| ID | Kontrol | Sonuç | Aksiyon |
+|---|---|---|---|
+| V-01 | `INDEX` link'i var olmayan section'ı gösteriyor | WARNING | rebuild `KNOWLEDGE_VIEW` INDEX |
+| V-02 | Aynı HS veya KN section ID'si birden fazla | FAIL | View write yok. Kullanıcıya göster. |
+| V-03 | Marker eşleşmesi bozuk: END'siz START, START'sız END, iç içe section veya bilinmeyen `SITL:` marker | FAIL | View write yok. Kullanıcıya göster. |
+| V-04 | KN marker ID, anchor ve heading ID farklı; veya KN ID graph'ta yok | FAIL | View write yok. Kullanıcıya göster. |
+| V-05 | `SITL:VIEW` `project_id` config ile farklı; veya HS ID bu project'in sync state'inde yok | FAIL | View kullanılmaz. Write yok. |
+| V-06 | HS status satırı state `sync_status` ile uyuşmuyor (`09` §5) | WARNING | rebuild `KNOWLEDGE_VIEW` HS section |
+| V-07 | Section eski: HS `v` ≠ `record_version`; KN `depth` ≠ `available_depth`; KN adı ≠ `canonical_name` | WARNING | rebuild `KNOWLEDGE_VIEW` section |
+| V-08 | İçerik var ama section yok: `SYNCED` / `STALE` record, depth'li `ACTIVE` node, `OPEN` debt; veya view yok | WARNING | rebuild `KNOWLEDGE_VIEW` section (`09` §12) |
+| V-09 | Section içinde kapanmamış code fence veya dengesiz `<details>` | FAIL | View write yok. Kullanıcıya göster. |
+| V-10 | HS / KN section'ında kendi `###` heading'i dışında `#`–`###` heading; diğer section'da kendi `##` heading'i dışında `#`–`###` heading | FAIL | View write yok. Kullanıcıya göster. |
+| V-11 | `UNSYNCED` unit için HS section; `DEBT` / `SUPERSEDED` node için KN section; veya `available_depth` dışında level | WARNING | rebuild `KNOWLEDGE_VIEW` section |
+| V-12 | Dosya var ama `SITL:VIEW` header'ı yok | FAIL | Overwrite yok. Kullanıcı karar verir. |
+| V-13 | Sync-only run KN, MAP veya DEBT section'ı değiştirdi | FAIL | Pre-image geri yüklenir (`08` §11). |
+| V-14 | MAP node'u graph'ta yok veya label `map_label_max_chars` sınırını aşıyor | WARNING | rebuild `KNOWLEDGE_VIEW` MAP |
+
+- Candidate FAIL → view yazılmaz. Authoritative write geri alınmaz. Sonuç WARNING olarak raporlanır.
+- Mevcut dosyada FAIL → Final Integrity FAIL. View bozuk veya yanıltıcıdır. Tam rebuild yalnız kullanıcı onayı ile yapılır (`09` §12).
+- WARNING repair yalnız gösterilen section'ı yazar. Diğer section'lar değişmez.
+
+---
+
 ## L. Learning State / Cross-Layer Integrity
 
 Final Integrity bu bölümdür. Run loop'un son adımıdır (`01` §1 adım 15). `/stay-in-the-loop integrity` aynı işi yapar (§L.6).
 
-§C, §E, §U, §M, §P kurallarını tekrar etmez. Yalnız layer'lar arası invariant'ları kontrol eder. Bir L check bir alt check ile aynı sonucu veriyorsa satırda kaynak check yazılır.
+§C, §E, §U, §M, §P, §V kurallarını tekrar etmez. Yalnız layer'lar arası invariant'ları kontrol eder. Bir L check bir alt check ile aynı sonucu veriyorsa satırda kaynak check yazılır.
 
 ### L.1 Authority model
 
@@ -247,6 +279,7 @@ Final Integrity bu bölümdür. Run loop'un son adımıdır (`01` §1 adım 15).
 | `LEARNING_QUEUE §A` | DERIVED | `state/LEARNING_QUEUE.md` §A | `COVERAGE_LEDGER` | YES |
 | `HORIZONTAL_MAP` | DERIVED | `maps/HORIZONTAL_MAP.md` | `SEMANTIC_GRAPH` | YES |
 | `LIBRARY_INDEX` | DERIVED | `<personal_library_path>/LIBRARY_INDEX.md` | registry + Concept Home | YES |
+| `KNOWLEDGE_VIEW` | DERIVED | `docs/learning/STAY_IN_THE_LOOP.md` | sync record + state, graph, `COMPLETE` ULA artifact, queue §B (`09` §1) | YES (section) |
 | `WRITE_LOCK` | LOCK | `<personal_library_path>/.learning-write-lock/` | persistence | NO (kullanıcı kararı, `06` §22.1) |
 
 - `DERIVED` artifact bozuksa kaynağından yeniden üretilir. Kaynak değişmez.
@@ -269,7 +302,7 @@ Final Integrity bu bölümdür. Run loop'un son adımıdır (`01` §1 adım 15).
 ```text
 LOAD        §L.7 sırası; yalnız gereken artifact
 ↓
-CHECK 1     §C + §E + §U + §M + §P (mevcut state) + §L checks
+CHECK 1     §C + §E + §U + §M + §P (mevcut state) + §V + §L checks
 ↓
 FAIL var?   evet → sonuç FAIL. Repair yok. Kullanıcıya göster. Dur.
 ↓
@@ -346,7 +379,7 @@ LEARNING_CONFIG + LEARNING_STATE
 ↓
 COVERAGE_LEDGER + LEARNING_QUEUE
 ↓
-yalnız gereken pass, graph, view, concepts/, experiences/
+yalnız gereken pass, graph, view, concepts/, experiences/, `STAY_IN_THE_LOOP.md` marker satırları
 ↓
 personal registry + ilgili Home + ilgili map + index  (yalnız configured ve gerekli ise)
 ```
@@ -363,5 +396,6 @@ Yüklenmez: `00_MASTER_SYSTEM_SPEC.md`, `ula/` rol dosyaları, example / histori
 - `references/04_ULA_PROTOCOL.md` §2, §5, §7, §9, §10, §11.
 - `references/05_MINDMAP_PROTOCOL.md` §3–§11.
 - `references/06_KNOWLEDGE_PERSISTENCE.md` §4–§22.
+- `references/09_KNOWLEDGE_VIEW.md` §1–§12.
 - Cross-layer ve final integrity: Phase 8 audit.
 - Content audit: `ula/LEARNING_AUDITOR.md`.

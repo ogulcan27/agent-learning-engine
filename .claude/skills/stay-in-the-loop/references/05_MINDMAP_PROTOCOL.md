@@ -332,6 +332,8 @@ INTEGRITY CHECK      (07 §M, aday graph üzerinde)
 WRITE GRAPH          graph_version + 1
 ↓
 REGENERATE VIEW
+↓
+KNOWLEDGE VIEW       09 §8: yalnız değişen KN section'ları + MAP + INDEX (derived; hata → WARNING)
 ```
 
 - DELTA UPDATE ≠ FULL REWRITE. Mevcut satırlar yalnız merge kuralları ile değişir.

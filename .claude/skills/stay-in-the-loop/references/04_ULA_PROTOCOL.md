@@ -392,6 +392,7 @@ updated_at: YYYY-MM-DD
 ```
 
 - Learning Pass içine artifact içeriği kopyalanmaz. Routing tablosu pointer verir.
+- `COMPLETE` artifact'in human-facing okuma kopyası `docs/learning/STAY_IN_THE_LOOP.md` KN section'ındadır (`09` §6). Artifact audit, resume ve provenance kaydı olarak kalır. Değişmez.
 - Development repository içinde runtime pass oluşturulmaz.
 
 ---

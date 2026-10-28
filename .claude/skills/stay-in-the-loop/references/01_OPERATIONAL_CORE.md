@@ -78,13 +78,13 @@ COMPLETION
 12. unit bazında Completion Commit + pass sonucu (04 §11)
 ↓                      pass COMPLETE değilse burada dur
 MAP SYNC
-13. eligibility + identity + delta + integrity (07 §M) + graph write + view (05 §6–§12)
+13. eligibility + identity + delta + integrity (07 §M) + graph write + view (05 §6–§12) + knowledge view (09 §8)
 ↓                      post-completion enrichment; completion'ı geri alamaz
 KNOWLEDGE PERSISTENCE
 14. routing + resolution + delta + integrity (07 §P) + lock + atomic write (06 §5–§22.1)
 ↓                      post-completion enrichment; completion'ı geri alamaz
 FINAL INTEGRITY
-15. 07 §L.3: §C + §E + §U + §M + §P + §L → derived repair → tekrar check
+15. 07 §L.3: §C + §E + §U + §M + §P + §V + §L → derived repair → tekrar check
 ↓                      sonuç PASS / PASS_WITH_WARNINGS → DONE; FAIL → DONE yok
 DONE
 
@@ -120,16 +120,17 @@ Persistence komutları (`concept`, `library`, `experiences`, `debt`) bu akışı
 | Adım | Yazılan | Yazılmayan |
 |---|---|---|
 | Discovery / Scope | Ledger (Discovery Commit, Scope Commit) | — |
-| Handoff | `passes/<learning-pass-id>/LEARNING_PASS.md`, queue §B `OPEN` debt | Ledger |
+| Handoff | `passes/<learning-pass-id>/LEARNING_PASS.md`, queue §B `OPEN` debt, sync record, view HS + DEBT section | Ledger |
 | ULA | `passes/<learning-pass-id>/ula/<event-id>/`, pass routing tablosu ve metadata | Ledger |
 | Completion | Ledger `COVERED` / `PARTIAL` / `NOT_LEARNING_RELEVANT`; pass status | — |
-| Map sync | `maps/SEMANTIC_GRAPH.md` (delta, atomic), `maps/HORIZONTAL_MAP.md` (view), pass `## Map Sync` tablosu | Ledger, pass status, `current_stage` |
-| Persistence | Personal: Concept Home, Registry, Experience Map, Index. Project: `concepts/`, `experiences/`, graph `home_ref`, queue §B debt status, pass `Experience Persistence` + `## Knowledge Persistence` | Ledger, pass status, `current_stage` |
+| Map sync | `maps/SEMANTIC_GRAPH.md` (delta, atomic), `maps/HORIZONTAL_MAP.md` (view), view KN + MAP section, pass `## Map Sync` tablosu | Ledger, pass status, `current_stage` |
+| Persistence | Personal: Concept Home, Registry, Experience Map, Index. Project: `concepts/`, `experiences/`, graph `home_ref`, queue §B debt status, view DEBT section, pass `Experience Persistence` + `## Knowledge Persistence` | Ledger, pass status, `current_stage` |
 | Abandon | Pass `pass_status: ABANDONED` | Ledger, queue §B |
-| Final integrity / `/stay-in-the-loop integrity` | Yalnız `DERIVED` artifact (07 §L.1): `LEARNING_STATE`, queue §A, `HORIZONTAL_MAP`, `LIBRARY_INDEX` | Bütün authoritative artifact |
+| Final integrity / `/stay-in-the-loop integrity` | Yalnız `DERIVED` artifact (07 §L.1): `LEARNING_STATE`, queue §A, `HORIZONTAL_MAP`, `LIBRARY_INDEX`, `KNOWLEDGE_VIEW` section | Bütün authoritative artifact |
 
 - Ledger yalnız Discovery Commit, Scope Commit ve Completion Commit ile yazılır (02 §10).
 - Her ledger commit sonrası state ve queue §A yeniden üretilir.
+- Human-facing view (`docs/learning/STAY_IN_THE_LOOP.md`) derived'dir. Yalnız section bazında yazılır (09 §10).
 
 ## 4. Steps after map sync
 

@@ -1,0 +1,117 @@
+# Stay in the Loop — Project Knowledge
+
+<!-- SITL:VIEW project_id=<PRJ-xxxxxxxx> -->
+
+> Template: `.claude/skills/stay-in-the-loop/templates/KNOWLEDGE_VIEW_TEMPLATE.md`
+> Target: `docs/learning/STAY_IN_THE_LOOP.md`
+> Role: DERIVED human-facing view. Authority `docs/learning/` state dosyalarıdır. Elle düzenleme.
+> Rules: `references/09_KNOWLEDGE_VIEW.md`. Yalnız içerik oluşunca oluşturulur (§2).
+
+<!-- SITL:INDEX:START -->
+## Quick Index
+
+**Human Sync** — project comprehension
+
+- [<label>](#hs-xxxxxxxx)
+- [<label>](#hs-xxxxxxxx) · needs refresh
+
+**Learning** — technical learning. Human Sync ≠ learned.
+
+- [<KN-xxxxxxxx> — <canonical_name>](#kn-xxxxxxxx) · L1 L2
+
+[Knowledge Map](#knowledge-map) · [Open Learning Debt](#open-learning-debt)
+<!-- SITL:INDEX:END -->
+
+<!-- SITL:MODEL:START -->
+## Project Mental Model
+
+<PROJECT_SYNC_CONTEXT.md bölümleri; yalnız dolu olanlar>
+<!-- SITL:MODEL:END -->
+
+## Human Sync
+
+<!-- SITL:HS:<HS-xxxxxxxx>:START v=<record_version> -->
+<a id="hs-xxxxxxxx"></a>
+### <label>
+
+**Status:** <Current | Needs refresh> · **Work unit:** `<work_unit_id>`
+
+#### Purpose
+
+#### What Changed
+
+#### Why
+
+#### How It Works
+
+#### Key Decisions
+
+#### Dependencies
+
+#### Downstream Impact
+
+#### Open Points
+<!-- SITL:HS:<HS-xxxxxxxx>:END -->
+
+## Learning
+
+<!-- SITL:KN:<KN-xxxxxxxx>:START depth=<L1;L2> -->
+<a id="kn-xxxxxxxx"></a>
+### <KN-xxxxxxxx> — <canonical_name>
+
+#### Where am I?
+
+<ROOT> → <parent> → **<canonical_name>**
+
+Also part of: <secondary PART_OF; yoksa satır yok>
+
+Learning depth: <L1 · L2> · Source: `<event-id>` (`<artifact path>`)
+
+<Local Map: yalnız primary child ≥ 3 ise Mermaid flowchart LR>
+
+#### L0 — Map
+
+#### L1 — Simple Mental Model
+
+#### L2 — Mechanism
+
+<details>
+<summary><strong>L3 — Theory</strong></summary>
+
+</details>
+
+<details>
+<summary><strong>L4 — Formalism</strong></summary>
+
+</details>
+
+#### Boundary
+
+#### Example
+
+#### Retrieval
+
+<details>
+<summary><strong>Reference</strong></summary>
+
+</details>
+
+#### Related Concepts
+
+- <RELATION> → [<name>](#kn-xxxxxxxx)
+<!-- SITL:KN:<KN-xxxxxxxx>:END -->
+
+<!-- SITL:MAP:START -->
+## Knowledge Map
+
+```mermaid
+flowchart LR
+    KN_xxxxxxxx["<canonical_name> (KN-xxxxxxxx)"] --> KN_yyyyyyyy["<canonical_name> (KN-yyyyyyyy)"]
+```
+<!-- SITL:MAP:END -->
+
+<!-- SITL:DEBT:START -->
+## Open Learning Debt
+
+- `<KD-...>` — <concept> · <priority> · <work_unit_ids>
+<!-- SITL:DEBT:END -->
