@@ -11,7 +11,7 @@ First stable release. Current integration: Claude Code (runtime skill `stay-in-t
 - Human Synchronization: short summaries of what AI-assisted work changed and why.
 - Standalone incremental Human Sync (`/stay-in-the-loop sync`) with persistent per-work-unit records, scoped staleness and reuse in the full workflow.
 - Light / Full ULA: targeted learning content only for concepts that matter.
-- One human-facing knowledge file per project (`docs/learning/STAY_IN_THE_LOOP.md`): Human Sync, ULA lessons, Mermaid knowledge map with local zoom, and open learning debt, updated section by section.
+- One human-facing knowledge file per project (`docs/learning/STAY_IN_THE_LOOP.md`): Human Sync, ULA lessons, Mermaid knowledge map with local zoom, and open learning debt, updated section by section. Human Sync sections are human-first: one sentence, key terms, mental model and why it matters, with a collapsed technical trace.
 - Semantic Graph and knowledge map views.
 - Concept Home and experience persistence, including the Personal Technical Library.
 - Cross-layer integrity checks with derived-file repair.

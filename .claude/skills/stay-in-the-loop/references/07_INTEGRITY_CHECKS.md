@@ -246,10 +246,12 @@ Kapsam: Yalnız active project root altındaki `docs/learning/STAY_IN_THE_LOOP.m
 | V-12 | Dosya var ama `SITL:VIEW` header'ı yok | FAIL | Overwrite yok. Kullanıcı karar verir. |
 | V-13 | Sync-only run KN, MAP veya DEBT section'ı değiştirdi | FAIL | Pre-image geri yüklenir (`08` §11). |
 | V-14 | MAP node'u graph'ta yok veya label `map_label_max_chars` sınırını aşıyor | WARNING | rebuild `KNOWLEDGE_VIEW` MAP |
+| V-15 | HS HUMAN katmanında ilk geçişte tanımsız proje sembolü (`09` §5.2) | WARNING | Rapor edilir. Record sonraki refresh'te düzeltilir (`03` §5). |
 
 - Candidate FAIL → view yazılmaz. Authoritative write geri alınmaz. Sonuç WARNING olarak raporlanır.
 - Mevcut dosyada FAIL → Final Integrity FAIL. View bozuk veya yanıltıcıdır. Tam rebuild yalnız kullanıcı onayı ile yapılır (`09` §12).
 - WARNING repair yalnız gösterilen section'ı yazar. Diğer section'lar değişmez.
+- V-15 view repair ile düzelmez. View record metnini değiştirmez. Repair V-15 için section yazmaz.
 
 ---
 

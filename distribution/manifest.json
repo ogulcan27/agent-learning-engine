@@ -22,7 +22,7 @@
                   },
                   {
                       "path":  "references/03_HUMAN_SYNC_PROTOCOL.md",
-                      "sha256":  "5f4db9e5f2b9184b13cc36123e8da464f3b7b9fe52b67c5061aa13f49f06395d"
+                      "sha256":  "538d08e9b17b59c517f507e043ef1273f7b8bd9598bf0e5f06faedea1af233fd"
                   },
                   {
                       "path":  "references/04_ULA_PROTOCOL.md",
@@ -38,15 +38,15 @@
                   },
                   {
                       "path":  "references/07_INTEGRITY_CHECKS.md",
-                      "sha256":  "0b49c66e899c4cd375dcaeb5603be22156a41a56c0824e3ab3cc82d50057ec88"
+                      "sha256":  "a62890cfc16fa58129687d99cf8bff84685e979ec2edf58bc9f403dec62cc651"
                   },
                   {
                       "path":  "references/08_HUMAN_SYNC_STATE.md",
-                      "sha256":  "be52adc26d84717051faee39cbcf61629b4b7f004fc54a6c431273402d68557d"
+                      "sha256":  "e75f5d714116dcfe8ef2a793aac609293b58f4fa941ba0698f4e07c9d800417d"
                   },
                   {
                       "path":  "references/09_KNOWLEDGE_VIEW.md",
-                      "sha256":  "d539404b813671ebecba58e79378c371fc65aabaab0c6dbe7d3c64426f3223b6"
+                      "sha256":  "31ef323d90bfaac76199e9f9ea7fe03eca57e030b5d9dbcf327b4086afc710bf"
                   },
                   {
                       "path":  "templates/CONCEPT_HOME_TEMPLATE.md",
@@ -78,7 +78,7 @@
                   },
                   {
                       "path":  "templates/HUMAN_SYNC_RECORD_TEMPLATE.md",
-                      "sha256":  "0aeb208d9c403ee3f70363beca4630d3cf79618fc063cbaebcaff767ccf5f3a7"
+                      "sha256":  "a96cd383da8427f4a9715310431feea4bb49773169d07c986714b66d56b76f83"
                   },
                   {
                       "path":  "templates/HUMAN_SYNC_STATE_TEMPLATE.md",
@@ -94,7 +94,7 @@
                   },
                   {
                       "path":  "templates/KNOWLEDGE_VIEW_TEMPLATE.md",
-                      "sha256":  "fa6ee8c8ab212c8e3576eb5365ff47a535c0b745337f2fe41621faa6076fea09"
+                      "sha256":  "98a9f96bac41f15c5df960f2bfc71f427b0159468a5f55464b85d53c8cd1be6a"
                   },
                   {
                       "path":  "templates/LEARNING_CONFIG_TEMPLATE.md",

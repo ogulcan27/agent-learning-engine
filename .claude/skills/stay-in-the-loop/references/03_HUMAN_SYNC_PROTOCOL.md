@@ -124,10 +124,10 @@ Scope başına **bir** çıktı üretilir. Format: `templates/HUMAN_SYNC_TEMPLAT
 
 | # | Alan | Kural |
 |---|---|---|
-| 5.1 | One-Sentence Summary | `Problem → Action → Result`. Tek cümle veya tek kısa zincir. |
+| 5.1 | One-Sentence Summary | `Problem → Action → Result`. Tek cümle veya tek kısa zincir. Konu + işlem veya karar + sonuç. İç ID özne olmaz. |
 | 5.2 | Simple Causal Explanation | 3–6 kısa cümle. Problem neydi? Neden önemliydi? Ne yaptık? Neden? Ne değişti? Implementation ayrıntısı minimum. |
 | 5.3 | Mental Model | Kullanıcı sistemi zihninde simüle edebilmeli. Şekil seçimi aşağıda. |
-| 5.4 | Technical Translation | `"Basit anlam" ↔ Canonical Technical Term`. Bir kavram = bir isim. |
+| 5.4 | Technical Translation | `"Basit anlam" ↔ Canonical Technical Term`. Bir kavram = bir isim. 2–5 çift. Önemli proje sembolü burada tanımlanır. |
 | 5.5 | Important Decisions | `Decision / Alternatives / Selected / Why / Trade-off`. Routine karar yok. |
 | 5.6 | What Changed? | `ÖNCE → … / SONRA → …`. System behaviour değişimi. Dosya listesi yok. |
 | 5.7 | Evidence | Her önemli iddia için evidence status + ref (§7). |
@@ -140,6 +140,16 @@ Mental Model şekli:
 | Veri veya istek bir hattan geçiyor | `INPUT → PROCESS → DECISION → OUTPUT` |
 | Alternatifler arasından seçim yapıldı | `PROBLEM ├── OPTION A ├── OPTION B └── OPTION C ↓ SELECTED` |
 | Diğer | Doğal system / causal / data flow diyagramı |
+
+Human-first yazım (scope çıktısı ve unit record):
+
+- Okuyucu iç ID'leri ve proje kısaltmalarını bilmez. Haftalar sonra dönmüş olabilir.
+- Önce düz anlam, sonra iç terim yazılır: `benzersiz dinleyici sayısı (N)`. Sembol ilk geçtiği yerde tanımlanır.
+- Record Purpose = One-Sentence Summary kuralı (5.1).
+- Record Downstream Impact önce düz dille yazılır: sonraki iş neyi kullanacak veya neyle sınırlanacak? ID'ler sonra gelir.
+- Mental Model 2–6 kısa satırdır. Audit ve provenance dili taşımaz.
+- Human Sync terimi işi anlamaya yetecek kadar açıklar. Teori öğretmez. Teori ULA'nın işidir (`04`).
+- View Purpose, Technical Translation, How It Works ve Downstream Impact'i HUMAN katmanında gösterir (`09` §5).
 
 Important Decisions içinde `Alternatives` alanı:
 

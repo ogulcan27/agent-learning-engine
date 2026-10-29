@@ -78,7 +78,7 @@ flowchart TD
 - **Connect.** Concepts are linked into a per-project knowledge map.
 - **Retain.** Reusable concepts and project experience are stored so they carry across projects.
 
-Human Sync is project comprehension. Learning is technical learning. A work unit can be synchronized without its concepts being learned.
+Human Sync is a human-first, compressed explanation of what changed, why it matters, and how the project now works. Learning is technical learning. A work unit can be synchronized without its concepts being learned.
 
 | Mode | Purpose | Human Sync | ULA | Learning Coverage |
 |---|---|---:|---:|---:|
@@ -108,7 +108,7 @@ All human-facing project understanding and learning material is consolidated in:
 docs/learning/STAY_IN_THE_LOOP.md
 ```
 
-It starts with a Quick Index, then the project mental model, one Human Sync section per work unit, one Learning section per concept (only the L0–L4 levels the learning pass produced), a Mermaid knowledge map with local zoom maps, and open learning debt. It renders in GitHub preview; there is no HTML viewer.
+It starts with a Quick Index, then Project in 60 Seconds, one Human Sync section per work unit (one sentence on what was done, key terms, a mental model and why it matters; decisions, evidence and provenance sit in a collapsed Technical Trace), one Learning section per concept (only the L0–L4 levels the learning pass produced), a Mermaid knowledge map with local zoom maps, and open learning debt. It renders in GitHub preview; there is no HTML viewer.
 
 Internal state files under `docs/learning/` still exist for incremental sync, checkpoints, integrity, coverage, and resume. You normally do not need to read them. The knowledge file is rebuilt from that state if needed, is created only once there is something to show, and is updated section by section, so a large file is never read or rewritten as a whole.
 

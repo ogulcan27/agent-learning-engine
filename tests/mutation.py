@@ -103,6 +103,19 @@ MUTATIONS = [
      [(R09, r"^\| collapsed \| L3; L4; Reference \|$", "| collapsed | L1; L2; L3; L4; Reference |")], ["view"]),
     ("VIEW-M10", "07 §L.1 knowledge view becomes authoritative",
      [(R07, r"^(\| `KNOWLEDGE_VIEW` \|) DERIVED \|", r"\1 AUTHORITATIVE |")], ["integration", "view"]),
+    ("HUMAN-M1", "09 §5.1 one sentence hidden in the technical trace",
+     [(R09, r"^\| `Tek cümlede:` \| Purpose \| HUMAN \|$", "| `Tek cümlede:` | Purpose | TRACE |")], ["view"]),
+    ("HUMAN-M2", "09 §5.1 why it matters hidden in the technical trace",
+     [(R09, r"^\| `Neden Önemli\?` \| Downstream Impact \| HUMAN \|$", "| `Neden Önemli?` | Downstream Impact | TRACE |")], ["view"]),
+    ("HUMAN-M3", "09 §5.1 evidence / provenance dropped from the view",
+     [(R09, r"^\| `Evidence` \| Evidence / Provenance \| TRACE \|\n", "")], ["view"]),
+    ("HUMAN-M4", "09 §1 key terms uncapped",
+     [(R09, r"^\| key_terms_max \| 5 \|$", "| key_terms_max | 9 |")], ["view"]),
+    ("HUMAN-M5", "07 V-15 removed (unexplained internal symbols accepted)", [(R07, r"^\| V-15 \|.*\n", "")], ["view"]),
+    ("HUMAN-M6", "09 §1 every invariant and decision pushed into five things to remember",
+     [(R09, r"^\| remember_max \| 5 \|$", "| remember_max | 14 |")], ["view"]),
+    ("HUMAN-M7", "09 §3 model back to the agent-oriented Project Mental Model",
+     [(R09, r"^(\| 3 \| `MODEL` \|) `## Project in 60 Seconds` \|", r"\1 `## Project Mental Model` |")], ["view"]),
 ]
 
 

@@ -5,6 +5,7 @@
 > Role: AUTHORITATIVE. Work unit başına sıkıştırılmış mental model.
 > Rules: `references/08_HUMAN_SYNC_STATE.md` §4, §9. İçerik kuralları: `references/03_HUMAN_SYNC_PROTOCOL.md` §5–§7.
 > Kod, uzun kaynak metin veya teori dersi yazılmaz.
+> Human-first: önce düz anlam, sonra iç terim (`03` §5). Purpose, Technical Translation, How It Works ve Downstream Impact view'da ilk okunan katmandır (`09` §5).
 
 ## Header
 

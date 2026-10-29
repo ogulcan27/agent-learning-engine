@@ -53,6 +53,8 @@ STAY_IN_THE_LOOP.md (derived)  → human-facing projection
 | local_map_min_children | 3 |
 | map_label_max_chars | 48 |
 | collapsed | L3; L4; Reference |
+| key_terms_max | 5 |
+| remember_max | 5 |
 
 | Karar | Authority | View |
 |---|---|---|
@@ -88,7 +90,7 @@ STAY_IN_THE_LOOP.md (derived)  → human-facing projection
 |---|---|---|---|
 | 1 | `VIEW` | `# Stay in the Loop — Project Knowledge` | config `project_id` |
 | 2 | `INDEX` | `## Quick Index` | HS + KN section listesi |
-| 3 | `MODEL` | `## Project Mental Model` | `sync/PROJECT_SYNC_CONTEXT.md` |
+| 3 | `MODEL` | `## Project in 60 Seconds` | `sync/PROJECT_SYNC_CONTEXT.md` |
 | 4 | `HS` | `## Human Sync` → `### <label>` | state + record |
 | 5 | `KN` | `## Learning` → `### <node-id> — <canonical_name>` | graph + ULA artifact |
 | 6 | `MAP` | `## Knowledge Map` | graph |
@@ -128,30 +130,89 @@ Marker satırı tek satırdır ve kendi satırında durur.
 
 ## 5. Human Sync section
 
-Kaynak: state satırı + record. Ham evidence okunmaz.
+Kaynak: state satırı + record. Ham evidence okunmaz. Record değişmez. View record part'larını yalnız sıralar ve gösterir. İkinci Human Sync authority oluşmaz.
 
-| view | record |
-|---|---|
-| Purpose | Purpose |
-| What Changed | What Changed |
-| Why | Why It Changed |
-| How It Works | How It Works |
-| Key Decisions | Key Decisions |
-| Dependencies | Dependencies |
-| Downstream Impact | Downstream Impact |
-| Open Points | Open / Uncertain Points |
+Okuyucu proje amacını bilir. İç ID'leri ve proje kısaltmalarını ezberlemedi. Haftalar sonra dönmüş olabilir. Section iki katmandır:
+
+```text
+HUMAN → anında anlama: ne yapıldı, ne akılda kalmalı, sonraki işte ne değişir
+TRACE → karar, evidence, bağımlılık, provenance (katlanmış)
+```
+
+Okuyucu work unit'in ne yaptığını TRACE'ten önce anlar.
+
+### 5.1 Parts
+
+| view | record | layer |
+|---|---|---|
+| `Tek cümlede:` | Purpose | HUMAN |
+| `Anahtar kavramlar:` | Technical Translation | HUMAN |
+| `Zihinsel Model` | How It Works | HUMAN |
+| `Neden Önemli?` | Downstream Impact | HUMAN |
+| `Why` | Why It Changed | TRACE |
+| `What Changed` | What Changed | TRACE |
+| `Key Decisions` | Key Decisions | TRACE |
+| `Dependencies` | Dependencies | TRACE |
+| `Open Points` | Open / Uncertain Points | TRACE |
+| `Evidence` | Evidence / Provenance | TRACE |
+| `More Terms` | Technical Translation | TRACE |
+| `Record:` | Header | TRACE |
 
 | sync_status | Status line |
 |---|---|
 | `SYNCED` | `Current` |
 | `STALE` | `Needs refresh` |
 
-- Record bölümü boşsa (`Yok.`) part gösterilmez. Purpose her zaman gösterilir.
-- Gösterilmez: record header (checkpoint, record_version), Technical Translation, Evidence / Provenance tablosu, lock ve integrity detayı.
+- Sıra tablo sırasıdır. `:` ile biten part kalın satırdır: `**Tek cümlede:** <metin>`. Diğer part'lar `####` heading'dir.
+- Status satırı başlıktan hemen sonra gelir: `**Status:** <Current | Needs refresh>`.
+- HUMAN part'lar açık durur. TRACE part'lar tek `<details>` bloğundadır: `<summary><strong>Technical Trace</strong></summary>`.
+- `Tek cümlede:` Purpose metnidir. Ayrı özet üretilmez. Aynı bilgi iki kez yazılmaz.
+- `Anahtar kavramlar:` her `"basit anlam" ↔ Term` satırını `basit anlam (Term)` yazar. Term parantez içeriyorsa `basit anlam — Term` yazar. Ayraç ` · `. İlk `key_terms_max` çift gösterilir.
+- `More Terms` kalan çiftleri ve bu biçime uymayan Technical Translation satırlarını taşır.
+- `Record:` satırı: `` `record_id` v<record_version> · `work_unit_id` · `checkpoint` ``. Provenance kaybolmaz.
+- Record bölümü boşsa (`Yok.`) part gösterilmez. `Tek cümlede:` ve `Record:` her zaman gösterilir.
+- Gösterilmez: lock ve integrity detayı.
 - `UNSYNCED` unit için section yoktur.
 - `STALE` olunca yalnız status satırı ve index satırı değişir. Eski içerik güncel gibi sunulmaz. Eski ve yeni sürüm yan yana tutulmaz.
 - Refresh sonrası section record'un yeni sürümünden yeniden üretilir (`v` +1).
 - HS section ders anlatmaz. Teorik konu `GENERAL THEORY` cümlesi olarak kalır (`08` §4).
+
+### 5.2 Human-first vocabulary
+
+HUMAN katmanında proje sembolü ilk geçtiği yerde tanımlıdır. Önce düz anlam, sonra iç terim gelir: `benzersiz dinleyici sayısı (N)`, `prediction-time information boundary (S-B)`.
+
+| sembol | örnek | kapsam |
+|---|---|---|
+| ID | `TF-02`, `S-B` | HUMAN part'lar |
+| fonksiyon | `K(t)`, `M(W)` | HUMAN part'lar |
+| tek büyük harf | `N`, `C` | HUMAN part'lar, code fence dışı |
+
+- Tanımlı biçim: `<düz anlam> (SYM)`, `<düz anlam> — SYM` veya `SYM = <düz anlam>`. Aynı section'da sonraki geçiş kısa yazılabilir.
+- `A` ve `I` tek harf sembol sayılmaz. Başlık, status satırı ve TRACE kapsam dışıdır.
+- Genel teknik notasyon yasak değildir. Kural yalnız HUMAN katmanı içindir.
+- View record metnini değiştirmez. Tanımsız sembol `07` V-15 WARNING'idir. Düzeltme kaynağı record'dur (`03` §5).
+
+### 5.3 Project in 60 Seconds
+
+`MODEL` section'ı. Kaynak: `sync/PROJECT_SYNC_CONTEXT.md`. Proje haftalar sonra açılınca okuyucu durumu bir dakikada anlar.
+
+| view | context | layer |
+|---|---|---|
+| What are we building? | Objective | HUMAN |
+| Where are we now? | Current Position | HUMAN |
+| How does it work at the highest level? | Data / Control Flow | HUMAN |
+| Five things to remember | Invariants; Active Decisions | HUMAN |
+| What is still unresolved? | Open Points | HUMAN |
+| Architecture | Architecture | SNAPSHOT |
+| Components | Components | SNAPSHOT |
+| Active Decisions | Active Decisions | SNAPSHOT |
+| Invariants | Invariants | SNAPSHOT |
+| Dependencies | Dependencies | SNAPSHOT |
+
+- Part'lar `####` heading'dir. SNAPSHOT part'ları tek `<details>` bloğundadır: `<summary><strong>Technical Project Snapshot</strong></summary>`.
+- `Five things to remember` Invariants ve Active Decisions maddelerinden ilk `remember_max` maddeyi bu sırayla alır.
+- Bu maddeler SNAPSHOT'ta tekrar yazılmaz. SNAPSHOT yalnız kalan maddeleri gösterir.
+- Boş part gösterilmez. Bütün part'lar boşsa gövde `Yok.` olur.
 
 ---
 
@@ -324,6 +385,7 @@ VERIFY      07 §V yazılmış dosya üzerinde
 
 - Aynı ders metni iki section'da yazılmaz. HS section kavramı öğretmez; KN section'a link verebilir.
 - Map node'u paragraf taşımaz.
+- HS section'da her record satırı bir kez görünür: HUMAN veya TRACE katmanında. Özet eklenmez; yalnız sıralama ve katlama vardır.
 - Pass artifact audit kaydıdır. Auditor kararı ve resume bu metne bağlıdır. Bu nedenle değişmez ve silinmez.
 - View, `COMPLETE` artifact'in okuma kopyasıdır. Kullanıcı dersi view'dan okur. Artifact'i normalde okumaz.
 - Concept Home (`06` §8) cross-project kalıcı kaynaktır. View project'e bağlı okuma yüzeyidir.

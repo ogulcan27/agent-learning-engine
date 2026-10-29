@@ -297,6 +297,8 @@ Kaçınılmaz geniş okuma: State yokken discovery work unit kaynağını listel
 - Header `source_records`: `record_id@record_version` listesi.
 - Her bölüm en fazla 7 madde. Dosya en fazla 120 satır.
 - Append edilmez. Her sync sonrası yeniden yazılır. Tarih detayı record'larda kalır.
+- Objective, Current Position ve Open Points düz dille yazılır. İç ID tek başına yazılmaz (`03` §5 human-first yazım).
+- View bu dosyayı `Project in 60 Seconds` olarak gösterir (`09` §5.3).
 
 ---
 

@@ -17,6 +17,7 @@ from harness import REPO as DEV_REPO, report, skill_dir, use  # noqa: E402
 
 use("sync", "view")
 import sync_model as sm  # noqa: E402
+import music_fixture as MF  # noqa: E402
 import view_model as vm  # noqa: E402
 from sync_model import Repo, wu  # noqa: E402
 from view_model import GRAPH_F, QUEUE_F, VIEW_F, Reader, View, ViewBlocked  # noqa: E402
@@ -186,9 +187,11 @@ check("B second update reads only new records, no whole view", (sorted(k for k, 
       (["RECORD", "RECORD"], sorted([sm.record_id(wu(4)), sm.record_id(wu(5))]), False))
 check("B unrelated sections only touched by index", [k for k in b2 if k in b1 and b1[k] != b2[k]], ["INDEX", "MODEL"])
 check("B incremental == rebuild after Stage 5", t2, vb.rebuild())
-check("B HS section hides machine metadata", [x for x in ("checkpoint", "record_version", "git:", "Evidence / Provenance") if x in b2[hs(4)]], [])
-check("B empty record parts omitted, Purpose kept", re.findall(r"^#### (.+)$", b2[hs(1)], re.M), ["Purpose"])
-check("B status line Current", "**Status:** Current ·" in b2[hs(1)], True)
+check("B machine metadata only inside Technical Trace", ([x for x in ("checkpoint", "record_version", "git:", "Evidence") if x in b2[hs(4)].split("<details>")[0]],
+      "git:" in b2[hs(4)].split("<details>")[1]), ([], True))
+check("B empty record parts omitted, one sentence and Record kept", (re.findall(r"^#### (.+)$", b2[hs(1)], re.M), re.findall(r"^\*\*(.+?:)\*\* ", b2[hs(1)], re.M)),
+      ([], ["Status:", "Tek cümlede:", "Record:"]))
+check("B status line Current", "**Status:** Current\n" in b2[hs(1)], True)
 again = sync(pb, vb)
 check("B up-to-date sync -> view unchanged", (again["result"], vtext(pb) == t2), ("UP_TO_DATE", True))
 
@@ -207,19 +210,19 @@ c1 = vtext(pc)
 k0, k1 = blocks(c0), blocks(c1)
 st = {r["work_unit_id"]: r["sync_status"] for r in state_rows(pc.root)}
 check("C material change -> Step 2 + dependent Step 5 STALE (state)", (st[wu(2)], st[wu(5)], st[wu(1)]), ("STALE", "STALE", "SYNCED"))
-check("C stale shown as Needs refresh", ["**Status:** Needs refresh ·" in k1[hs(n)] for n in (2, 5)], [True, True])
+check("C stale shown as Needs refresh", ["**Status:** Needs refresh\n" in k1[hs(n)] for n in (2, 5)], [True, True])
 check("C only status line changed in stale sections", [[a for a, b in zip(k0[hs(n)].splitlines(), k1[hs(n)].splitlines()) if a != b] for n in (2, 5)],
       [[k0[hs(2)].splitlines()[4]], [k0[hs(5)].splitlines()[4]]])
 check("C unrelated HS sections byte-identical", [k0[hs(n)] == k1[hs(n)] for n in (1, 3, 4, 6)], [True] * 4)
 check("C index marks needs refresh", re.findall(r"\(#(hs-[0-9a-f]{8})\) · needs refresh", k1["INDEX"]),
       [sm.record_id(wu(2)).lower(), sm.record_id(wu(5)).lower()])
-check("C no duplicate stale + current versions", (c1.count(f"SITL:{hs(2)}:START"), c1.count("#### Purpose")), (1, 6))
+check("C no duplicate stale + current versions", (c1.count(f"SITL:{hs(2)}:START"), c1.count("**Tek cümlede:**")), (1, 6))
 check("C stale view passes V checks", vc.integrity(c1), [])
 check("C sync latest: target empty, staleness persisted only", (rc["synced"], rc["refreshed"]), ([], []))
 rc2 = sync(pc, vc, "", judge)
 c2 = vtext(pc)
 k2 = blocks(c2)
-check("C refresh -> v2, Current again", [(View.spans(c2)[hs(n)][2]["v"], "**Status:** Current ·" in k2[hs(n)]) for n in (2, 5)], [("2", True), ("2", True)])
+check("C refresh -> v2, Current again", [(View.spans(c2)[hs(n)][2]["v"], "**Status:** Current\n" in k2[hs(n)]) for n in (2, 5)], [("2", True), ("2", True)])
 check("C refresh leaves unrelated HS byte-identical", [k1[hs(n)] == k2[hs(n)] for n in (1, 3, 4, 6)], [True] * 4)
 check("C refresh content from new record version", "(v2)" in k2[hs(2)], True)
 check("C incremental == rebuild", c2, vc.rebuild())
@@ -286,7 +289,8 @@ ve.on_map_sync(None)
 e1 = vtext(pe)
 eb = blocks(e1)
 check("E HS sections byte-identical after learning", [blocks(e0)[hs(n)] == eb[hs(n)] for n in (1, 2, 3)], [True, True, True])
-check("E HS parts follow 09 §5 order, empty ones omitted", re.findall(r"^#### (.+)$", eb[hs(2)], re.M), ["Purpose", "Why"])
+check("E HS parts follow 09 §5.1 order, empty ones omitted", re.findall(r"^(?:#### (.+)|\*\*(.+?:)\*\* )", eb[hs(2)], re.M),
+      [("", "Status:"), ("", "Tek cümlede:"), ("Why", ""), ("", "Record:")])
 check("E learning added to Learning section", e1.index("## Learning") < e1.index("SITL:KN:KN-0000000b:START") < e1.index("SITL:MAP:START"), True)
 hs_lines = {l for k, b in eb.items() if k.startswith("HS:") for l in b.splitlines() if len(l) > 25}
 kn_lines = {l for k, b in eb.items() if k.startswith("KN:") for l in b.splitlines() if len(l) > 25}
@@ -423,7 +427,7 @@ check("J lesson text once per concept section", all(b.count("Skor yanlış iyi g
 check("J related concepts link to sections", "- USES → [Duration Model](#kn-00000040)" in jb["KN:KN-00000020"], True)
 
 # Test K - 07 §V integrity, candidate safety, write failure (spec 33, 34)
-check("K 14 V checks", sorted(P.checks), [f"V-{i:02d}" for i in range(1, 15)])
+check("K 15 V checks", sorted(P.checks), [f"V-{i:02d}" for i in range(1, 16)])
 check("K structural / misleading checks FAIL", sorted(c for c, s in P.checks.items() if s == "FAIL"),
       ["V-02", "V-03", "V-04", "V-05", "V-09", "V-10", "V-12", "V-13"])
 base = vtext(pd)
@@ -487,14 +491,14 @@ sync(pk, vk)
 k_before = vtext(pk)
 pk.step(3, ["src/s3.py"])
 try:
-    sync(pk, vk, judge={("hs", wu(3)): {"How It Works": "```text\nA → B"}})
+    sync(pk, vk, judge={("hs", wu(3)): {"How It Works": "```text\nGirdi → Çıktı"}})
     cand = None
 except ViewBlocked as e:
     cand = str(e)
 check("K candidate V-09 -> view write refused", (cand, vtext(pk) == k_before), ("V-09", True))
 check("K authoritative sync not undone by view failure", {r["work_unit_id"]: r["sync_status"] for r in state_rows(pk.root)}[wu(3)], "SYNCED")
 # write failure mid-way restores the pre-image (no half section, no lone marker)
-pk.write(f"{sm.SYNC}/records/{sm.record_id(wu(3))}.md", (pk.root / f"{sm.SYNC}/records/{sm.record_id(wu(3))}.md").read_text(encoding="utf-8").replace("```text\nA → B", "A → B"))
+pk.write(f"{sm.SYNC}/records/{sm.record_id(wu(3))}.md", (pk.root / f"{sm.SYNC}/records/{sm.record_id(wu(3))}.md").read_text(encoding="utf-8").replace("```text\nGirdi → Çıktı", "Girdi → Çıktı"))
 try:
     vk.update([hs(3), "MODEL", "INDEX"], fail_on="INDEX")
     wf = None
@@ -562,13 +566,124 @@ check("N README: mode table", [bool(re.search(p, readme, re.M)) for p in (r"^\| 
 check("N README: single knowledge file + internal state explained", ("docs/learning/STAY_IN_THE_LOOP.md" in readme,
       all(w in readme for w in ("incremental sync", "checkpoints", "integrity", "coverage", "resume"))), (True, True))
 
+# Test P - human-first Human Sync rendering on a realistic research project (09 §5, 07 V-15)
+pp = project("pp", steps=8)
+vp = View(P, pp.root)
+sync(pp, vp, judge={("hs", wu(n)): c for n, c in MF.UNITS.items()})
+p0 = vtext(pp)
+pb_ = blocks(p0)
+
+
+def human(block):
+    return block.split("<details>", 1)[0].split("\n", 5)[-1]
+
+
+def record(n):
+    return vm.parts_of((pp.root / f"{sm.SYNC}/records/{sm.record_id(wu(n))}.md").read_text(encoding="utf-8"), 2)
+
+
+def parts_seq(block):
+    return [h or b for h, b in re.findall(r"^(?:#### (.+)|\*\*(.+?:)\*\* )", block, re.M)]
+
+
+check("P full layer order (rich unit)", parts_seq(pb_[hs(1)]), ["Status:", "Tek cümlede:", "Anahtar kavramlar:", "Zihinsel Model", "Neden Önemli?",
+      "Why", "What Changed", "Key Decisions", "Open Points", "Evidence", "Record:"])
+check("P trace is one collapsed block after the human layer", [(b.count("<details>"), b.count("<summary><strong>Technical Trace</strong></summary>"),
+      b.index("#### Neden Önemli?") < b.index("<details>") if "#### Neden Önemli?" in b else True) for k, b in pb_.items() if k.startswith("HS:")], [(1, 1, True)] * 8)
+check("P one sentence = record Purpose, shown once", [(pb_[hs(n)].count(record(n)["Purpose"]), f"**Tek cümlede:** {record(n)['Purpose']}" in pb_[hs(n)])
+      for n in range(1, 9)], [(1, True)] * 8)
+check("P key terms: plain meaning first, internal term second", "**Anahtar kavramlar:** haftalık benzersiz dinleyici sayısı (N) · "
+      "haftalık toplam dinleme sayısı (C) · veri yok, sıfır değil (empty ≠ zero)" in pb_[hs(1)], True)
+kt3 = re.search(r"^\*\*Anahtar kavramlar:\*\* (.+)$", pb_[hs(3)], re.M).group(1).split(" · ")
+check("P term that already carries a symbol: no nested parentheses", kt3[:1], ["tahmin anında bilinebilen bilgi sınırı — prediction-time information boundary (S-B)"])
+check("P key terms capped at key_terms_max; rest in More Terms (trace)", (len(kt3), "- geçmişe dönük düzeltilmiş veri (revised data)" in pb_[hs(3)].split("<details>")[1]),
+      (5, True))
+check("P Mental Model only where the record has one", ["#### Zihinsel Model" in human(pb_[hs(n)]) for n in (1, 2, 3, 7)], [True, True, True, False])
+check("P Why It Matters = human downstream meaning, before trace",
+      human(pb_[hs(3)]).split("#### Neden Önemli?\n\n")[1].strip(), MF.UNITS[3]["Downstream Impact"])
+lost, dup = [], []
+for n in range(1, 9):
+    rec, blk = record(n), pb_[hs(n)]
+    for name, body in rec.items():
+        if name in ("Header", "Technical Translation"):
+            continue
+        for line in vm.shift(body, 2).splitlines():
+            if line.strip() and line.strip() not in ("Yok.", "```", "```text") and not set(line) <= set("|-"):
+                (lost if blk.count(line) == 0 else dup if blk.count(line) > 1 and len(line) > 12 else []).append(f"{n}:{line[:40]}")
+    for a, t in vm.TERM.findall(rec.get("Technical Translation", "").replace("```text", "")):
+        if blk.count(f"{a} — {t.strip()}" if "(" in t else f"{a} ({t.strip()})") != 1:
+            lost.append(f"{n}:term {a}")
+check("P every record line appears exactly once (no loss, no duplicate summary)", (lost, dup), ([], []))
+head4 = dict(sm.KV.findall(record(4)["Header"]))
+check("P provenance kept: Record line has id, version, work unit, checkpoint",
+      f"**Record:** `{head4['record_id']}` v{head4['record_version']} · `{head4['work_unit_id']}` · `{head4['checkpoint']}`" in pb_[hs(4)].split("<details>")[1], True)
+check("P evidence table in trace, not in human layer", [("VERIFIED (" in pb_[hs(n)].split("<details>")[1], "VERIFIED" in human(pb_[hs(n)])) for n in (1, 2, 3)],
+      [(True, False)] * 3)
+quality = {}
+for n in MF.TYPES:
+    h = human(pb_[hs(n)])
+    quality[MF.TYPES[n]] = ("**Tek cümlede:**" in h, len(re.search(r"^\*\*Anahtar kavramlar:\*\* (.+)$", h, re.M).group(1).split(" · ")) >= 2,
+                            "#### Neden Önemli?" in h, vm.undefined_symbols(h), len([l for l in h.splitlines() if l.strip()]) <= 15,
+                            re.search(r"VERIFIED|INFERRED|UNRESOLVED|checkpoint|git:|HS-", h) is None)
+check("P quality: research definition / data audit / freeze answer what, remember, next in the human layer only",
+      quality, {t: (True, True, True, [], True, True) for t in MF.TYPES.values()})
+check("P human-first symbols defined on first use (N, C, S-B, M(W), W, K(t), TF-03)",
+      [vm.undefined_symbols(human(pb_[hs(n)])) for n in (1, 2, 3, 5, 6, 8)], [[]] * 6)
+check("P old-style record flagged: undefined IDs in the human layer", vm.undefined_symbols(human(pb_[hs(4)])), ["TF-04", "TF-05", "TF-06"])
+check("P symbol rule: bare N flagged; meaning (N) / meaning — M(W) / N = meaning / fenced letters / OPTION words not",
+      [vm.undefined_symbols(x) for x in ("N arttı.", "benzersiz dinleyici sayısı (N) arttı. N düştü.", "dinleyici değişimi — M(W)",
+                                          "N = benzersiz dinleyici sayısı", "```text\nN → C\n```", "PROBLEM ├── OPTION A", "K(t) = N(t+12)",
+                                          "```text\nK(t)\n```", " — S-B")],
+      [["N"], [], [], [], [], [], ["K(t)"], ["K(t)"], ["S-B"]])
+check("P V-15 WARNING on the old-style section only", vp.integrity(p0), [("V-15", "WARNING")])
+learn = pp.root / "docs/learning"
+auth = lambda: {f.relative_to(learn).as_posix(): sha(f.read_bytes()) for f in sorted(learn.rglob("*")) if f.is_file() and f.name != "STAY_IN_THE_LOOP.md"}  # noqa: E731
+a0 = auth()
+check("P V-15 is not repaired by view writes (record is the source)", (vp.repair(), vtext(pp) == p0), (([("V-15", "WARNING")], "NOTHING"), True))
+(pp.root / VIEW_F).unlink()
+rd = Reader()
+vp.repair(rd)
+check("P migration: rebuild from existing records reproduces the view", vtext(pp), p0)
+check("P authoritative records, state and context unchanged by view writes", auth(), a0)
+check("P view rebuild reads no ULA artifact; Human Sync never invokes ULA", ("ARTIFACT" in rd.kinds(), (learn / "passes").exists()), (False, False))
+pp.write("src/s5.py", "# step 5 changed\nv2 behaviour\n")
+pp.commit("change step 5")
+sync(pp, vp, "latest", {("material", wu(5)): "BEHAVIOUR", **{("hs", wu(n)): c for n, c in MF.UNITS.items()}})
+p1 = blocks(vtext(pp))
+check("P stale: only the status line of that section changes", [a for a, b in zip(pb_[hs(5)].splitlines(), p1[hs(5)].splitlines()) if a != b],
+      ["**Status:** Current"])
+check("P stale: other sections byte-identical", [k for k in pb_ if k != hs(5) and pb_[k] != p1[k]], ["INDEX", "MODEL"])
+sync(pp, vp, "", {("hs", wu(n)): c for n, c in MF.UNITS.items()})
+p2 = blocks(vtext(pp))
+check("P refresh: section rebuilt from record v2, others untouched", (View.spans(vtext(pp))[hs(5)][2]["v"], "**Status:** Current\n" in p2[hs(5)],
+      [k for k in p1 if k.startswith("HS:") and k != hs(5) and p1[k] != p2[k]]), ("2", True, []))
+pp.write(sm.CONTEXT_F, f"# Project Sync Context\n\n## Header\n\n```text\nproject_id: {PRJ}\n```\n\n{MF.CONTEXT}")
+before_model = blocks(vtext(pp))
+vp.update(["MODEL"])
+m = blocks(vtext(pp))
+model = m["MODEL"]
+check("P Project in 60 Seconds: heading and human-first order", (model.splitlines()[1], parts_seq(model.split("<details>")[0])),
+      ("## Project in 60 Seconds", ["What are we building?", "Where are we now?", "How does it work at the highest level?", "Five things to remember",
+                                    "What is still unresolved?"]))
+five = model.split("#### Five things to remember\n\n")[1].split("\n\n")[0].splitlines()
+check("P five things = invariants first, then active decisions", five, ["- Eksik hafta sıfır değil, boştur.",
+      "- Model yalnız tahmin haftasından önce yayımlanmış veriyi görür.", "- Her özellik aynı activity tanımını kullanır.",
+      "- Ana ölçü benzersiz dinleyici sayısı, toplam dinleme yardımcı.", "- Hedef 12 haftalık dinleyici artışı."])
+check("P technical snapshot collapsed, keeps the rest", (model.count("<summary><strong>Technical Project Snapshot</strong></summary>"),
+      parts_seq(model.split("<details>")[1])), (1, ["Architecture", "Components", "Active Decisions", "Dependencies"]))
+ctx_lines = [l for l in MF.CONTEXT.splitlines() if l.strip() and not l.startswith(("## ", "```"))]
+check("P every context line appears exactly once in the model", [l for l in ctx_lines if model.count(l) != 1], [])
+check("P model update touches only MODEL", [k for k in m if m[k] != before_model[k]], ["MODEL"])
+check("P view == rebuild; only V-15 (old-style record) remains", (vtext(pp) == vp.rebuild(), vp.integrity(vtext(pp))), (True, [("V-15", "WARNING")]))
+
 # Test O - protocol vocabulary
 check("O authority rules", {k: P.rules[k] for k in ("authority", "read_mode", "write_mode", "on_write_error", "failure_effect")},
       {"authority": "DERIVED", "read_mode": "MARKERS_THEN_SECTION", "write_mode": "SECTION_PATCH", "on_write_error": "RESTORE_PRE_IMAGE",
        "failure_effect": "WARNING"})
 check("O structure order", P.order, ["VIEW", "INDEX", "MODEL", "HS", "KN", "MAP", "DEBT"])
 check("O status lines", P.status_line, {"SYNCED": "Current", "STALE": "Needs refresh"})
-check("O HS template parts = 09 §5 mapping", P.hs_sections, [v for v, _ in P.hs_map])
+check("O HS template parts = 09 §5.1 mapping", P.hs_sections, [v for v, _, _ in P.hs_map])
+check("O MODEL template = 09 §3 heading + §5.3 parts", (P.model_template_heading, P.model_sections), (P.model_heading, [v for v, _, _ in P.model_map]))
 check("O Light has no L4 source", P.artifact_map["L4 — Formalism"]["LIGHT"], None)
 check("O collapsed parts", P.collapsed, ["L3", "L4", "Reference"])
 s07 = (SKILL / "references" / "07_INTEGRITY_CHECKS.md").read_text(encoding="utf-8")

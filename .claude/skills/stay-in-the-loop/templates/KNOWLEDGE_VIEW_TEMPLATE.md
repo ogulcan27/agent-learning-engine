@@ -23,9 +23,32 @@
 <!-- SITL:INDEX:END -->
 
 <!-- SITL:MODEL:START -->
-## Project Mental Model
+## Project in 60 Seconds
 
-<PROJECT_SYNC_CONTEXT.md bölümleri; yalnız dolu olanlar>
+#### What are we building?
+
+#### Where are we now?
+
+#### How does it work at the highest level?
+
+#### Five things to remember
+
+#### What is still unresolved?
+
+<details>
+<summary><strong>Technical Project Snapshot</strong></summary>
+
+#### Architecture
+
+#### Components
+
+#### Active Decisions
+
+#### Invariants
+
+#### Dependencies
+
+</details>
 <!-- SITL:MODEL:END -->
 
 ## Human Sync
@@ -34,23 +57,36 @@
 <a id="hs-xxxxxxxx"></a>
 ### <label>
 
-**Status:** <Current | Needs refresh> · **Work unit:** `<work_unit_id>`
+**Status:** <Current | Needs refresh>
 
-#### Purpose
+**Tek cümlede:** <konu + işlem veya karar + sonuç>
 
-#### What Changed
+**Anahtar kavramlar:** <basit anlam (Term)> · <basit anlam (Term)>
+
+#### Zihinsel Model
+
+#### Neden Önemli?
+
+<details>
+<summary><strong>Technical Trace</strong></summary>
 
 #### Why
 
-#### How It Works
+#### What Changed
 
 #### Key Decisions
 
 #### Dependencies
 
-#### Downstream Impact
-
 #### Open Points
+
+#### Evidence
+
+#### More Terms
+
+**Record:** `<HS-xxxxxxxx>` v<record_version> · `<work_unit_id>` · `<checkpoint>`
+
+</details>
 <!-- SITL:HS:<HS-xxxxxxxx>:END -->
 
 ## Learning

@@ -22,6 +22,29 @@ HEADING = re.compile(r"^(#{1,6}) (.*)$")
 TITLE = "# Stay in the Loop — Project Knowledge"
 NOTE = "> Derived human-facing view. Authority: `docs/learning/` state. Elle düzenleme. Rules: `09_KNOWLEDGE_VIEW`."
 FIXED = {"knowledge-map", "open-learning-debt"}
+TERM = re.compile(r'^"(.+?)"\s*↔\s*(.+)$')
+SYMBOL = re.compile(r"(?<![\w-])(?:[A-Z]{1,5}-[A-Z0-9]{1,6}|[A-Z]\([A-Za-z]\)|[B-HJ-Z])(?![\w(-])")
+
+
+def undefined_symbols(human):
+    """09 §5.2: project symbols whose first occurrence in the HUMAN layer has no plain meaning attached."""
+    known, bad, fence = set(), [], False
+    for line in human.splitlines():
+        if line.startswith("```"):
+            fence = not fence
+            continue
+        for m in SYMBOL.finditer(line):
+            sym = m.group(0)
+            if sym in known or (fence and len(sym) == 1):
+                continue
+            before, after = line[: m.start()], line[m.end():]
+            inline = before.endswith("(") and after.startswith(")") and re.search(r"\w", before[:-1])
+            dashed = before.endswith(" — ") and re.search(r"\w", before[:-3])
+            if inline or dashed or re.match(r"\s*=\s*[a-zçğıöşü]", after):
+                known.add(sym)
+            elif sym not in bad:
+                bad.append(sym)
+    return bad
 
 
 def cells(block):
@@ -35,10 +58,13 @@ class Protocol:
         self.rules = {r[0]: r[1] for r in auth[0]}
         self.path = self.rules["view_path"].strip("`")
         self.collapsed = [x.strip() for x in self.rules["collapsed"].split(";")]
-        self.order = [TICK.findall(r[1])[0] for r in sm.tables(sm.section(p, "## 3. Structure"))[0]]
-        hs = sm.tables(sm.section(p, "## 5. Human Sync section"))
-        self.hs_map = [(r[0], r[1]) for r in hs[0]]
+        structure = sm.tables(sm.section(p, "## 3. Structure"))[0]
+        self.order = [TICK.findall(r[1])[0] for r in structure]
+        self.model_heading = next(TICK.findall(r[2])[0] for r in structure if "MODEL" in r[1])
+        hs = sm.tables(sm.section(p, "### 5.1 Parts"))
+        self.hs_map = [(r[0].strip("`"), r[1], r[2]) for r in hs[0]]
         self.status_line = {TICK.findall(r[0])[0]: TICK.findall(r[1])[0] for r in hs[1]}
+        self.model_map = [tuple(r) for r in sm.tables(sm.section(p, "### 5.3 Project in 60 Seconds"))[0]]
         self.parts = [r[0] for r in sm.tables(sm.section(p, "### 6.1 Parts"))[0]]
         heading = lambda c: TICK.findall(c)[0].lstrip("# ") if "`" in c else None  # noqa: E731
         self.artifact_map = {r[0]: {"LIGHT": heading(r[1]), "FULL": heading(r[2])}
@@ -53,7 +79,10 @@ class Protocol:
         t = skill / "templates"
         tpl = (t / "KNOWLEDGE_VIEW_TEMPLATE.md").read_text(encoding="utf-8")
         hs_tpl = tpl.split(":START v=", 1)[1].split(":END", 1)[0]
-        self.hs_sections = re.findall(r"^#### (.+)$", hs_tpl, re.M)
+        self.hs_sections = [h or b for h, b in re.findall(r"^(?:#### (.+)|\*\*(.+?:)\*\* )", hs_tpl, re.M) if b != "Status:"]
+        model_tpl = tpl.split("<!-- SITL:MODEL:START -->", 1)[1].split("<!-- SITL:MODEL:END -->", 1)[0]
+        self.model_sections = re.findall(r"^#### (.+)$", model_tpl, re.M)
+        self.model_template_heading = re.search(r"^## (.+)$", model_tpl, re.M).group(0)
         g = (t / "SEMANTIC_GRAPH_TEMPLATE.md").read_text(encoding="utf-8")
         self.node_cols = sm.header(sm.section(g, "## Nodes"))
         self.edge_cols = sm.header(sm.section(g, "## Edges"))
@@ -195,18 +224,39 @@ class View:
         return bool(self.hs_rows(S) or self.kn_nodes(S) or [d for d in S["debts"] if d["debt_status"] == "OPEN"])
 
     # --- renderers ---
+    def terms(self, body):
+        """09 §5.1: '"plain" ↔ Term' -> 'plain (Term)' or 'plain — Term(...)'; first key_terms_max shown, the rest in More Terms."""
+        pairs, other = [], []
+        for line in body.splitlines():
+            m = TERM.match(line.strip())
+            if m:
+                term = m.group(2).strip()
+                pairs.append(f"{m.group(1)} — {term}" if "(" in term else f"{m.group(1)} ({term})")
+            elif line.strip() and not line.startswith("```") and line.strip() != "Yok.":
+                other.append(line.strip())
+        n = self.P.int_rule("key_terms_max")
+        return " · ".join(pairs[:n]), "\n".join(f"- {x}" for x in pairs[n:] + other)
+
     def render_hs(self, S, row, rd):
+        """09 §5: HUMAN parts open, TRACE parts in one collapsed block. Every record line appears once."""
         rd.read("RECORD", row["record_id"])
-        rec = self.read_file(f"{sm.SYNC}/records/{row['record_id']}.md")
-        sec = parts_of(rec, 2)
+        sec = parts_of(self.read_file(f"{sm.SYNC}/records/{row['record_id']}.md"), 2)
+        head = dict(sm.KV.findall(sec.get("Header", "")))
         rid = row["record_id"]
+        key_terms, more = self.terms(sec.get("Technical Translation", ""))
+        special = {"Anahtar kavramlar:": key_terms, "More Terms": more,
+                   "Record:": f"`{rid}` v{head['record_version']} · `{head['work_unit_id']}` · `{head['checkpoint']}`"}
+        keep = {self.P.hs_map[0][0], "Record:"}
+        layers = {"HUMAN": [], "TRACE": []}
+        for view, src, layer in self.P.hs_map:
+            body = special[view] if view in special else shift(sec.get(src, "Yok."), 2).strip()
+            if body in ("", "Yok.") and view not in keep:
+                continue
+            layers[layer].append(f"**{view}** {body}" if view.endswith(":") else f"#### {view}\n\n{body}")
         out = [f"<!-- SITL:HS:{rid}:START v={row['record_version']} -->", f'<a id="{rid.lower()}"></a>', f"### {row['label']}", "",
-               f"**Status:** {self.P.status_line[row['sync_status']]} · **Work unit:** `{row['work_unit_id']}`"]
-        src = dict(self.P.hs_map)
-        for name in self.P.hs_sections:
-            body = shift(sec.get(src[name], "Yok."), 2).strip() or "Yok."
-            if body != "Yok." or name == self.P.hs_sections[0]:
-                out += ["", f"#### {name}", "", body]
+               f"**Status:** {self.P.status_line[row['sync_status']]}"]
+        out += [x for p in layers["HUMAN"] for x in ("", p)]
+        out += ["", "<details>", "<summary><strong>Technical Trace</strong></summary>"] + [x for p in layers["TRACE"] for x in ("", p)] + ["", "</details>"]
         return "\n".join(out + [f"<!-- SITL:HS:{rid}:END -->"])
 
     def artifact_parts(self, node, rd):
@@ -328,10 +378,29 @@ class View:
                          + ["", "[Knowledge Map](#knowledge-map) · [Open Learning Debt](#open-learning-debt)", "<!-- SITL:INDEX:END -->"])
 
     def render_model(self, rd):
+        """09 §5.3: Project in 60 Seconds; snapshot collapsed; remembered items are not repeated in the snapshot."""
         rd.read("CONTEXT")
-        ctx = self.read_file(sm.CONTEXT_F) or ""
-        body = [f"#### {k}\n\n{shift(v, 2)}" for k, v in parts_of(ctx, 2).items() if k != "Header" and v]
-        return "\n".join(["<!-- SITL:MODEL:START -->", "## Project Mental Model", "", "\n\n".join(body) or "Yok.", "<!-- SITL:MODEL:END -->"])
+        ctx = parts_of(self.read_file(sm.CONTEXT_F) or "", 2)
+        text = {k: shift(v, 2).strip() for k, v in ctx.items()}
+        remember = next(src for _, src, _ in self.P.model_map if ";" in src)
+        pooled = [k.strip() for k in remember.split(";")]
+        pool = [(k, l) for k in pooled for l in text.get(k, "").splitlines() if l.startswith("- ")]
+        used = pool[: self.P.int_rule("remember_max")]
+        layers = {"HUMAN": [], "SNAPSHOT": []}
+        for view, src, layer in self.P.model_map:
+            if src == remember:
+                body = "\n".join(l for _, l in used)
+            elif src in pooled:
+                body = "\n".join(l for l in text.get(src, "").splitlines() if (src, l) not in used).strip()
+            else:
+                body = text.get(src, "")
+            if body:
+                layers[layer].append(f"#### {view}\n\n{body}")
+        out = [x for p in layers["HUMAN"] for x in ("", p)]
+        if layers["SNAPSHOT"]:
+            out += ["", "<details>", "<summary><strong>Technical Project Snapshot</strong></summary>"] + \
+                   [x for p in layers["SNAPSHOT"] for x in ("", p)] + ["", "</details>"]
+        return "\n".join(["<!-- SITL:MODEL:START -->", self.P.model_heading] + (out or ["", "Yok."]) + ["<!-- SITL:MODEL:END -->"])
 
     def render_debt(self, S):
         rows = [f"- `{d['debt_id']}` — {d['concept']} · {d['priority']} · {d['work_unit_ids']}" for d in S["debts"] if d["debt_status"] == "OPEN"]
@@ -623,11 +692,14 @@ class View:
                     if r["sync_status"] not in self.P.status_line:
                         add("V-11")
                         continue
-                    shown = re.search(r"^\*\*Status:\*\* ([^·]+?) ·", body, re.M)
+                    shown = re.search(r"^\*\*Status:\*\* (.+)$", body, re.M)
                     if not shown or shown.group(1) != self.P.status_line[r["sync_status"]]:
                         add("V-06")
                     if span[2].get("v") != r["record_version"]:
                         add("V-07")
+                    human = body.split(shown.group(0), 1)[1].split("<details>", 1)[0] if shown else ""
+                    if undefined_symbols(human):
+                        add("V-15")
             if kind == "MAP":
                 for nid, lab in re.findall(r'(KN_[0-9a-f]{8})\["([^"]*)"\]', body):
                     n = nodes.get(nid.replace("_", "-"))
@@ -652,7 +724,7 @@ class View:
         found = self.integrity(text, S)
         if any(s == "FAIL" for _, s in found):
             return found, "FAIL"
-        if not found:
+        if not [c for c, _ in found if c != "V-15"]:
             return found, "NOTHING"
         if text is None:
             self.update([], rd)
@@ -665,7 +737,7 @@ class View:
                 cur = self.lines_of(text, spans[k])
                 if k.startswith("HS:"):
                     r = next(x for x in S["rows"] if x["record_id"] == k[3:])
-                    if spans[k][2].get("v") != r["record_version"] or f"**Status:** {self.P.status_line[r['sync_status']]} ·" not in cur:
+                    if spans[k][2].get("v") != r["record_version"] or f"**Status:** {self.P.status_line[r['sync_status']]}\n" not in cur:
                         keys.append(k)
                 else:
                     n = next(x for x in S["nodes"] if x["node_id"] == k[3:])
